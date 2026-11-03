@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DeadlineDeck is an academic workload planning platform that compares pending task hours against available study time to keep student schedules balanced.">
+  <title>DeadlineDeck — Academic Workload Planning & Student Productivity</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <style>
+    .landing-shell {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: var(--space-32) var(--space-24) var(--space-64);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-64);
+    }
+    .landing-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: var(--space-24);
+      border-bottom: 1px solid var(--border-hairline);
+    }
+    .landing-brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .landing-brand svg {
+      width: 24px;
+      height: 24px;
+    }
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-20);
+      max-width: 760px;
+    }
+    .hero-heading {
+      font-family: var(--font-display);
+      font-size: 38px;
+      font-weight: 500;
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+    }
+    .hero-sub {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .hero-actions {
+      display: flex;
+      gap: var(--space-12);
+      align-items: center;
+      margin-top: var(--space-8);
+    }
+    .landing-diagram-panel {
+      background-color: var(--card);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-panel);
+      padding: var(--space-32);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-20);
+    }
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-24);
+    }
+    .principle-item {
+      background-color: var(--card);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-panel);
+      padding: var(--space-24);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+    }
+    .principle-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .principle-body {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    @media (max-width: 768px) {
+      .hero-heading { font-size: 28px; }
+      .principles-grid { grid-template-columns: 1fr; }
+      .landing-diagram-panel { padding: var(--space-16); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="landing-shell">
+    <header class="landing-nav">
+      <div class="landing-brand">
+        <svg><use href="/icons.svg#icon-logo"></use></svg>
+        <span>DeadlineDeck</span>
+      </div>
+      <div style="display: flex; gap: var(--space-12); align-items: center;">
+        <a href="/login.html" class="btn btn-ghost">Sign in</a>
+        <a href="/register.html" class="btn btn-primary">Create account</a>
+      </div>
+    </header>
+
+    <section class="hero-content">
+      <span class="label-eyebrow">Academic Workload Planning</span>
+      <h1 class="hero-heading">Know your real study capacity before deadlines collide.</h1>
+      <p class="hero-sub">
+        DeadlineDeck tracks academic submissions by separating submission due dates from planned study dates, calculating daily workload pressure, and flagging overloaded study days before they happen.
+      </p>
+      <div class="hero-actions">
+        <a href="/register.html" class="btn btn-primary" style="height: 40px; padding: 0 var(--space-20);">Get started</a>
+        <a href="/login.html" class="btn btn-secondary" style="height: 40px; padding: 0 var(--space-20);">Sign in to dashboard</a>
+      </div>
+    </section>
+
+    <!-- Workload Map Illustration -->
+    <div class="landing-diagram-panel">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <span class="label-eyebrow">Signature Instrument</span>
+          <h2 style="font-size: 16px; font-weight: 600; margin-top: 2px;">The Workload Pressure Indicator</h2>
+        </div>
+        <div style="display: flex; gap: var(--space-16); font-size: 12px;">
+          <span class="status-chip is-balanced"><span class="status-dot"></span>Balanced &le; 80%</span>
+          <span class="status-chip is-near-capacity"><span class="status-dot"></span>Near capacity 81–100%</span>
+          <span class="status-chip is-overloaded"><span class="status-dot"></span>Overloaded &gt; 100%</span>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background-color: var(--border-hairline); border: 1px solid var(--border-hairline); border-radius: var(--radius-md); overflow: hidden;">
+        <!-- Mon -->
+        <div style="background-color: var(--card); padding: var(--space-16) var(--space-8); display: flex; flex-direction: column; align-items: center; gap: var(--space-8);">
+          <span class="label-eyebrow">Mon</span>
+          <div class="workload-gauge-track" style="height: 90px; width: 14px;">
+            <div class="workload-gauge-tick" style="bottom: 75%;"></div>
+            <div class="workload-gauge-fill" style="height: 50%;"></div>
+          </div>
+          <span class="tabular" style="font-size: 12px; font-weight: 600;">2.0 / 3.0 h</span>
+          <span class="day-status-text status-balanced" style="font-size: 10.5px;">Balanced</span>
+        </div>
+
+        <!-- Tue -->
+        <div style="background-color: var(--card); padding: var(--space-16) var(--space-8); display: flex; flex-direction: column; align-items: center; gap: var(--space-8);">
+          <span class="label-eyebrow">Tue</span>
+          <div class="workload-gauge-track" style="height: 90px; width: 14px;">
+            <div class="workload-gauge-tick" style="bottom: 75%;"></div>
+            <div class="workload-gauge-fill is-near-capacity" style="height: 68%;"></div>
+          </div>
+          <span class="tabular" style="font-size: 12px; font-weight: 600;">2.75 / 3.0 h</span>
+          <span class="day-status-text status-near_capacity" style="font-size: 10.5px;">Near capacity</span>
+        </div>
+
+        <!-- Wed (Overloaded) -->
+        <div style="background-color: var(--surface); padding: var(--space-16) var(--space-8); display: flex; flex-direction: column; align-items: center; gap: var(--space-8); position: relative;">
+          <span class="label-eyebrow">Wed</span>
+          <div class="workload-gauge-track" style="height: 90px; width: 14px;">
+            <div class="workload-gauge-tick" style="bottom: 65%;"></div>
+            <div class="workload-gauge-overflow" style="height: 22%;"></div>
+            <div class="workload-gauge-fill is-overloaded" style="height: 65%;"></div>
+          </div>
+          <span class="tabular" style="font-size: 12px; font-weight: 600;">3.5 / 3.0 h</span>
+          <span class="day-status-text status-overloaded" style="font-size: 10.5px;">Overloaded</span>
+        </div>
+
+        <!-- Thu -->
+        <div style="background-color: var(--card); padding: var(--space-16) var(--space-8); display: flex; flex-direction: column; align-items: center; gap: var(--space-8);">
+          <span class="label-eyebrow">Thu</span>
+          <div class="workload-gauge-track" style="height: 90px; width: 14px;">
+            <div class="workload-gauge-tick" style="bottom: 80%;"></div>
+            <div class="workload-gauge-fill" style="height: 50%;"></div>
+          </div>
+          <span class="tabular" style="font-size: 12px; font-weight: 600;">2.5 / 4.0 h</span>
+          <span class="day-status-text status-balanced" style="font-size: 10.5px;">Balanced</span>
+        </div>
+
+        <!-- Fri -->
+        <div style="background-color: var(--card); padding: var(--space-16) var(--space-8); display: flex; flex-direction: column; align-items: center; gap: var(--space-8);">
+          <span class="label-eyebrow">Fri</span>
+          <div class="workload-gauge-track" style="height: 90px; width: 14px;">
+            <div class="workload-gauge-tick" style="bottom: 75%;"></div>
+            <div class="workload-gauge-fill" style="height: 35%;"></div>
+          </div>
+          <span class="tabular" style="font-size: 12px; font-weight: 600;">1.5 / 3.0 h</span>
+          <span class="day-status-text status-balanced" style="font-size: 10.5px;">Balanced</span>
+        </div>
+
+        <!-- Sat -->
+        <div style="background-color: var(--card); padding: var(--space-16) var(--space-8); display: flex; flex-direction: column; align-items: center; gap: var(--space-8);">
+          <span class="label-eyebrow">Sat</span>
+          <div class="workload-gauge-track" style="height: 90px; width: 14px;">
+            <div class="workload-gauge-tick" style="bottom: 75%;"></div>
+            <div class="workload-gauge-fill" style="height: 25%;"></div>
+          </div>
+          <span class="tabular" style="font-size: 12px; font-weight: 600;">1.0 / 3.0 h</span>
+          <span class="day-status-text status-balanced" style="font-size: 10.5px;">Balanced</span>
+        </div>
+
+        <!-- Sun -->
+        <div style="background-color: var(--card); padding: var(--space-16) var(--space-8); display: flex; flex-direction: column; align-items: center; gap: var(--space-8);">
+          <span class="label-eyebrow">Sun</span>
+          <div class="workload-gauge-track" style="height: 90px; width: 14px;">
+            <div class="workload-gauge-tick" style="bottom: 75%;"></div>
+            <div class="workload-gauge-fill" style="height: 0%;"></div>
+          </div>
+          <span class="tabular" style="font-size: 12px; font-weight: 600;">0.0 / 3.0 h</span>
+          <span class="day-status-text status-balanced" style="font-size: 10.5px;">Balanced</span>
+        </div>
+      </div>
+      <p class="secondary" style="margin: 0; text-align: center;">
+        Example: Wednesday has 3.5 hours planned against 3.0 hours capacity. The system signals overflow with clear warnings and rescheduling actions.
+      </p>
+    </div>
+
+    <!-- 3 Short Explanations -->
+    <div class="principles-grid">
+      <div class="principle-item">
+        <span class="label-eyebrow">Due Date vs Planned Date</span>
+        <h3 class="principle-title">Separate deadlines from study days</h3>
+        <p class="principle-body">
+          Traditional to-do apps cluster tasks on submission day. DeadlineDeck records when work must be delivered separately from when you plan to do the study.
+        </p>
+      </div>
+
+      <div class="principle-item">
+        <span class="label-eyebrow">Capacity Modeling</span>
+        <h3 class="principle-title">Real hours, not abstract points</h3>
+        <p class="principle-body">
+          Configure default study capacity and date-specific overrides. If laboratory classes or travel reduce your available time, the model adjusts automatically.
+        </p>
+      </div>
+
+      <div class="principle-item">
+        <span class="label-eyebrow">Student Toolkit</span>
+        <h3 class="principle-title">Built-in academic utilities</h3>
+        <p class="principle-body">
+          Includes six dedicated tools: word counter with target progression, APA/IEEE citation generator, focus study session timer, checklist builder, notes, and weighted marks calculator.
+        </p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

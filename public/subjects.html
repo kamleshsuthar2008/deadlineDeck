@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subjects — DeadlineDeck</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo-mark">
+          <svg><use href="/icons.svg#icon-logo"></use></svg>
+        </div>
+        <span class="brand-wordmark">DeadlineDeck</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="/dashboard.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-dashboard"></use></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="/planner.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-planner"></use></svg>
+          <span>My Planner</span>
+        </a>
+        <a href="/tasks.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-tasks"></use></svg>
+          <span>Tasks</span>
+        </a>
+        <a href="/calendar.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-calendar"></use></svg>
+          <span>Calendar</span>
+        </a>
+        <a href="/subjects.html" class="nav-link active">
+          <svg><use href="/icons.svg#icon-subjects"></use></svg>
+          <span>Subjects</span>
+        </a>
+        <a href="/insights.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-insights"></use></svg>
+          <span>Insights &amp; Reports</span>
+        </a>
+        <a href="/toolkit.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-toolkit"></use></svg>
+          <span>Student Toolkit</span>
+        </a>
+        <a href="/settings.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-settings"></use></svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="user-avatar-monogram">--</div>
+          <div class="user-info-text">
+            <div class="user-display-name">Loading...</div>
+            <div class="user-display-email">student@college.edu</div>
+          </div>
+        </div>
+        <button class="btn-sidebar-logout">
+          <svg><use href="/icons.svg#icon-logout"></use></svg>
+          <span>Log out</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay"></div>
+
+    <div class="main-wrapper">
+      <header class="mobile-top-bar">
+        <div class="mobile-brand">
+          <svg style="width:20px;height:20px;"><use href="/icons.svg#icon-logo"></use></svg>
+          <span>DeadlineDeck</span>
+        </div>
+        <button class="mobile-menu-btn" aria-label="Open navigation menu">
+          <svg><use href="/icons.svg#icon-menu"></use></svg>
+        </button>
+      </header>
+
+      <main class="main-canvas">
+        <div class="page-header" style="margin-bottom: var(--space-24);">
+          <div class="page-header-text">
+            <span class="label-eyebrow">Academic Curriculum</span>
+            <h1 class="page-title">Enrolled Subjects</h1>
+          </div>
+          <div class="page-actions">
+            <button id="btn-add-subject" class="btn btn-primary">
+              <svg><use href="/icons.svg#icon-plus"></use></svg>
+              <span>Add subject</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Subjects Ledger Panel -->
+        <div class="panel">
+          <div class="table-container">
+            <table class="ledger-table">
+              <thead>
+                <tr>
+                  <th style="width: 120px;">Code</th>
+                  <th>Subject name</th>
+                  <th class="col-numeral">Total tasks</th>
+                  <th class="col-numeral">Pending</th>
+                  <th class="col-numeral">Completed</th>
+                  <th class="col-numeral">Pending hours</th>
+                  <th>Next deadline</th>
+                  <th class="col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="subjects-tbody">
+                <!-- Rendered by subjects.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <nav class="mobile-bottom-nav">
+    <a href="/dashboard.html" class="bottom-nav-item">
+      <svg><use href="/icons.svg#icon-dashboard"></use></svg>
+      <span>Dashboard</span>
+    </a>
+    <a href="/planner.html" class="bottom-nav-item">
+      <svg><use href="/icons.svg#icon-planner"></use></svg>
+      <span>Planner</span>
+    </a>
+    <a href="/tasks.html" class="bottom-nav-item">
+      <svg><use href="/icons.svg#icon-tasks"></use></svg>
+      <span>Tasks</span>
+    </a>
+    <a href="/calendar.html" class="bottom-nav-item">
+      <svg><use href="/icons.svg#icon-calendar"></use></svg>
+      <span>Calendar</span>
+    </a>
+    <a href="/toolkit.html" class="bottom-nav-item">
+      <svg><use href="/icons.svg#icon-toolkit"></use></svg>
+      <span>Toolkit</span>
+    </a>
+  </nav>
+
+  <!-- Add/Edit Subject Modal -->
+  <div id="subject-modal" class="modal-backdrop">
+    <div class="modal-dialog" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h2 id="subject-modal-heading" class="modal-title">Add academic subject</h2>
+        <button class="modal-close-btn" data-dismiss="modal">
+          <svg><use href="/icons.svg#icon-close"></use></svg>
+        </button>
+      </div>
+      <form id="subject-form">
+        <input type="hidden" id="modal-sub-id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="sub-code">Subject code</label>
+            <input type="text" id="sub-code" class="input-text" required placeholder="e.g. CS305" maxlength="20">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sub-name">Subject name</label>
+            <input type="text" id="sub-name" class="input-text" required placeholder="e.g. Computer Networks">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-sub">Save subject</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/subjects.js"></script>
+</body>
+</html>

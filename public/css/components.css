@@ -1,0 +1,587 @@
+/* ==========================================================================
+   DEADLINEDECK - REUSABLE UI COMPONENTS (components.css)
+   Strict adherence to Part A2, A3, and A4 design rules
+   ========================================================================== */
+
+/* ==========================================================================
+   1. BUTTONS (3 variants only: primary, secondary, ghost)
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  height: 36px;
+  padding: 0 var(--space-16);
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
+/* Primary Button: Accent fill, white text */
+.btn-primary {
+  background-color: var(--accent);
+  color: #FFFFFF;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--accent-hover);
+  color: #FFFFFF;
+}
+
+/* Secondary Button: White bg, hairline border */
+.btn-secondary {
+  background-color: var(--card);
+  border-color: var(--border-hairline);
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--surface);
+  border-color: var(--border-strong);
+}
+
+/* Ghost Button: Text only */
+.btn-ghost {
+  background-color: transparent;
+  color: var(--text-secondary);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background-color: var(--surface);
+  color: var(--text-primary);
+}
+
+.btn-danger-ghost {
+  background-color: transparent;
+  color: var(--status-coral-text);
+}
+
+.btn-danger-ghost:hover:not(:disabled) {
+  background-color: var(--status-coral-tint);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   2. FORMS & INPUT CONTROLS
+   ========================================================================== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6, 6px);
+  margin-bottom: var(--space-16);
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-hint {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.input-text,
+.input-select,
+.input-textarea {
+  height: 40px;
+  padding: 0 var(--space-12);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--text-primary);
+  background-color: var(--card);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  width: 100%;
+}
+
+.input-textarea {
+  height: auto;
+  min-height: 80px;
+  padding: var(--space-8) var(--space-12);
+  resize: vertical;
+}
+
+.input-text:focus,
+.input-select:focus,
+.input-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-light);
+}
+
+.input-text[aria-invalid="true"],
+.input-select[aria-invalid="true"] {
+  border-color: var(--status-coral);
+}
+
+.form-error {
+  font-size: 12px;
+  color: var(--status-coral-text);
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Custom Checkbox */
+.custom-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-checkbox input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background-color: var(--card);
+  cursor: pointer;
+  display: grid;
+  place-content: center;
+  transition: all var(--transition-fast);
+  margin: 0;
+}
+
+.custom-checkbox input[type="checkbox"]:checked {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+.custom-checkbox input[type="checkbox"]:checked::before {
+  content: '';
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid #FFFFFF;
+  border-bottom: 2px solid #FFFFFF;
+  transform: rotate(-45deg) translate(1px, -1px);
+}
+
+/* ==========================================================================
+   3. STATUS CHIPS (Strictly: 6px dot + text, no filled pill, no border)
+   ========================================================================== */
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6, 6px);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+/* Status variants */
+.status-chip.is-balanced {
+  color: var(--status-teal-text);
+}
+.status-chip.is-balanced .status-dot {
+  background-color: var(--status-teal);
+}
+
+.status-chip.is-near-capacity {
+  color: var(--status-amber-text);
+}
+.status-chip.is-near-capacity .status-dot {
+  background-color: var(--status-amber);
+}
+
+.status-chip.is-overloaded {
+  color: var(--status-coral-text);
+}
+.status-chip.is-overloaded .status-dot {
+  background-color: var(--status-coral);
+}
+
+.status-chip.is-not-configured {
+  color: var(--text-secondary);
+}
+.status-chip.is-not-configured .status-dot {
+  background-color: var(--text-muted);
+}
+
+/* Priority Indicators (Using distinct line/triangle shapes, never competing with workload hues) */
+.priority-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6, 6px);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.priority-mark {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 1.5px;
+  height: 10px;
+}
+
+.priority-mark span {
+  width: 2.5px;
+  background-color: var(--text-secondary);
+  border-radius: 1px;
+}
+
+.priority-mark.p-high span:nth-child(1) { height: 4px; background-color: var(--text-primary); }
+.priority-mark.p-high span:nth-child(2) { height: 7px; background-color: var(--text-primary); }
+.priority-mark.p-high span:nth-child(3) { height: 10px; background-color: var(--text-primary); }
+
+.priority-mark.p-med span:nth-child(1) { height: 4px; }
+.priority-mark.p-med span:nth-child(2) { height: 7px; }
+.priority-mark.p-med span:nth-child(3) { height: 2px; opacity: 0.2; }
+
+.priority-mark.p-low span:nth-child(1) { height: 4px; }
+.priority-mark.p-low span:nth-child(2) { height: 2px; opacity: 0.2; }
+.priority-mark.p-low span:nth-child(3) { height: 2px; opacity: 0.2; }
+
+/* ==========================================================================
+   4. PANELS & CARDS (Strict: 10px radius, 1px hairline border, NO shadows)
+   ========================================================================== */
+.panel {
+  background-color: var(--card);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: var(--space-16) var(--space-20, 20px);
+  border-bottom: 1px solid var(--border-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.panel-body {
+  padding: var(--space-20, 20px);
+}
+
+/* ==========================================================================
+   5. LEDGER TABLES (Ledger style: hairline separators, right-aligned numbers)
+   ========================================================================== */
+.table-container {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  text-align: left;
+}
+
+.ledger-table th {
+  padding: var(--space-12) var(--space-16);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-strong);
+  background-color: var(--card);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.ledger-table td {
+  padding: var(--space-12) var(--space-16);
+  border-bottom: 1px solid var(--border-hairline);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.ledger-table tbody tr {
+  transition: background-color var(--transition-fast);
+}
+
+.ledger-table tbody tr:hover {
+  background-color: var(--surface);
+}
+
+.ledger-table .col-numeral {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.ledger-table .col-actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.row-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  opacity: 0.8;
+  transition: opacity var(--transition-fast);
+}
+
+.ledger-table tr:hover .row-actions {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   6. MODAL & BOTTOM SHEET (Desktop 560px modal, Mobile bottom sheet)
+   ========================================================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(23, 36, 56, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+  padding: var(--space-16);
+}
+
+.modal-backdrop.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-dialog {
+  background-color: var(--card);
+  width: 100%;
+  max-width: 560px;
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--border-hairline);
+  box-shadow: 0 12px 32px rgba(23, 36, 56, 0.16);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 48px);
+  transform: translateY(8px);
+  transition: transform var(--transition-fast);
+}
+
+.modal-backdrop.is-open .modal-dialog {
+  transform: translateY(0);
+}
+
+.modal-header {
+  padding: var(--space-16) var(--space-20, 20px);
+  border-bottom: 1px solid var(--border-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-title {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  padding: var(--space-4);
+  display: flex;
+}
+
+.modal-close-btn:hover {
+  color: var(--text-primary);
+}
+
+.modal-body {
+  padding: var(--space-20, 20px);
+  overflow-y: auto;
+}
+
+.modal-footer {
+  padding: var(--space-16) var(--space-20, 20px);
+  border-top: 1px solid var(--border-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-12);
+  background-color: var(--surface);
+  border-radius: 0 0 var(--radius-panel) var(--radius-panel);
+}
+
+/* ==========================================================================
+   7. TOAST NOTIFICATIONS (Bottom-left, auto-dismiss)
+   ========================================================================== */
+.toast-container {
+  position: fixed;
+  bottom: var(--space-24);
+  left: var(--space-24);
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  pointer-events: none;
+}
+
+.toast {
+  background-color: var(--bg-sidebar);
+  color: #FFFFFF;
+  padding: var(--space-12) var(--space-16);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  pointer-events: auto;
+  animation: toast-in var(--transition-fast) ease-out;
+}
+
+.toast svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--status-teal);
+  flex-shrink: 0;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   8. SKELETONS & EMPTY STATES
+   ========================================================================== */
+.skeleton-box {
+  background-color: var(--surface);
+  border-radius: var(--radius-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.empty-state {
+  padding: var(--space-48) var(--space-24);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-12);
+  color: var(--text-secondary);
+}
+
+.empty-state svg {
+  width: 40px;
+  height: 40px;
+  stroke: var(--text-muted);
+  stroke-width: 1.2;
+}
+
+.empty-state-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.empty-state-text {
+  font-size: 13.5px;
+  max-width: 360px;
+  line-height: 1.45;
+  margin-bottom: var(--space-4);
+}
+
+/* ==========================================================================
+   9. VERTICAL CAPACITY GAUGE WITH CORAL DIAGONAL HATCH OVERFLOW
+   Signature Instrument Panel Component
+   ========================================================================== */
+.workload-gauge-track {
+  width: 18px;
+  height: 120px;
+  background-color: var(--surface);
+  border-radius: var(--radius-sm);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column-reverse;
+  border: 1px solid var(--border-hairline);
+}
+
+/* Planned hours fill from bottom in status color */
+.workload-gauge-fill {
+  width: 100%;
+  background-color: var(--status-teal);
+  transition: height var(--transition-fast);
+}
+
+.workload-gauge-fill.is-near-capacity {
+  background-color: var(--status-amber);
+}
+
+.workload-gauge-fill.is-overloaded {
+  background-color: var(--status-coral);
+}
+
+/* Capacity tick line marking available hours */
+.workload-gauge-tick {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--text-primary);
+  z-index: 5;
+}
+
+/* Coral diagonal hatch pattern for overflow */
+.workload-gauge-overflow {
+  width: 100%;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--status-coral),
+    var(--status-coral) 3px,
+    #B54D49 3px,
+    #B54D49 6px
+  );
+}
+
+/* Zero capacity state */
+.workload-gauge-track.is-empty-capacity {
+  border: 1px dashed var(--border-strong);
+  background: transparent;
+}

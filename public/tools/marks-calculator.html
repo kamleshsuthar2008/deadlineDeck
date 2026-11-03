@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marks &amp; Percentage Calculator — DeadlineDeck</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/toolkit.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo-mark">
+          <svg><use href="/icons.svg#icon-logo"></use></svg>
+        </div>
+        <span class="brand-wordmark">DeadlineDeck</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="/dashboard.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-dashboard"></use></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="/planner.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-planner"></use></svg>
+          <span>My Planner</span>
+        </a>
+        <a href="/tasks.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-tasks"></use></svg>
+          <span>Tasks</span>
+        </a>
+        <a href="/calendar.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-calendar"></use></svg>
+          <span>Calendar</span>
+        </a>
+        <a href="/subjects.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-subjects"></use></svg>
+          <span>Subjects</span>
+        </a>
+        <a href="/insights.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-insights"></use></svg>
+          <span>Insights &amp; Reports</span>
+        </a>
+        <a href="/toolkit.html" class="nav-link active">
+          <svg><use href="/icons.svg#icon-toolkit"></use></svg>
+          <span>Student Toolkit</span>
+        </a>
+        <a href="/settings.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-settings"></use></svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="user-avatar-monogram">--</div>
+          <div class="user-info-text">
+            <div class="user-display-name">Loading...</div>
+            <div class="user-display-email">student@college.edu</div>
+          </div>
+        </div>
+        <button class="btn-sidebar-logout">
+          <svg><use href="/icons.svg#icon-logout"></use></svg>
+          <span>Log out</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay"></div>
+
+    <div class="main-wrapper">
+      <header class="mobile-top-bar">
+        <div class="mobile-brand">
+          <svg style="width:20px;height:20px;"><use href="/icons.svg#icon-logo"></use></svg>
+          <span>DeadlineDeck</span>
+        </div>
+        <button class="mobile-menu-btn" aria-label="Open navigation menu">
+          <svg><use href="/icons.svg#icon-menu"></use></svg>
+        </button>
+      </header>
+
+      <main class="main-canvas">
+        <div class="single-column-workspace">
+          <nav class="tool-breadcrumb">
+            <a href="/toolkit.html">&larr; Student Toolkit</a>
+            <span>/</span>
+            <span>Marks &amp; Percentage Calculator</span>
+          </nav>
+
+          <div class="tool-workspace">
+            <div>
+              <span class="label-eyebrow">Academic Utility 6</span>
+              <h1 class="page-title">Marks &amp; Percentage Calculator</h1>
+              <p class="secondary" style="margin-top: 4px;">Calculate percentage scores, subject averages, and required target exam marks.</p>
+            </div>
+
+            <!-- 1. Single Assessment Percentage -->
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <span class="section-title">1. Single Assessment Percentage</span>
+                  <div class="secondary" style="font-size: 12px;">Formula: (Marks Obtained / Maximum Marks) &times; 100</div>
+                </div>
+              </div>
+              <div class="panel-body" style="display: flex; flex-direction: column; gap: var(--space-16);">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-12);">
+                  <div class="form-group" style="margin: 0;">
+                    <label class="form-label" for="calc-obtained">Marks obtained</label>
+                    <input type="number" id="calc-obtained" class="input-text tabular" step="0.5" min="0" value="42">
+                  </div>
+                  <div class="form-group" style="margin: 0;">
+                    <label class="form-label" for="calc-maximum">Maximum marks</label>
+                    <input type="number" id="calc-maximum" class="input-text tabular" step="0.5" min="1" value="50">
+                  </div>
+                </div>
+
+                <div style="background: var(--surface); padding: var(--space-16); border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 13.5px; font-weight: 500;">Calculated Percentage</span>
+                  <span id="single-pct-result" class="tabular" style="font-family: var(--font-display); font-size: 28px; font-weight: 600; color: var(--accent);">84.0%</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- 2. Weighted Assessment & Target Score -->
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <span class="section-title">2. Target Exam Score Calculator</span>
+                  <div class="secondary" style="font-size: 12px;">Find the exact score you need on your final exam to achieve your desired course grade.</div>
+                </div>
+              </div>
+              <div class="panel-body" style="display: flex; flex-direction: column; gap: var(--space-16);">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-12);">
+                  <div class="form-group" style="margin: 0;">
+                    <label class="form-label" for="tgt-internal-pct">Internal/Lab score (%)</label>
+                    <input type="number" id="tgt-internal-pct" class="input-text tabular" step="0.5" min="0" max="100" value="85">
+                  </div>
+                  <div class="form-group" style="margin: 0;">
+                    <label class="form-label" for="tgt-internal-weight">Internal weight (%)</label>
+                    <input type="number" id="tgt-internal-weight" class="input-text tabular" step="1" min="1" max="99" value="40">
+                  </div>
+                  <div class="form-group" style="margin: 0;">
+                    <label class="form-label" for="tgt-desired-grade">Desired total grade (%)</label>
+                    <input type="number" id="tgt-desired-grade" class="input-text tabular" step="0.5" min="1" max="100" value="75">
+                  </div>
+                </div>
+
+                <div style="background: var(--surface); padding: var(--space-16); border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-12);">
+                  <div>
+                    <span style="font-size: 13.5px; font-weight: 500;" id="tgt-result-label">Required Final Exam Score</span>
+                    <div id="tgt-breakdown-sub" class="secondary" style="font-size: 12px; margin-top: 2px;">Assuming remaining 60% exam weight</div>
+                  </div>
+                  <span id="tgt-score-result" class="tabular" style="font-family: var(--font-display); font-size: 28px; font-weight: 600; color: var(--status-teal-text);">68.3%</span>
+                </div>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/tools/marks-calculator.js"></script>
+</body>
+</html>

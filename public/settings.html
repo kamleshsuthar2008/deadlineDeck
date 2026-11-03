@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings — DeadlineDeck</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo-mark">
+          <svg><use href="/icons.svg#icon-logo"></use></svg>
+        </div>
+        <span class="brand-wordmark">DeadlineDeck</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="/dashboard.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-dashboard"></use></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="/planner.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-planner"></use></svg>
+          <span>My Planner</span>
+        </a>
+        <a href="/tasks.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-tasks"></use></svg>
+          <span>Tasks</span>
+        </a>
+        <a href="/calendar.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-calendar"></use></svg>
+          <span>Calendar</span>
+        </a>
+        <a href="/subjects.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-subjects"></use></svg>
+          <span>Subjects</span>
+        </a>
+        <a href="/insights.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-insights"></use></svg>
+          <span>Insights &amp; Reports</span>
+        </a>
+        <a href="/toolkit.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-toolkit"></use></svg>
+          <span>Student Toolkit</span>
+        </a>
+        <a href="/settings.html" class="nav-link active">
+          <svg><use href="/icons.svg#icon-settings"></use></svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="user-avatar-monogram">--</div>
+          <div class="user-info-text">
+            <div class="user-display-name">Loading...</div>
+            <div class="user-display-email">student@college.edu</div>
+          </div>
+        </div>
+        <button class="btn-sidebar-logout">
+          <svg><use href="/icons.svg#icon-logout"></use></svg>
+          <span>Log out</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay"></div>
+
+    <div class="main-wrapper">
+      <header class="mobile-top-bar">
+        <div class="mobile-brand">
+          <svg style="width:20px;height:20px;"><use href="/icons.svg#icon-logo"></use></svg>
+          <span>DeadlineDeck</span>
+        </div>
+        <button class="mobile-menu-btn" aria-label="Open navigation menu">
+          <svg><use href="/icons.svg#icon-menu"></use></svg>
+        </button>
+      </header>
+
+      <main class="main-canvas">
+        <div class="page-header" style="margin-bottom: var(--space-24);">
+          <div class="page-header-text">
+            <span class="label-eyebrow">Configuration</span>
+            <h1 class="page-title">Platform Settings</h1>
+          </div>
+        </div>
+
+        <div class="single-column-workspace">
+          <!-- 1. Profile Settings -->
+          <section class="panel">
+            <div class="panel-header">
+              <span class="section-title">Student Profile</span>
+            </div>
+            <form id="form-profile" class="panel-body">
+              <div class="form-group">
+                <label class="form-label" for="setting-name">Student full name</label>
+                <input type="text" id="setting-name" class="input-text" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="setting-email">
+                  <span>Registered academic email</span>
+                  <span class="form-hint">Read-only account identifier</span>
+                </label>
+                <input type="email" id="setting-email" class="input-text" readonly style="background-color: var(--surface);">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="setting-default-hours">
+                  <span>Default daily study hours</span>
+                  <span class="form-hint">Baseline capacity applied to every day</span>
+                </label>
+                <input type="number" id="setting-default-hours" class="input-text tabular" step="0.25" min="0.25" max="24" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Save profile</button>
+            </form>
+          </section>
+
+          <!-- 2. Date-Specific Study Capacity Overrides -->
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <span class="section-title">Date-Specific Capacity Overrides</span>
+                <p class="secondary" style="font-size: 12.5px; margin: 4px 0 0 0;">
+                  Date-specific capacity takes precedence over your default daily study hours.
+                </p>
+              </div>
+            </div>
+            <div class="panel-body" style="display: flex; flex-direction: column; gap: var(--space-20);">
+              <!-- Add / Edit override row -->
+              <form id="form-capacity-override" style="display: flex; gap: var(--space-12); align-items: flex-end; flex-wrap: wrap;">
+                <div class="form-group" style="margin: 0; flex: 1; min-width: 160px;">
+                  <label class="form-label" for="override-date">Target date</label>
+                  <input type="date" id="override-date" class="input-text tabular" required>
+                </div>
+                <div class="form-group" style="margin: 0; width: 140px;">
+                  <label class="form-label" for="override-hours">Available hours</label>
+                  <input type="number" id="override-hours" class="input-text tabular" step="0.25" min="0" max="24" value="2.00" required>
+                </div>
+                <button type="submit" class="btn btn-secondary" style="height: 40px;">Save date capacity</button>
+              </form>
+
+              <!-- List of active overrides -->
+              <div>
+                <span class="label-eyebrow" style="margin-bottom: var(--space-8); display: block;">Configured Date Overrides</span>
+                <div id="overrides-list" style="display: flex; flex-direction: column; gap: 8px;">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 3. Password & Security -->
+          <section class="panel">
+            <div class="panel-header">
+              <span class="section-title">Change Password</span>
+            </div>
+            <form id="form-password" class="panel-body">
+              <div class="form-group">
+                <label class="form-label" for="current-pwd">Current password</label>
+                <input type="password" id="current-pwd" class="input-text" required placeholder="••••••••">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="new-pwd">New password</label>
+                <input type="password" id="new-pwd" class="input-text" required minlength="6" placeholder="At least 6 characters">
+              </div>
+              <button type="submit" class="btn btn-secondary">Update password</button>
+            </form>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <nav class="mobile-bottom-nav">
+    <a href="/dashboard.html" class="bottom-nav-item">
+      <svg><use href="/icons.svg#icon-dashboard"></use></svg>
+      <span>Dashboard</span>
+    </a>
+    <a href="/planner.html" class="bottom-nav-item">
+      <svg><use href="/icons.svg#icon-planner"></use></svg>
+      <span>Planner</span>
+    </a>
+    <a href="/tasks.html" class="bottom-nav-item">
+      <svg><use href="/icons.svg#icon-tasks"></use></svg>
+      <span>Tasks</span>
+    </a>
+    <a href="/calendar.html" class="bottom-nav-item">
+      <svg><use href="/icons.svg#icon-calendar"></use></svg>
+      <span>Calendar</span>
+    </a>
+    <a href="/toolkit.html" class="bottom-nav-item">
+      <svg><use href="/icons.svg#icon-toolkit"></use></svg>
+      <span>Toolkit</span>
+    </a>
+  </nav>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/settings.js"></script>
+</body>
+</html>

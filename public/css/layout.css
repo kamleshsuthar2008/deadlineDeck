@@ -1,0 +1,310 @@
+/* ==========================================================================
+   DEADLINEDECK - APPLICATION SHELL & LAYOUT (layout.css)
+   ========================================================================== */
+
+/* Main Application Container */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* ==========================================================================
+   SIDEBAR NAVIGATION (#172438, 248px)
+   ========================================================================== */
+.sidebar {
+  width: 248px;
+  background-color: var(--bg-sidebar);
+  color: var(--text-on-dark);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 50;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  user-select: none;
+}
+
+/* Sidebar Brand Header */
+.sidebar-header {
+  height: 64px;
+  padding: 0 var(--space-20, 20px);
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.brand-logo-mark {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.brand-logo-mark svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.brand-wordmark {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #FFFFFF;
+}
+
+/* Sidebar Navigation Items */
+.sidebar-nav {
+  flex: 1;
+  padding: var(--space-16) var(--space-12);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  overflow-y: auto;
+}
+
+.nav-link {
+  height: 40px;
+  padding: 0 var(--space-12);
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  color: var(--text-on-dark-muted);
+  font-size: 13.5px;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  position: relative;
+}
+
+.nav-link svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
+.nav-link:hover {
+  background-color: var(--bg-sidebar-hover);
+  color: #FFFFFF;
+}
+
+.nav-link.active {
+  background-color: var(--bg-sidebar-active);
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+/* 2px accent marker on active item's inner edge */
+.nav-link.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  background-color: var(--accent);
+  border-radius: 0 2px 2px 0;
+}
+
+/* Sidebar User Footer */
+.sidebar-footer {
+  padding: var(--space-16);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.user-profile-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.user-avatar-monogram {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-sidebar-active);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.user-info-text {
+  min-width: 0;
+  flex: 1;
+}
+
+.user-display-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFFFFF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-display-email {
+  font-size: 11.5px;
+  color: var(--text-on-dark-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-sidebar-logout {
+  background: none;
+  border: none;
+  color: var(--text-on-dark-muted);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-4) 0;
+  transition: color var(--transition-fast);
+}
+
+.btn-sidebar-logout svg {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-sidebar-logout:hover {
+  color: var(--status-coral);
+}
+
+/* ==========================================================================
+   MAIN CONTENT AREA (offset by 248px sidebar)
+   ========================================================================== */
+.main-wrapper {
+  flex: 1;
+  margin-left: 248px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top bar for mobile/drawer toggle */
+.mobile-top-bar {
+  display: none;
+  height: 56px;
+  background-color: var(--bg-sidebar);
+  color: #FFFFFF;
+  padding: 0 var(--space-16);
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.mobile-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.mobile-menu-btn {
+  background: none;
+  border: none;
+  color: #FFFFFF;
+  cursor: pointer;
+  padding: var(--space-8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-menu-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Workspace Canvas */
+.main-canvas {
+  flex: 1;
+  padding: var(--space-32);
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* 3-Zone Workspace Layout */
+.dashboard-layout {
+  display: flex;
+  gap: var(--space-32);
+  align-items: flex-start;
+}
+
+.main-workspace {
+  flex: 1;
+  min-width: 0;
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-32);
+}
+
+.insights-rail {
+  width: 320px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+/* Single-column focused layout (e.g. Toolkit, Settings, Tools) */
+.single-column-workspace {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-32);
+}
+
+/* Page Header Structure */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+  flex-wrap: wrap;
+}
+
+.page-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.page-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+/* Overlay for Mobile Drawer */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 45;
+}

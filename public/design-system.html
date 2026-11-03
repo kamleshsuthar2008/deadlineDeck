@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeadlineDeck — Design System & Component Library</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/toolkit.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    .ds-section {
+      margin-bottom: var(--space-48);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-16);
+    }
+    .ds-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--space-16);
+      align-items: start;
+    }
+    .swatch {
+      height: 48px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--space-12);
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid var(--border-hairline);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar Preview -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo-mark">
+          <svg><use href="/icons.svg#icon-logo"></use></svg>
+        </div>
+        <span class="brand-wordmark">DeadlineDeck</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#dashboard" class="nav-link active">
+          <svg><use href="/icons.svg#icon-dashboard"></use></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#planner" class="nav-link">
+          <svg><use href="/icons.svg#icon-planner"></use></svg>
+          <span>My Planner</span>
+        </a>
+        <a href="#tasks" class="nav-link">
+          <svg><use href="/icons.svg#icon-tasks"></use></svg>
+          <span>Tasks</span>
+        </a>
+        <a href="#calendar" class="nav-link">
+          <svg><use href="/icons.svg#icon-calendar"></use></svg>
+          <span>Calendar</span>
+        </a>
+        <a href="#subjects" class="nav-link">
+          <svg><use href="/icons.svg#icon-subjects"></use></svg>
+          <span>Subjects</span>
+        </a>
+        <a href="#insights" class="nav-link">
+          <svg><use href="/icons.svg#icon-insights"></use></svg>
+          <span>Insights & Reports</span>
+        </a>
+        <a href="#toolkit" class="nav-link">
+          <svg><use href="/icons.svg#icon-toolkit"></use></svg>
+          <span>Student Toolkit</span>
+        </a>
+        <a href="#settings" class="nav-link">
+          <svg><use href="/icons.svg#icon-settings"></use></svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="user-avatar-monogram">AS</div>
+          <div class="user-info-text">
+            <div class="user-display-name">Aarav Sharma</div>
+            <div class="user-display-email">aarav.sharma@college.edu</div>
+          </div>
+        </div>
+        <button class="btn-sidebar-logout">
+          <svg><use href="/icons.svg#icon-logout"></use></svg>
+          <span>Log out</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <div class="main-wrapper">
+      <main class="main-canvas">
+        <div class="page-header" style="margin-bottom: var(--space-32);">
+          <div>
+            <span class="label-eyebrow">Design System Spec</span>
+            <h1 class="page-title">DeadlineDeck Component Matrix</h1>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-secondary" onclick="document.getElementById('demo-modal').classList.add('is-open')">Open modal</button>
+            <button class="btn btn-primary" onclick="showToast('Component verified successfully')">Trigger toast</button>
+          </div>
+        </div>
+
+        <!-- 1. Color Swatches -->
+        <section class="ds-section">
+          <span class="label-eyebrow">1. Palette Tokens</span>
+          <div class="ds-grid">
+            <div class="swatch" style="background-color: var(--bg-main); color: var(--text-primary);">Main Canvas: #F6F7F4</div>
+            <div class="swatch" style="background-color: var(--bg-sidebar); color: #FFF;">Sidebar: #172438</div>
+            <div class="swatch" style="background-color: var(--accent); color: #FFF;">Accent Action: #4567D8</div>
+            <div class="swatch" style="background-color: var(--status-teal); color: #FFF;">Balanced Teal: #36978C</div>
+            <div class="swatch" style="background-color: var(--status-amber); color: #FFF;">Near Capacity Amber: #E6A13A</div>
+            <div class="swatch" style="background-color: var(--status-coral); color: #FFF;">Overloaded Coral: #D76B67</div>
+          </div>
+        </section>
+
+        <!-- 2. Signature Workload Gauges in all 4 states -->
+        <section class="ds-section">
+          <span class="label-eyebrow">2. Signature Workload Gauge in All Four States</span>
+          <div class="panel">
+            <div class="panel-header">
+              <span class="section-title">Vertical Capacity Gauge Instrument Panel</span>
+            </div>
+            <div class="panel-body" style="display: flex; gap: var(--space-48); justify-content: space-around;">
+              <!-- State A: Balanced (<= 80%) -->
+              <div style="display: flex; flex-direction: column; align-items: center; gap: var(--space-8);">
+                <div class="label-eyebrow">Balanced (66.7%)</div>
+                <div class="workload-gauge-track">
+                  <div class="workload-gauge-tick" style="bottom: 80%;"></div>
+                  <div class="workload-gauge-fill" style="height: 53%;"></div>
+                </div>
+                <div class="status-chip is-balanced">
+                  <span class="status-dot"></span>
+                  <span class="tabular">2.0 / 3.0 h</span>
+                </div>
+                <span class="day-status-text status-balanced">Balanced</span>
+              </div>
+
+              <!-- State B: Near Capacity (80% - 100%) -->
+              <div style="display: flex; flex-direction: column; align-items: center; gap: var(--space-8);">
+                <div class="label-eyebrow">Near Capacity (91.7%)</div>
+                <div class="workload-gauge-track">
+                  <div class="workload-gauge-tick" style="bottom: 80%;"></div>
+                  <div class="workload-gauge-fill is-near-capacity" style="height: 73%;"></div>
+                </div>
+                <div class="status-chip is-near-capacity">
+                  <span class="status-dot"></span>
+                  <span class="tabular">2.75 / 3.0 h</span>
+                </div>
+                <span class="day-status-text status-near_capacity">Near capacity</span>
+              </div>
+
+              <!-- State C: Overloaded (> 100%) with coral diagonal hatch! -->
+              <div style="display: flex; flex-direction: column; align-items: center; gap: var(--space-8);">
+                <div class="label-eyebrow">Overloaded (116.7%)</div>
+                <div class="workload-gauge-track">
+                  <div class="workload-gauge-tick" style="bottom: 70%;"></div>
+                  <!-- Overflow section with diagonal hatch -->
+                  <div class="workload-gauge-overflow" style="height: 20%;"></div>
+                  <!-- Base capacity section -->
+                  <div class="workload-gauge-fill is-overloaded" style="height: 70%;"></div>
+                </div>
+                <div class="status-chip is-overloaded">
+                  <span class="status-dot"></span>
+                  <span class="tabular">3.5 / 3.0 h</span>
+                </div>
+                <span class="day-status-text status-overloaded">Overloaded</span>
+              </div>
+
+              <!-- State D: Zero Capacity -->
+              <div style="display: flex; flex-direction: column; align-items: center; gap: var(--space-8);">
+                <div class="label-eyebrow">Capacity Not Set</div>
+                <div class="workload-gauge-track is-empty-capacity"></div>
+                <div class="status-chip is-not-configured">
+                  <span class="status-dot"></span>
+                  <span>Not set</span>
+                </div>
+                <span class="day-status-text status-not_configured">Configure</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Buttons & Status Chips -->
+        <section class="ds-section">
+          <span class="label-eyebrow">3. Action Buttons & Status Chips</span>
+          <div style="display: flex; gap: var(--space-16); align-items: center; flex-wrap: wrap;">
+            <button class="btn btn-primary">
+              <svg><use href="/icons.svg#icon-plus"></use></svg>
+              <span>Add task</span>
+            </button>
+            <button class="btn btn-secondary">Secondary button</button>
+            <button class="btn btn-ghost">Ghost action</button>
+            <button class="btn btn-danger-ghost">Delete record</button>
+            <button class="btn btn-primary" disabled>Disabled button</button>
+          </div>
+
+          <div style="display: flex; gap: var(--space-24); align-items: center; margin-top: var(--space-16); flex-wrap: wrap;">
+            <div class="status-chip is-balanced"><span class="status-dot"></span>Balanced</div>
+            <div class="status-chip is-near-capacity"><span class="status-dot"></span>Near capacity</div>
+            <div class="status-chip is-overloaded"><span class="status-dot"></span>Overloaded</div>
+            <div class="status-chip is-not-configured"><span class="status-dot"></span>Capacity not set</div>
+
+            <div class="priority-indicator">
+              <div class="priority-mark p-high"><span></span><span></span><span></span></div>
+              <span>High priority</span>
+            </div>
+            <div class="priority-indicator">
+              <div class="priority-mark p-med"><span></span><span></span><span></span></div>
+              <span>Medium priority</span>
+            </div>
+            <div class="priority-indicator">
+              <div class="priority-mark p-low"><span></span><span></span><span></span></div>
+              <span>Low priority</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. Form Controls -->
+        <section class="ds-section">
+          <span class="label-eyebrow">4. Form Inputs & Stepper</span>
+          <div class="ds-grid">
+            <div class="form-group">
+              <label class="form-label" for="ds-title">Task title</label>
+              <input type="text" id="ds-title" class="input-text" value="Implement Round Robin scheduling">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="ds-select">Subject</label>
+              <select id="ds-select" class="input-select">
+                <option>Operating Systems (CS302)</option>
+                <option>DBMS (CS301)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="ds-hours">
+                <span>Estimated study hours</span>
+                <span class="form-hint">0.25 increment</span>
+              </label>
+              <input type="number" id="ds-hours" class="input-text tabular" step="0.25" min="0.25" max="24" value="1.50">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="ds-error">Input with inline validation</label>
+              <input type="text" id="ds-error" class="input-text" aria-invalid="true" value="Invalid input">
+              <span class="form-error">Please enter a valid academic task name.</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. Ledger Table Row -->
+        <section class="ds-section">
+          <span class="label-eyebrow">5. Ledger Table Specimen</span>
+          <div class="panel">
+            <div class="table-container">
+              <table class="ledger-table">
+                <thead>
+                  <tr>
+                    <th style="width: 40px;"><span class="sr-only">Select</span></th>
+                    <th>Task title</th>
+                    <th>Subject</th>
+                    <th>Type</th>
+                    <th>Planned date</th>
+                    <th>Due date</th>
+                    <th class="col-numeral">Est. hours</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th class="col-actions">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <label class="custom-checkbox">
+                        <input type="checkbox">
+                      </label>
+                    </td>
+                    <td style="font-weight: 500;">SQL Joins & Grouping Lab Sheet</td>
+                    <td><span class="focus-subject-tag">CS301</span></td>
+                    <td>Practical</td>
+                    <td class="tabular">2026-11-04</td>
+                    <td class="tabular">2026-11-05</td>
+                    <td class="col-numeral tabular">1.00 h</td>
+                    <td>
+                      <div class="priority-indicator">
+                        <div class="priority-mark p-high"><span></span><span></span><span></span></div>
+                        <span>High</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="status-chip is-balanced">
+                        <span class="status-dot"></span>
+                        <span>Pending</span>
+                      </div>
+                    </td>
+                    <td class="col-actions">
+                      <div class="row-actions">
+                        <button class="btn btn-ghost" style="padding: 4px;" title="Edit">
+                          <svg><use href="/icons.svg#icon-edit"></use></svg>
+                        </button>
+                        <button class="btn btn-danger-ghost" style="padding: 4px;" title="Delete">
+                          <svg><use href="/icons.svg#icon-trash"></use></svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. Empty State -->
+        <section class="ds-section">
+          <span class="label-eyebrow">6. Empty State Component</span>
+          <div class="panel">
+            <div class="empty-state">
+              <svg><use href="/icons.svg#icon-tasks"></use></svg>
+              <div class="empty-state-title">No tasks scheduled for this day</div>
+              <div class="empty-state-text">Your academic workload is completely clear. You have 3 hours of available study capacity.</div>
+              <button class="btn btn-secondary">
+                <svg><use href="/icons.svg#icon-plus"></use></svg>
+                <span>Add task</span>
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal Component Specimen -->
+  <div id="demo-modal" class="modal-backdrop" onclick="if(event.target === this) this.classList.remove('is-open')">
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h2 id="modal-title" class="modal-title">Create academic task</h2>
+        <button class="modal-close-btn" onclick="document.getElementById('demo-modal').classList.remove('is-open')">
+          <svg><use href="/icons.svg#icon-close"></use></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="modal-task-title">Title</label>
+          <input type="text" id="modal-task-title" class="input-text" placeholder="e.g. BCNF decomposition assignment">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="modal-task-hours">Estimated hours</label>
+          <input type="number" id="modal-task-hours" class="input-text tabular" step="0.25" value="1.50">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="document.getElementById('demo-modal').classList.remove('is-open')">Cancel</button>
+        <button class="btn btn-primary" onclick="document.getElementById('demo-modal').classList.remove('is-open'); showToast('Task created successfully')">Save task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script>
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `<svg><use href="/icons.svg#icon-check"></use></svg><span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.2s ease-out';
+        setTimeout(() => toast.remove(), 200);
+      }, 3800);
+    }
+  </script>
+</body>
+</html>

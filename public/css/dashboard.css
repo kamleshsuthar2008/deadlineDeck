@@ -1,0 +1,558 @@
+/* ==========================================================================
+   DEADLINEDECK - DASHBOARD VIEWPORT STYLES (dashboard.css)
+   Strict adherence to Part A5, A6 specifications
+   ========================================================================== */
+
+/* ==========================================================================
+   1. DASHBOARD HEADER
+   ========================================================================== */
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+  flex-wrap: wrap;
+}
+
+.greeting-text {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.current-date-text {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.week-navigation-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  background-color: var(--card);
+  padding: var(--space-4) var(--space-8);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-md);
+}
+
+.week-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  padding: 0 var(--space-8);
+  user-select: none;
+}
+
+/* ==========================================================================
+   2. ACADEMIC OVERVIEW RIBBON (Single panel, hairline divided cells)
+   ========================================================================== */
+.overview-ribbon {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background-color: var(--card);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+}
+
+.overview-cell {
+  padding: var(--space-20, 20px) var(--space-24);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  position: relative;
+}
+
+.overview-cell:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: var(--space-16);
+  bottom: var(--space-16);
+  right: 0;
+  width: 1px;
+  background-color: var(--border-hairline);
+}
+
+.overview-figure {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Overdue cell turns coral ONLY when above zero */
+.overview-cell.is-overdue-alert .overview-figure {
+  color: var(--status-coral-text);
+}
+
+.overview-unit {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin-left: 2px;
+}
+
+/* ==========================================================================
+   3. THE SIGNATURE WEEKLY WORKLOAD MAP (Part A5)
+   ========================================================================== */
+.workload-map-panel {
+  background-color: var(--card);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.workload-map-header {
+  padding: var(--space-16) var(--space-20, 20px);
+  border-bottom: 1px solid var(--border-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Seven day columns in a single continuous panel separated by hairlines */
+.workload-map-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background-color: var(--card);
+}
+
+.workload-day-column {
+  padding: var(--space-16) var(--space-12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-12);
+  position: relative;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  user-select: none;
+}
+
+.workload-day-column:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 1px;
+  background-color: var(--border-hairline);
+}
+
+.workload-day-column:hover {
+  background-color: var(--surface);
+}
+
+/* Selected column has prominent outline / surface fill */
+.workload-day-column.is-selected {
+  background-color: var(--surface);
+}
+
+.workload-day-column.is-selected::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: var(--accent);
+}
+
+/* Column Date Header */
+.day-column-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.day-weekday-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.day-numeral {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-primary);
+  position: relative;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Today marked with small accent underline */
+.workload-day-column.is-today .day-numeral::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 2px;
+  background-color: var(--accent);
+  border-radius: 1px;
+}
+
+/* Day Statistics below Gauge */
+.day-metrics {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 100%;
+  text-align: center;
+}
+
+.day-hours-ratio {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.day-percentage {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.day-task-count {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Status text badge */
+.day-status-text {
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.day-status-text.status-balanced {
+  color: var(--status-teal-text);
+}
+
+.day-status-text.status-near_capacity {
+  color: var(--status-amber-text);
+}
+
+.day-status-text.status-overloaded {
+  color: var(--status-coral-text);
+}
+
+.day-status-text.status-not_configured {
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+/* Workload Detail Panel (Beneath the Map) */
+.workload-detail-panel {
+  border-top: 1px solid var(--border-hairline);
+  padding: var(--space-16) var(--space-20, 20px);
+  background-color: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.workload-detail-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+  flex-wrap: wrap;
+}
+
+.workload-plain-sentence {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.workload-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.day-task-mini-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6, 6px);
+}
+
+.day-task-mini-item {
+  background-color: var(--card);
+  padding: var(--space-8) var(--space-12);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+/* ==========================================================================
+   4. TODAY'S FOCUS (Ranked list with rank numerals & explicit reasons)
+   ========================================================================== */
+.focus-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.focus-item {
+  background-color: var(--card);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-panel);
+  padding: var(--space-12) var(--space-16);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-16);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.focus-item:hover {
+  border-color: var(--border-strong);
+}
+
+.focus-rank-badge {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  width: 24px;
+  text-align: center;
+  padding-top: 2px;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.focus-main-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.focus-title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.focus-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.focus-subject-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background-color: var(--surface);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.focus-reason-text {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.focus-meta-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  flex-shrink: 0;
+}
+
+.focus-hours {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   5. UPCOMING DEADLINES TIMELINE (Date-led block, not cards)
+   ========================================================================== */
+.deadline-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.timeline-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  padding: var(--space-8) 0;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.timeline-date-block {
+  width: 44px;
+  text-align: center;
+  flex-shrink: 0;
+  padding: var(--space-4) 0;
+  background-color: var(--surface);
+  border-radius: var(--radius-sm);
+}
+
+.timeline-month {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+}
+
+.timeline-day {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.timeline-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.timeline-title {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.timeline-sub {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   6. SUBJECT WORKLOAD BARS (Horizontal SVG/CSS bars)
+   ========================================================================== */
+.subject-workload-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.subject-workload-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.subject-workload-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+}
+
+.subject-workload-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.subject-workload-hours {
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.subject-bar-track {
+  height: 6px;
+  background-color: var(--surface);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.subject-bar-fill {
+  height: 100%;
+  background-color: var(--accent);
+  border-radius: var(--radius-full);
+  transition: width var(--transition-fast);
+}
+
+/* ==========================================================================
+   7. INSIGHTS RAIL (Compact 320px column)
+   ========================================================================== */
+.rail-widget {
+  background-color: var(--card);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-panel);
+  padding: var(--space-20, 20px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.rail-widget-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.rail-stat-value {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* SVG Completion Ring */
+.completion-ring-container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+.completion-ring-svg {
+  width: 64px;
+  height: 64px;
+  transform: rotate(-90deg);
+  flex-shrink: 0;
+}
+
+.completion-ring-track {
+  fill: none;
+  stroke: var(--surface);
+  stroke-width: 6;
+}
+
+.completion-ring-fill {
+  fill: none;
+  stroke: var(--status-teal);
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.4s ease-out;
+}

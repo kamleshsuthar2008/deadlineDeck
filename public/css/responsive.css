@@ -1,0 +1,199 @@
+/* ==========================================================================
+   DEADLINEDECK - RESPONSIVE BEHAVIOR (responsive.css)
+   Strict adherence to Part A7 specifications
+   ========================================================================== */
+
+/* Bottom Navigation Bar for Mobile (< 640px) */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: var(--bg-sidebar);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 40;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 var(--space-8);
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  color: var(--text-on-dark-muted);
+  font-size: 10px;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+}
+
+.bottom-nav-item svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+}
+
+.bottom-nav-item.active {
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   TABLET / LAPTOP (1024px to 1279px)
+   Rail moves below main workspace
+   ========================================================================== */
+@media (max-width: 1279px) {
+  .dashboard-layout {
+    flex-direction: column;
+  }
+
+  .main-workspace {
+    max-width: 100%;
+  }
+
+  .insights-rail {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-20);
+  }
+
+  .toolkit-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ==========================================================================
+   TABLET & SMALL SCREENS (640px to 1023px)
+   Sidebar becomes drawer behind top bar
+   ========================================================================== */
+@media (max-width: 1023px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.25s ease-out;
+  }
+
+  .sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay.is-open {
+    display: block;
+  }
+
+  .main-wrapper {
+    margin-left: 0;
+  }
+
+  .mobile-top-bar {
+    display: flex;
+  }
+
+  .main-canvas {
+    padding: var(--space-20, 20px);
+  }
+
+  .overview-ribbon {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ==========================================================================
+   MOBILE PHONES (< 640px)
+   Bottom tab bar, bottom sheets, mobile workload vertical list
+   ========================================================================== */
+@media (max-width: 639px) {
+  .mobile-bottom-nav {
+    display: flex;
+  }
+
+  .main-canvas {
+    padding: var(--space-16);
+    padding-bottom: 80px; /* Space for bottom nav bar */
+  }
+
+  /* Overview ribbon becomes stacked 2-column grid */
+  .overview-ribbon {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .overview-cell {
+    padding: var(--space-16);
+  }
+
+  .overview-cell:nth-child(2)::after,
+  .overview-cell:nth-child(4)::after {
+    display: none;
+  }
+
+  /* Workload Map becomes vertical list of 7 rows on mobile */
+  .workload-map-grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .workload-day-column {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: var(--space-12) var(--space-16);
+    width: 100%;
+    border-bottom: 1px solid var(--border-hairline);
+  }
+
+  .workload-day-column:not(:last-child)::after {
+    display: none;
+  }
+
+  .day-column-header {
+    flex-direction: row;
+    gap: var(--space-8);
+    align-items: baseline;
+    width: 80px;
+  }
+
+  .workload-gauge-track {
+    width: 90px;
+    height: 12px;
+    flex-direction: row;
+  }
+
+  .workload-gauge-fill {
+    height: 100%;
+    width: 0;
+  }
+
+  .day-metrics {
+    flex-direction: row;
+    gap: var(--space-12);
+    width: auto;
+  }
+
+  /* Modal becomes full-width bottom sheet */
+  .modal-dialog {
+    max-width: 100%;
+    border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+    max-height: 85vh;
+    margin-top: auto;
+    transform: translateY(100%);
+  }
+
+  .modal-backdrop.is-open .modal-dialog {
+    transform: translateY(0);
+  }
+
+  .toolkit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .insights-rail {
+    grid-template-columns: 1fr;
+  }
+
+  /* Touch targets minimum 40px */
+  .btn {
+    height: 40px;
+  }
+}

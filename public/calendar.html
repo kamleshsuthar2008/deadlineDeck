@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendar — DeadlineDeck</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <style>
+    .calendar-container {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: var(--space-24);
+      align-items: start;
+    }
+    .calendar-month-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-panel);
+      background-color: var(--card);
+      overflow: hidden;
+    }
+    .calendar-weekday-header {
+      padding: var(--space-8);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-align: center;
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--border-hairline);
+    }
+    .calendar-day-cell {
+      min-height: 84px;
+      padding: var(--space-6, 6px);
+      border-right: 1px solid var(--border-hairline);
+      border-bottom: 1px solid var(--border-hairline);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+      transition: background-color var(--transition-fast);
+      user-select: none;
+    }
+    .calendar-day-cell:nth-child(7n) {
+      border-right: none;
+    }
+    .calendar-day-cell:hover {
+      background-color: var(--surface);
+    }
+    .calendar-day-cell.is-selected {
+      background-color: var(--surface);
+      box-shadow: inset 0 0 0 2px var(--accent);
+    }
+    .calendar-day-cell.is-outside-month {
+      background-color: #FAFAFA;
+      opacity: 0.4;
+    }
+    .cell-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cell-date-num {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .cell-is-today {
+      background-color: var(--accent);
+      color: #FFFFFF;
+      width: 20px;
+      height: 20px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11.5px;
+    }
+    .cal-event-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      line-height: 1.2;
+      padding: 1px 4px;
+      border-radius: var(--radius-sm);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+    .cal-event-dot.type-planned {
+      border: 1px solid var(--border-strong);
+      color: var(--text-primary);
+    }
+    .cal-event-dot.type-due {
+      background-color: var(--text-primary);
+      color: #FFFFFF;
+    }
+    .calendar-legend {
+      display: flex;
+      gap: var(--space-16);
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    @media (max-width: 960px) {
+      .calendar-container { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo-mark">
+          <svg><use href="/icons.svg#icon-logo"></use></svg>
+        </div>
+        <span class="brand-wordmark">DeadlineDeck</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="/dashboard.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-dashboard"></use></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="/planner.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-planner"></use></svg>
+          <span>My Planner</span>
+        </a>
+        <a href="/tasks.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-tasks"></use></svg>
+          <span>Tasks</span>
+        </a>
+        <a href="/calendar.html" class="nav-link active">
+          <svg><use href="/icons.svg#icon-calendar"></use></svg>
+          <span>Calendar</span>
+        </a>
+        <a href="/subjects.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-subjects"></use></svg>
+          <span>Subjects</span>
+        </a>
+        <a href="/insights.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-insights"></use></svg>
+          <span>Insights &amp; Reports</span>
+        </a>
+        <a href="/toolkit.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-toolkit"></use></svg>
+          <span>Student Toolkit</span>
+        </a>
+        <a href="/settings.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-settings"></use></svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="user-avatar-monogram">--</div>
+          <div class="user-info-text">
+            <div class="user-display-name">Loading...</div>
+            <div class="user-display-email">student@college.edu</div>
+          </div>
+        </div>
+        <button class="btn-sidebar-logout">
+          <svg><use href="/icons.svg#icon-logout"></use></svg>
+          <span>Log out</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay"></div>
+
+    <div class="main-wrapper">
+      <header class="mobile-top-bar">
+        <div class="mobile-brand">
+          <svg style="width:20px;height:20px;"><use href="/icons.svg#icon-logo"></use></svg>
+          <span>DeadlineDeck</span>
+        </div>
+        <button class="mobile-menu-btn" aria-label="Open navigation menu">
+          <svg><use href="/icons.svg#icon-menu"></use></svg>
+        </button>
+      </header>
+
+      <main class="main-canvas">
+        <div class="page-header" style="margin-bottom: var(--space-20);">
+          <div class="page-header-text">
+            <span class="label-eyebrow">Academic Schedule</span>
+            <h1 class="page-title" id="cal-month-title">Monthly Calendar</h1>
+          </div>
+          <div class="page-actions">
+            <div class="week-navigation-toolbar">
+              <button id="btn-cal-prev" class="btn btn-ghost" style="padding: 4px;">
+                <svg><use href="/icons.svg#icon-chevron-left"></use></svg>
+              </button>
+              <button id="btn-cal-today" class="btn btn-ghost" style="font-size: 12px; padding: 0 8px;">Today</button>
+              <button id="btn-cal-next" class="btn btn-ghost" style="padding: 4px;">
+                <svg><use href="/icons.svg#icon-chevron-right"></use></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Legend -->
+        <div style="margin-bottom: var(--space-16); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-12);">
+          <div class="calendar-legend">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span class="cal-event-dot type-planned" style="width: auto; padding: 2px 6px;">Planned Study</span>
+              <span>Study scheduled</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span class="cal-event-dot type-due" style="width: auto; padding: 2px 6px;">Due Date</span>
+              <span>Final submission deadline</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="calendar-container">
+          <!-- Calendar Month Grid -->
+          <div class="calendar-month-grid" id="calendar-grid">
+            <div class="calendar-weekday-header">Mon</div>
+            <div class="calendar-weekday-header">Tue</div>
+            <div class="calendar-weekday-header">Wed</div>
+            <div class="calendar-weekday-header">Thu</div>
+            <div class="calendar-weekday-header">Fri</div>
+            <div class="calendar-weekday-header">Sat</div>
+            <div class="calendar-weekday-header">Sun</div>
+            <!-- Days rendered dynamically -->
+          </div>
+
+          <!-- Day Inspector Side Panel -->
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <span class="label-eyebrow" id="cal-day-label">Selected Date</span>
+                <h2 class="section-title" id="cal-day-heading">Day Overview</h2>
+              </div>
+            </div>
+            <div class="panel-body" style="display: flex; flex-direction: column; gap: var(--space-20);">
+              <!-- Section A: Study Planned -->
+              <div>
+                <span class="label-eyebrow" style="margin-bottom: var(--space-8); display: block;">Study Planned on this Date</span>
+                <div id="inspector-study-list" style="display: flex; flex-direction: column; gap: 6px;"></div>
+              </div>
+
+              <!-- Section B: Deadlines Due -->
+              <div style="border-top: 1px solid var(--border-hairline); padding-top: var(--space-16);">
+                <span class="label-eyebrow" style="margin-bottom: var(--space-8); display: block;">Submission Deadlines Due</span>
+                <div id="inspector-due-list" style="display: flex; flex-direction: column; gap: 6px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <nav class="mobile-bottom-nav">
+    <a href="/dashboard.html" class="bottom-nav-item">
+      <svg><use href="/icons.svg#icon-dashboard"></use></svg>
+      <span>Dashboard</span>
+    </a>
+    <a href="/planner.html" class="bottom-nav-item">
+      <svg><use href="/icons.svg#icon-planner"></use></svg>
+      <span>Planner</span>
+    </a>
+    <a href="/tasks.html" class="bottom-nav-item">
+      <svg><use href="/icons.svg#icon-tasks"></use></svg>
+      <span>Tasks</span>
+    </a>
+    <a href="/calendar.html" class="bottom-nav-item active">
+      <svg><use href="/icons.svg#icon-calendar"></use></svg>
+      <span>Calendar</span>
+    </a>
+    <a href="/toolkit.html" class="bottom-nav-item">
+      <svg><use href="/icons.svg#icon-toolkit"></use></svg>
+      <span>Toolkit</span>
+    </a>
+  </nav>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/calendar.js"></script>
+</body>
+</html>

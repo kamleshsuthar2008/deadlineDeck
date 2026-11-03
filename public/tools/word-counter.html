@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word and Character Counter — DeadlineDeck</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/toolkit.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo-mark">
+          <svg><use href="/icons.svg#icon-logo"></use></svg>
+        </div>
+        <span class="brand-wordmark">DeadlineDeck</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="/dashboard.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-dashboard"></use></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="/planner.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-planner"></use></svg>
+          <span>My Planner</span>
+        </a>
+        <a href="/tasks.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-tasks"></use></svg>
+          <span>Tasks</span>
+        </a>
+        <a href="/calendar.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-calendar"></use></svg>
+          <span>Calendar</span>
+        </a>
+        <a href="/subjects.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-subjects"></use></svg>
+          <span>Subjects</span>
+        </a>
+        <a href="/insights.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-insights"></use></svg>
+          <span>Insights &amp; Reports</span>
+        </a>
+        <a href="/toolkit.html" class="nav-link active">
+          <svg><use href="/icons.svg#icon-toolkit"></use></svg>
+          <span>Student Toolkit</span>
+        </a>
+        <a href="/settings.html" class="nav-link">
+          <svg><use href="/icons.svg#icon-settings"></use></svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="user-avatar-monogram">--</div>
+          <div class="user-info-text">
+            <div class="user-display-name">Loading...</div>
+            <div class="user-display-email">student@college.edu</div>
+          </div>
+        </div>
+        <button class="btn-sidebar-logout">
+          <svg><use href="/icons.svg#icon-logout"></use></svg>
+          <span>Log out</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay"></div>
+
+    <div class="main-wrapper">
+      <header class="mobile-top-bar">
+        <div class="mobile-brand">
+          <svg style="width:20px;height:20px;"><use href="/icons.svg#icon-logo"></use></svg>
+          <span>DeadlineDeck</span>
+        </div>
+        <button class="mobile-menu-btn" aria-label="Open navigation menu">
+          <svg><use href="/icons.svg#icon-menu"></use></svg>
+        </button>
+      </header>
+
+      <main class="main-canvas">
+        <div class="single-column-workspace">
+          <!-- Breadcrumb back to toolkit -->
+          <nav class="tool-breadcrumb">
+            <a href="/toolkit.html">&larr; Student Toolkit</a>
+            <span>/</span>
+            <span>Word Counter</span>
+          </nav>
+
+          <div class="tool-workspace">
+            <div>
+              <span class="label-eyebrow">Academic Utility 1</span>
+              <h1 class="page-title">Word and Character Counter</h1>
+              <p class="secondary" style="margin-top: 4px;">Live statistical analysis and target completion for assignments and reports.</p>
+            </div>
+
+            <!-- Target Progress Box -->
+            <div style="background: var(--surface); padding: var(--space-16); border-radius: var(--radius-md); border: 1px solid var(--border-hairline); display: flex; flex-direction: column; gap: var(--space-8);">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-8);">
+                <div style="display: flex; align-items: center; gap: var(--space-8);">
+                  <label for="input-target-words" class="form-label" style="margin: 0;">Word count target:</label>
+                  <input type="number" id="input-target-words" class="input-text tabular" style="width: 100px; height: 32px;" value="500" min="10" step="50">
+                </div>
+                <div class="tabular" style="font-size: 13px; font-weight: 600;">
+                  Progress: <span id="target-stat-text">0 / 500 words (0%)</span>
+                </div>
+              </div>
+              <div class="subject-bar-track" style="height: 8px;">
+                <div id="target-bar-fill" class="subject-bar-fill" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <!-- Live Stats Strip -->
+            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-12); background: var(--card); border: 1px solid var(--border-hairline); border-radius: var(--radius-md); padding: var(--space-16);">
+              <div style="text-align: center;">
+                <span class="label-eyebrow">Words</span>
+                <div id="cnt-words" class="tabular" style="font-size: 24px; font-weight: 600; font-family: var(--font-display);">0</div>
+              </div>
+              <div style="text-align: center;">
+                <span class="label-eyebrow">Chars (with spaces)</span>
+                <div id="cnt-chars-spaces" class="tabular" style="font-size: 24px; font-weight: 600; font-family: var(--font-display);">0</div>
+              </div>
+              <div style="text-align: center;">
+                <span class="label-eyebrow">Chars (no spaces)</span>
+                <div id="cnt-chars-nospaces" class="tabular" style="font-size: 24px; font-weight: 600; font-family: var(--font-display);">0</div>
+              </div>
+              <div style="text-align: center;">
+                <span class="label-eyebrow">Paragraphs</span>
+                <div id="cnt-paragraphs" class="tabular" style="font-size: 24px; font-weight: 600; font-family: var(--font-display);">0</div>
+              </div>
+              <div style="text-align: center;">
+                <span class="label-eyebrow">Reading Time</span>
+                <div id="cnt-reading-time" class="tabular" style="font-size: 24px; font-weight: 600; font-family: var(--font-display);">0 min</div>
+              </div>
+            </div>
+
+            <!-- Text Input Area -->
+            <div class="form-group">
+              <label class="form-label" for="text-input">
+                <span>Enter or paste academic content</span>
+                <button type="button" id="btn-clear-text" class="btn btn-ghost" style="height: 24px; padding: 0 6px; font-size: 12px;">Clear text</button>
+              </label>
+              <textarea id="text-input" class="input-textarea" style="min-height: 240px; font-size: 14.5px; line-height: 1.6;" placeholder="Paste your essay, lab report introduction, or research summary here..."></textarea>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/tools/word-counter.js"></script>
+</body>
+</html>
