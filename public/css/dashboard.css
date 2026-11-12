@@ -47,47 +47,72 @@
 }
 
 /* ==========================================================================
-   2. ACADEMIC OVERVIEW RIBBON (Single panel, hairline divided cells)
+   2. ACADEMIC OVERVIEW RIBBON (Modern segmented cards)
    ========================================================================== */
 .overview-ribbon {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  background-color: var(--card);
-  border: 1px solid var(--border-hairline);
-  border-radius: var(--radius-panel);
-  overflow: hidden;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-16);
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
 }
 
 .overview-cell {
-  padding: var(--space-20, 20px) var(--space-24);
+  background-color: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-16) var(--space-20);
   display: flex;
   flex-direction: column;
-  gap: var(--space-8);
+  gap: var(--space-6);
   position: relative;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(17, 17, 17, 0.02);
+}
+
+.overview-cell:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+  box-shadow: 0 6px 16px -2px rgba(17, 17, 17, 0.06);
 }
 
 .overview-cell:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  top: var(--space-16);
-  bottom: var(--space-16);
-  right: 0;
-  width: 1px;
-  background-color: var(--border-hairline);
+  display: none;
 }
 
-.overview-figure {
-  font-family: var(--font-display);
+.overview-cell-label {
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.overview-cell-numeral {
+  font-family: var(--font-editorial);
   font-size: 32px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-primary);
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 
-/* Overdue cell turns coral ONLY when above zero */
-.overview-cell.is-overdue-alert .overview-figure {
-  color: var(--status-coral-text);
+/* Overdue cell turns coral alert when tasks require attention */
+.overview-cell.is-overdue-alert {
+  border-color: rgba(201, 104, 101, 0.45);
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAECEB 100%);
+}
+
+.overview-cell.is-overdue-alert .overview-cell-numeral {
+  color: var(--status-coral);
+}
+
+.overview-cell-footnote {
+  font-size: 11.5px;
+  color: var(--text-secondary);
 }
 
 .overview-unit {
@@ -103,7 +128,7 @@
    ========================================================================== */
 .workload-map-panel {
   background-color: var(--card);
-  border: 1px solid var(--border-hairline);
+  border: 1px solid var(--border);
   border-radius: var(--radius-panel);
   overflow: hidden;
   display: flex;
@@ -111,59 +136,77 @@
 }
 
 .workload-map-header {
-  padding: var(--space-16) var(--space-20, 20px);
-  border-bottom: 1px solid var(--border-hairline);
+  padding: var(--space-16) var(--space-20);
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-/* Seven day columns in a single continuous panel separated by hairlines */
-.workload-map-grid {
+/* Seven day columns in a responsive 7-slot grid */
+#workload-map-grid,
+.workload-map-grid,
+.workload-days-container {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  background-color: var(--card);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+  background-color: transparent;
+  width: 100%;
 }
 
 .workload-day-column {
-  padding: var(--space-16) var(--space-12);
+  padding: 16px 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-12);
+  gap: 12px;
   position: relative;
   cursor: pointer;
-  transition: background-color var(--transition-fast);
+  background-color: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   user-select: none;
+  min-width: 0;
+  box-shadow: 0 1px 3px rgba(17, 17, 17, 0.02);
 }
 
 .workload-day-column:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 1px;
-  background-color: var(--border-hairline);
+  display: none;
 }
 
 .workload-day-column:hover {
-  background-color: var(--surface);
+  background-color: var(--white);
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px -4px rgba(74, 100, 216, 0.12);
 }
 
-/* Selected column has prominent outline / surface fill */
+.workload-day-column.is-today {
+  border-color: rgba(74, 100, 216, 0.4);
+}
+
+.workload-day-column.is-today .day-weekday-label {
+  color: var(--accent);
+}
+
+/* Selected column has prominent outline and soft ambient shadow */
 .workload-day-column.is-selected {
-  background-color: var(--surface);
+  background-color: #FFFFFF;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent), 0 8px 24px -4px rgba(74, 100, 216, 0.16);
+  transform: translateY(-3px);
 }
 
 .workload-day-column.is-selected::before {
   content: '';
   position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
+  left: 14px;
+  right: 14px;
   height: 3px;
   background-color: var(--accent);
+  border-radius: 0 0 3px 3px;
 }
 
 /* Column Date Header */
@@ -171,38 +214,39 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 3px;
 }
 
 .day-weekday-label {
   font-family: var(--font-sans);
   font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-secondary);
 }
 
 .day-numeral {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 500;
+  font-family: var(--font-editorial);
+  font-size: 22px;
+  font-weight: 600;
   color: var(--text-primary);
+  line-height: 1;
   position: relative;
   font-variant-numeric: tabular-nums;
 }
 
-/* Today marked with small accent underline */
-.workload-day-column.is-today .day-numeral::after {
-  content: '';
-  position: absolute;
-  bottom: -3px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 12px;
-  height: 2px;
-  background-color: var(--accent);
-  border-radius: 1px;
+.today-micro-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background-color: var(--soft-blue);
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  margin-top: 2px;
 }
 
 /* Day Statistics below Gauge */
@@ -210,36 +254,66 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   width: 100%;
   text-align: center;
 }
 
 .day-hours-ratio {
   font-family: var(--font-sans);
-  font-size: 12.5px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 700;
   color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.day-ratio-denom {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.day-util-badge {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: var(--radius-full);
   font-variant-numeric: tabular-nums;
 }
 
-.day-percentage {
-  font-size: 11.5px;
-  font-weight: 500;
+.status-badge-balanced {
+  background-color: var(--status-balanced-bg);
+  color: var(--status-balanced);
+}
+
+.status-badge-near_capacity {
+  background-color: var(--status-near-capacity-bg);
+  color: var(--status-near-capacity);
+}
+
+.status-badge-overloaded {
+  background-color: var(--status-overloaded-bg);
+  color: var(--status-overloaded);
+}
+
+.status-badge-not_configured {
+  background-color: var(--surface);
   color: var(--text-secondary);
-  font-variant-numeric: tabular-nums;
 }
 
 .day-task-count {
   font-size: 11px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
 /* Status text badge */
 .day-status-text {
   font-size: 11px;
   font-weight: 600;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .day-status-text.status-balanced {
@@ -259,46 +333,89 @@
   font-size: 10px;
 }
 
-/* Workload Detail Panel (Beneath the Map) */
-.workload-detail-panel {
-  border-top: 1px solid var(--border-hairline);
-  padding: var(--space-16) var(--space-20, 20px);
-  background-color: var(--surface);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-16);
+/* Selected Day Shelf (Enhanced Drawer below Map) */
+.selected-day-detail-panel {
+  margin-top: var(--space-24);
+  padding: var(--space-20);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
 }
 
-.workload-detail-summary {
+.shelf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  margin-bottom: var(--space-16);
+}
+
+.shelf-title-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  flex-wrap: wrap;
+}
+
+.workload-sentence-banner {
+  padding: var(--space-10) var(--space-16);
+  border-radius: var(--radius-md);
+  font-size: 13.5px;
+  font-weight: 500;
+  margin-bottom: var(--space-16);
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  background-color: var(--white);
+  border: 1px solid var(--border);
+}
+
+.workload-sentence-banner.balanced {
+  background-color: var(--status-balanced-bg);
+  color: #1A5445;
+  border-color: rgba(67, 136, 117, 0.25);
+}
+
+.workload-sentence-banner.near_capacity {
+  background-color: var(--status-near-capacity-bg);
+  color: #7A4E10;
+  border-color: rgba(210, 154, 72, 0.3);
+}
+
+.workload-sentence-banner.overloaded {
+  background-color: var(--status-overloaded-bg);
+  color: #8C2926;
+  border-color: rgba(201, 104, 101, 0.3);
+}
+
+.shelf-tasks-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.shelf-task-card {
+  background-color: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-12) var(--space-16);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-16);
-  flex-wrap: wrap;
+  transition: all 0.15s ease;
 }
 
-.workload-plain-sentence {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.workload-detail-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-}
-
-.day-task-mini-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6, 6px);
+.shelf-task-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 2px 8px rgba(17, 17, 17, 0.04);
 }
 
 .day-task-mini-item {
   background-color: var(--card);
   padding: var(--space-8) var(--space-12);
-  border: 1px solid var(--border-hairline);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;

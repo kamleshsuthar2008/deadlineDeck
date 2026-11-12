@@ -4,328 +4,338 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tasks — DeadlineDeck</title>
+  
+  <link rel="stylesheet" href="/css/design-system.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/responsive.css">
+
   <style>
-    .tasks-toolbar {
-      background-color: var(--card);
-      border: 1px solid var(--border-hairline);
-      border-radius: var(--radius-panel);
-      padding: var(--space-16);
+    .tasks-filter-card {
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-20);
+      box-shadow: var(--shadow-subtle);
       display: flex;
       flex-direction: column;
-      gap: var(--space-12);
+      gap: var(--space-16);
     }
-    .toolbar-row {
-      display: flex;
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
       gap: var(--space-12);
       align-items: center;
-      flex-wrap: wrap;
     }
+
     .filter-token {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      background-color: var(--surface);
-      border: 1px solid var(--border-hairline);
+      gap: 6px;
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border);
       border-radius: var(--radius-sm);
-      padding: 2px 8px;
+      padding: 3px 10px;
       font-size: 11.5px;
       color: var(--text-primary);
     }
+
     .filter-token button {
       background: none;
       border: none;
       cursor: pointer;
       color: var(--text-secondary);
-      font-size: 14px;
+      font-size: 15px;
       line-height: 1;
-      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .tasks-table-wrapper {
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow-x: auto;
+    }
+
+    .editorial-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .editorial-table th {
+      background-color: var(--bg-main);
+      padding: var(--space-12) var(--space-16);
+      font-size: 11.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .editorial-table td {
+      padding: var(--space-16);
+      font-size: 13.5px;
+      border-bottom: 1px solid var(--border-light);
+      vertical-align: middle;
+    }
+
+    .editorial-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .editorial-table tr:hover td {
+      background-color: var(--bg-main);
+    }
+
+    @media (max-width: 1024px) {
+      .filter-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 640px) {
+      .filter-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="app-container">
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="brand-logo-mark">
+  <!-- TOP HORIZONTAL NAVIGATION -->
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="/dashboard.html" class="nav-brand">
+        <div class="brand-symbol">
           <svg><use href="/icons.svg#icon-logo"></use></svg>
         </div>
-        <span class="brand-wordmark">DeadlineDeck</span>
-      </div>
+        <span class="brand-title">DeadlineDeck</span>
+      </a>
 
-      <nav class="sidebar-nav">
-        <a href="/dashboard.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-dashboard"></use></svg>
-          <span>Dashboard</span>
-        </a>
-        <a href="/planner.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-planner"></use></svg>
-          <span>My Planner</span>
-        </a>
-        <a href="/tasks.html" class="nav-link active">
-          <svg><use href="/icons.svg#icon-tasks"></use></svg>
-          <span>Tasks</span>
-        </a>
-        <a href="/calendar.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-calendar"></use></svg>
-          <span>Calendar</span>
-        </a>
-        <a href="/subjects.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-subjects"></use></svg>
-          <span>Subjects</span>
-        </a>
-        <a href="/insights.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-insights"></use></svg>
-          <span>Insights &amp; Reports</span>
-        </a>
-        <a href="/toolkit.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-toolkit"></use></svg>
-          <span>Student Toolkit</span>
-        </a>
-        <a href="/settings.html" class="nav-link">
+      <ul class="nav-center">
+        <li><a href="/dashboard.html" class="nav-link"><svg><use href="/icons.svg#icon-dashboard"></use></svg>Overview</a></li>
+        <li><a href="/planner.html" class="nav-link"><svg><use href="/icons.svg#icon-planner"></use></svg>Planner</a></li>
+        <li><a href="/tasks.html" class="nav-link active"><svg><use href="/icons.svg#icon-tasks"></use></svg>Tasks</a></li>
+        <li><a href="/calendar.html" class="nav-link"><svg><use href="/icons.svg#icon-calendar"></use></svg>Calendar</a></li>
+        <li><a href="/subjects.html" class="nav-link"><svg><use href="/icons.svg#icon-subjects"></use></svg>Subjects</a></li>
+        <li><a href="/toolkit.html" class="nav-link"><svg><use href="/icons.svg#icon-toolkit"></use></svg>Toolkit</a></li>
+        <li><a href="/insights.html" class="nav-link"><svg><use href="/icons.svg#icon-insights"></use></svg>Insights</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <div class="user-nav-profile">
+          <span class="user-avatar-pill user-avatar-monogram">ST</span>
+          <span class="user-display-name">Student</span>
+        </div>
+        <a href="/settings.html" class="btn-nav-icon" title="Settings">
           <svg><use href="/icons.svg#icon-settings"></use></svg>
-          <span>Settings</span>
         </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <div class="user-profile-badge">
-          <div class="user-avatar-monogram">--</div>
-          <div class="user-info-text">
-            <div class="user-display-name">Loading...</div>
-            <div class="user-display-email">student@college.edu</div>
-          </div>
-        </div>
-        <button class="btn-sidebar-logout">
+        <button class="btn-nav-icon btn-nav-logout" data-action="logout" title="Sign Out">
           <svg><use href="/icons.svg#icon-logout"></use></svg>
-          <span>Log out</span>
+        </button>
+        <button class="mobile-hamburger" aria-label="Toggle navigation">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
       </div>
-    </aside>
-
-    <div class="sidebar-overlay"></div>
-
-    <div class="main-wrapper">
-      <header class="mobile-top-bar">
-        <div class="mobile-brand">
-          <svg style="width:20px;height:20px;"><use href="/icons.svg#icon-logo"></use></svg>
-          <span>DeadlineDeck</span>
-        </div>
-        <button class="mobile-menu-btn" aria-label="Open navigation menu">
-          <svg><use href="/icons.svg#icon-menu"></use></svg>
-        </button>
-      </header>
-
-      <main class="main-canvas">
-        <div class="page-header" style="margin-bottom: var(--space-24);">
-          <div class="page-header-text">
-            <span class="label-eyebrow">Academic Ledger</span>
-            <h1 class="page-title">Tasks &amp; Submissions</h1>
-          </div>
-          <div class="page-actions">
-            <button id="btn-add-new-task" class="btn btn-primary">
-              <svg><use href="/icons.svg#icon-plus"></use></svg>
-              <span>Add task</span>
-            </button>
-          </div>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: var(--space-20);">
-          <!-- Filters & Search Toolbar -->
-          <div class="tasks-toolbar">
-            <div class="toolbar-row">
-              <div style="flex: 1; min-width: 220px; position: relative;">
-                <input type="text" id="filter-search" class="input-text" placeholder="Search tasks by title or description..." style="padding-left: 36px;">
-                <svg style="position: absolute; left: 12px; top: 12px; width: 16px; height: 16px; stroke: var(--text-muted);"><use href="/icons.svg#icon-search"></use></svg>
-              </div>
-
-              <select id="filter-subject" class="input-select" style="width: 170px;">
-                <option value="">All subjects</option>
-              </select>
-
-              <select id="filter-type" class="input-select" style="width: 150px;">
-                <option value="">All types</option>
-                <option value="Assignment">Assignment</option>
-                <option value="Practical">Practical</option>
-                <option value="Project">Project</option>
-                <option value="Quiz">Quiz</option>
-                <option value="Internal Examination">Internal Exam</option>
-                <option value="End-Term Examination">End-Term Exam</option>
-                <option value="Revision">Revision</option>
-                <option value="Other">Other</option>
-              </select>
-
-              <select id="filter-priority" class="input-select" style="width: 130px;">
-                <option value="">All priorities</option>
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
-              </select>
-
-              <select id="filter-status" class="input-select" style="width: 140px;">
-                <option value="">All statuses</option>
-                <option value="Pending">Pending</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Completed">Completed</option>
-              </select>
-            </div>
-
-            <!-- Active Filter Tokens Container -->
-            <div id="active-tokens-container" style="display: flex; gap: var(--space-8); align-items: center; flex-wrap: wrap;"></div>
-          </div>
-
-          <!-- Tasks Ledger Table Panel -->
-          <div class="panel">
-            <div class="table-container">
-              <table class="ledger-table" id="tasks-table">
-                <thead>
-                  <tr>
-                    <th style="width: 44px;"><span class="sr-only">Complete</span></th>
-                    <th>Task title</th>
-                    <th>Subject</th>
-                    <th>Type</th>
-                    <th>Planned date</th>
-                    <th>Due date</th>
-                    <th class="col-numeral">Est. hours</th>
-                    <th>Priority</th>
-                    <th>Status</th>
-                    <th class="col-actions">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="tasks-tbody">
-                  <!-- Populated by tasks.js -->
-                </tbody>
-              </table>
-            </div>
-            <div id="tasks-empty-state" style="display: none;">
-              <div class="empty-state">
-                <svg><use href="/icons.svg#icon-tasks"></use></svg>
-                <div class="empty-state-title">No tasks found</div>
-                <div class="empty-state-text">No academic tasks match your active filters. Try adjusting or clearing search tokens.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
     </div>
-  </div>
 
-  <!-- Mobile Bottom Nav -->
-  <nav class="mobile-bottom-nav">
-    <a href="/dashboard.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-dashboard"></use></svg>
-      <span>Dashboard</span>
-    </a>
-    <a href="/planner.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-planner"></use></svg>
-      <span>Planner</span>
-    </a>
-    <a href="/tasks.html" class="bottom-nav-item active">
-      <svg><use href="/icons.svg#icon-tasks"></use></svg>
-      <span>Tasks</span>
-    </a>
-    <a href="/calendar.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-calendar"></use></svg>
-      <span>Calendar</span>
-    </a>
-    <a href="/toolkit.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-toolkit"></use></svg>
-      <span>Toolkit</span>
-    </a>
-  </nav>
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer">
+      <a href="/dashboard.html" class="nav-link"><svg><use href="/icons.svg#icon-dashboard"></use></svg>Overview</a>
+      <a href="/planner.html" class="nav-link"><svg><use href="/icons.svg#icon-planner"></use></svg>Planner</a>
+      <a href="/tasks.html" class="nav-link active"><svg><use href="/icons.svg#icon-tasks"></use></svg>Tasks</a>
+      <a href="/calendar.html" class="nav-link"><svg><use href="/icons.svg#icon-calendar"></use></svg>Calendar</a>
+      <a href="/subjects.html" class="nav-link"><svg><use href="/icons.svg#icon-subjects"></use></svg>Subjects</a>
+      <a href="/toolkit.html" class="nav-link"><svg><use href="/icons.svg#icon-toolkit"></use></svg>Toolkit</a>
+      <a href="/insights.html" class="nav-link"><svg><use href="/icons.svg#icon-insights"></use></svg>Insights</a>
+      <a href="/settings.html" class="nav-link"><svg><use href="/icons.svg#icon-settings"></use></svg>Settings</a>
+    </div>
+  </header>
 
-  <!-- Create/Edit Task Modal -->
-  <div id="task-dialog" class="modal-backdrop">
-    <div class="modal-dialog" role="dialog" aria-modal="true">
-      <div class="modal-header">
-        <h2 id="dialog-heading" class="modal-title">Create academic task</h2>
-        <button class="modal-close-btn" data-dismiss="modal" aria-label="Close dialog">
-          <svg><use href="/icons.svg#icon-close"></use></svg>
+  <!-- MAIN WORKSPACE -->
+  <main class="main-wrapper">
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="page-header-text">
+        <span class="page-eyebrow">Academic Coursework Ledger</span>
+        <h1 class="page-title">Tasks &amp; Deliverables</h1>
+        <p class="page-subtitle">Track, filter, and prioritize your assignments, laboratory practicals, revisions, and examination milestones.</p>
+      </div>
+      <div class="page-actions">
+        <button id="btn-open-create-task" class="btn btn-primary">
+          <svg style="width:16px;height:16px;"><use href="/icons.svg#icon-plus"></use></svg>
+          <span>Create Task</span>
         </button>
       </div>
-      <form id="dialog-form">
-        <input type="hidden" id="modal-task-id">
+    </div>
+
+    <!-- FILTER & SEARCH TOOLBAR -->
+    <section class="tasks-filter-card">
+      <div class="filter-grid">
+        <div>
+          <input type="text" id="filter-search" class="form-input" placeholder="Search tasks by title or keywords...">
+        </div>
+        <div>
+          <select id="filter-subject" class="form-select">
+            <option value="">All Subjects</option>
+          </select>
+        </div>
+        <div>
+          <select id="filter-type" class="form-select">
+            <option value="">All Types</option>
+            <option value="Assignment">Assignment</option>
+            <option value="Practical">Practical</option>
+            <option value="Project">Project</option>
+            <option value="Quiz">Quiz</option>
+            <option value="Internal Examination">Internal Examination</option>
+            <option value="End-Term Examination">End-Term Examination</option>
+            <option value="Revision">Revision</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div>
+          <select id="filter-priority" class="form-select">
+            <option value="">All Priorities</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+        <div>
+          <select id="filter-status" class="form-select">
+            <option value="">All Statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="active-tokens-container" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;"></div>
+    </section>
+
+    <!-- TASKS TABLE -->
+    <div class="tasks-table-wrapper">
+      <table class="editorial-table" id="tasks-table">
+        <thead>
+          <tr>
+            <th style="width: 40px;"></th>
+            <th>Task &amp; Description</th>
+            <th>Subject</th>
+            <th>Type</th>
+            <th>Planned Study</th>
+            <th>Submission Due</th>
+            <th>Hours</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th style="text-align: right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tasks-tbody">
+          <!-- Populated dynamically by tasks.js -->
+        </tbody>
+      </table>
+
+      <!-- Empty State -->
+      <div id="tasks-empty-state" style="display: none; padding: var(--space-64) var(--space-20); text-align: center;">
+        <h3 style="font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">No academic tasks found</h3>
+        <p style="font-size: 13.5px; color: var(--text-secondary); max-width: 440px; margin: 0 auto var(--space-20);">
+          No tasks match your active filters, or you haven't scheduled any deliverables yet.
+        </p>
+        <button class="btn btn-primary btn-sm" onclick="document.getElementById('btn-open-create-task').click();">
+          Add Your First Task
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- TASK MODAL (CREATE / EDIT) -->
+  <div id="modal-task-form" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-task-heading" class="modal-title">Create Academic Task</h3>
+        <button class="btn btn-ghost btn-sm" data-dismiss="modal">&times;</button>
+      </div>
+      <form id="form-task-editor">
+        <input type="hidden" id="edit-task-id">
         <div class="modal-body">
           <div class="form-group">
-            <label class="form-label" for="dlg-title">Task title</label>
-            <input type="text" id="dlg-title" class="input-text" required placeholder="e.g. BCNF normalization exercise">
+            <label class="form-label" for="dlg-title">Task Title</label>
+            <input type="text" id="dlg-title" class="form-input" placeholder="e.g. CPU Scheduling Algorithms Report" required>
           </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-12);">
+          <div class="form-group">
+            <label class="form-label" for="dlg-subject">Subject</label>
+            <select id="dlg-subject" class="form-select" required></select>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-12);">
             <div class="form-group">
-              <label class="form-label" for="dlg-subject">Subject</label>
-              <select id="dlg-subject" class="input-select" required></select>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="dlg-type">Task type</label>
-              <select id="dlg-type" class="input-select" required>
+              <label class="form-label" for="dlg-type">Task Type</label>
+              <select id="dlg-type" class="form-select">
                 <option value="Assignment">Assignment</option>
                 <option value="Practical">Practical</option>
                 <option value="Project">Project</option>
                 <option value="Quiz">Quiz</option>
-                <option value="Internal Examination">Internal Exam</option>
-                <option value="End-Term Examination">End-Term Exam</option>
+                <option value="Internal Examination">Internal Examination</option>
+                <option value="End-Term Examination">End-Term Examination</option>
                 <option value="Revision">Revision</option>
                 <option value="Other">Other</option>
               </select>
-            </div>
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-12);">
-            <div class="form-group">
-              <label class="form-label" for="dlg-planned">Planned study date</label>
-              <input type="date" id="dlg-planned" class="input-text tabular" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="dlg-due">Submission due date</label>
-              <input type="date" id="dlg-due" class="input-text tabular" required>
-            </div>
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-12);">
-            <div class="form-group">
-              <label class="form-label" for="dlg-hours">Est. hours (0.25 steps)</label>
-              <input type="number" id="dlg-hours" class="input-text tabular" step="0.25" min="0.25" max="24" value="1.00" required>
             </div>
             <div class="form-group">
               <label class="form-label" for="dlg-priority">Priority</label>
-              <select id="dlg-priority" class="input-select">
+              <select id="dlg-priority" class="form-select">
                 <option value="High">High</option>
                 <option value="Medium" selected>Medium</option>
                 <option value="Low">Low</option>
               </select>
             </div>
           </div>
-
-          <div class="form-group">
-            <label class="form-label" for="dlg-status">Status</label>
-            <select id="dlg-status" class="input-select">
-              <option value="Pending">Pending</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Completed">Completed</option>
-            </select>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-12);">
+            <div class="form-group">
+              <label class="form-label" for="dlg-due-date">Submission Due Date</label>
+              <input type="date" id="dlg-due-date" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="dlg-planned-date">Planned Study Date</label>
+              <input type="date" id="dlg-planned-date" class="form-input" required>
+            </div>
           </div>
-
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-12);">
+            <div class="form-group">
+              <label class="form-label" for="dlg-hours">Estimated Hours</label>
+              <input type="number" id="dlg-hours" class="form-input" min="0.25" max="24" step="0.25" value="2.0" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="dlg-status">Status</label>
+              <select id="dlg-status" class="form-select">
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+              </select>
+            </div>
+          </div>
           <div class="form-group">
-            <label class="form-label" for="dlg-desc">Description</label>
-            <textarea id="dlg-desc" class="input-textarea" rows="2" placeholder="Task specifics, requirements..."></textarea>
+            <label class="form-label" for="dlg-desc">Description &amp; Deliverables (Optional)</label>
+            <textarea id="dlg-desc" class="form-textarea" placeholder="Rubric details, problem numbers, or submission format..."></textarea>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-primary" id="btn-submit-task">Save task</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Save Task</button>
         </div>
       </form>
     </div>
   </div>
 
   <script src="/js/api.js"></script>
-  <script src="/js/auth.js"></script>
   <script src="/js/ui.js"></script>
+  <script src="/js/auth.js"></script>
   <script src="/js/tasks.js"></script>
 </body>
 </html>

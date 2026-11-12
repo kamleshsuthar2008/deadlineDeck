@@ -16,25 +16,35 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function setupCalendarControls() {
-  document.getElementById('btn-cal-prev').addEventListener('click', () => {
-    calMonth--;
-    if (calMonth < 1) { calMonth = 12; calYear--; }
-    loadCalendarMonth(calYear, calMonth);
-  });
+  const prevBtn = document.getElementById('btn-prev-month') || document.getElementById('btn-cal-prev');
+  const nextBtn = document.getElementById('btn-next-month') || document.getElementById('btn-cal-next');
+  const todayBtn = document.getElementById('btn-calendar-today') || document.getElementById('btn-cal-today');
 
-  document.getElementById('btn-cal-next').addEventListener('click', () => {
-    calMonth++;
-    if (calMonth > 12) { calMonth = 1; calYear++; }
-    loadCalendarMonth(calYear, calMonth);
-  });
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      calMonth--;
+      if (calMonth < 1) { calMonth = 12; calYear--; }
+      loadCalendarMonth(calYear, calMonth);
+    });
+  }
 
-  document.getElementById('btn-cal-today').addEventListener('click', () => {
-    const now = new Date();
-    calYear = now.getFullYear();
-    calMonth = now.getMonth() + 1;
-    selectedDateStr = now.toISOString().substring(0, 10);
-    loadCalendarMonth(calYear, calMonth);
-  });
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      calMonth++;
+      if (calMonth > 12) { calMonth = 1; calYear++; }
+      loadCalendarMonth(calYear, calMonth);
+    });
+  }
+
+  if (todayBtn) {
+    todayBtn.addEventListener('click', () => {
+      const now = new Date();
+      calYear = now.getFullYear();
+      calMonth = now.getMonth() + 1;
+      selectedDateStr = now.toISOString().substring(0, 10);
+      loadCalendarMonth(calYear, calMonth);
+    });
+  }
 }
 
 async function loadCalendarMonth(year, month) {
@@ -43,7 +53,8 @@ async function loadCalendarMonth(year, month) {
     monthEvents = data.events || [];
 
     const monthName = new Date(year, month - 1, 1).toLocaleString('en-US', { month: 'long' });
-    document.getElementById('cal-month-title').textContent = `${monthName} ${year}`;
+    const titleEl = document.getElementById('calendar-month-label') || document.getElementById('cal-month-title');
+    if (titleEl) titleEl.textContent = `${monthName} ${year}`;
 
     renderMonthGrid(year, month, monthEvents);
     renderInspector(selectedDateStr);
@@ -147,49 +158,88 @@ function renderInspector(dateStr) {
   const d = new Date(dateStr);
   const formatted = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
 
-  document.getElementById('cal-day-heading').textContent = formatted;
+  const headingEl = document.getElementById('shelf-selected-date') || document.getElementById('cal-day-heading');
+  if (headingEl) headingEl.textContent = formatted;
 
   const plannedTasks = monthEvents.filter(e => e.planned_date === dateStr);
   const dueTasks = monthEvents.filter(e => e.due_date === dateStr);
 
+  const shelfContainer = document.getElementById('shelf-events-container');
+  if (shelfContainer) {
+    shelfContainer.innerHTML = '';
+
+    if (plannedTasks.length === 0 && dueTasks.length === 0) {
+      shelfContainer.innerHTML = '<div style="font-size: 13px; color: var(--text-secondary); padding: var(--space-12) 0;">No study tasks or deadlines for this day.</div>';
+    } else {
+      plannedTasks.forEach(t => {
+        const el = document.createElement('div');
+        el.style.cssText = 'background: var(--bg-main); border: 1px solid var(--border); padding: 8px 12px; border-radius: var(--radius-sm); font-size: 13px; display: flex; justify-content: space-between; align-items: center;';
+        el.innerHTML = `
+          <div>
+            <span class="focus-subject-tag">${escapeHTML(t.subject_code)}</span>
+            <span style="font-weight: 500; margin-left: 6px;">${escapeHTML(t.title)}</span>
+          </div>
+          <span class="cal-pill-plan" style="font-size:11px; padding:2px 8px; border-radius:4px; font-weight:600;">Plan: ${t.estimated_hours}h</span>
+        `;
+        shelfContainer.appendChild(el);
+      });
+
+      dueTasks.forEach(t => {
+        const el = document.createElement('div');
+        el.style.cssText = 'background: var(--white); border: 1px solid var(--border-strong, #ddd); padding: 8px 12px; border-radius: var(--radius-sm); font-size: 13px; display: flex; justify-content: space-between; align-items: center;';
+        el.innerHTML = `
+          <div>
+            <span class="focus-subject-tag">${escapeHTML(t.subject_code)}</span>
+            <span style="font-weight: 600; margin-left: 6px;">${escapeHTML(t.title)}</span>
+          </div>
+          <span class="cal-pill-due" style="font-size:11px; padding:2px 8px; border-radius:4px; font-weight:600;">Due</span>
+        `;
+        shelfContainer.appendChild(el);
+      });
+    }
+  }
+
   const studyContainer = document.getElementById('inspector-study-list');
   const dueContainer = document.getElementById('inspector-due-list');
 
-  studyContainer.innerHTML = '';
-  dueContainer.innerHTML = '';
-
-  if (plannedTasks.length === 0) {
-    studyContainer.innerHTML = '<div style="font-size: 12.5px; color: var(--text-secondary);">No study sessions scheduled for this date.</div>';
-  } else {
-    plannedTasks.forEach(t => {
-      const el = document.createElement('div');
-      el.style.cssText = 'background: var(--surface); padding: 8px 10px; border-radius: var(--radius-sm); font-size: 13px; display: flex; justify-content: space-between; align-items: center;';
-      el.innerHTML = `
-        <div>
-          <span class="focus-subject-tag">${escapeHTML(t.subject_code)}</span>
-          <span style="font-weight: 500; margin-left: 4px;">${escapeHTML(t.title)}</span>
-        </div>
-        <span class="tabular" style="font-size: 12px; font-weight: 600;">${t.estimated_hours}h</span>
-      `;
-      studyContainer.appendChild(el);
-    });
+  if (studyContainer) {
+    studyContainer.innerHTML = '';
+    if (plannedTasks.length === 0) {
+      studyContainer.innerHTML = '<div style="font-size: 12.5px; color: var(--text-secondary);">No study sessions scheduled for this date.</div>';
+    } else {
+      plannedTasks.forEach(t => {
+        const el = document.createElement('div');
+        el.style.cssText = 'background: var(--surface); padding: 8px 10px; border-radius: var(--radius-sm); font-size: 13px; display: flex; justify-content: space-between; align-items: center;';
+        el.innerHTML = `
+          <div>
+            <span class="focus-subject-tag">${escapeHTML(t.subject_code)}</span>
+            <span style="font-weight: 500; margin-left: 4px;">${escapeHTML(t.title)}</span>
+          </div>
+          <span class="tabular" style="font-size: 12px; font-weight: 600;">${t.estimated_hours}h</span>
+        `;
+        studyContainer.appendChild(el);
+      });
+    }
   }
 
-  if (dueTasks.length === 0) {
-    dueContainer.innerHTML = '<div style="font-size: 12.5px; color: var(--text-secondary);">No submissions due on this date.</div>';
-  } else {
-    dueTasks.forEach(t => {
-      const el = document.createElement('div');
-      el.style.cssText = 'background: var(--card); border: 1px solid var(--border-strong); padding: 8px 10px; border-radius: var(--radius-sm); font-size: 13px; display: flex; justify-content: space-between; align-items: center;';
-      el.innerHTML = `
-        <div>
-          <span class="focus-subject-tag">${escapeHTML(t.subject_code)}</span>
-          <span style="font-weight: 600; margin-left: 4px;">${escapeHTML(t.title)}</span>
-          <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">${escapeHTML(t.task_type)} &bull; ${t.priority} priority</div>
-        </div>
-        <span class="status-chip is-overloaded" style="font-size: 11px;"><span class="status-dot"></span>Due</span>
-      `;
-      dueContainer.appendChild(el);
-    });
+  if (dueContainer) {
+    dueContainer.innerHTML = '';
+    if (dueTasks.length === 0) {
+      dueContainer.innerHTML = '<div style="font-size: 12.5px; color: var(--text-secondary);">No submissions due on this date.</div>';
+    } else {
+      dueTasks.forEach(t => {
+        const el = document.createElement('div');
+        el.style.cssText = 'background: var(--card); border: 1px solid var(--border-strong); padding: 8px 10px; border-radius: var(--radius-sm); font-size: 13px; display: flex; justify-content: space-between; align-items: center;';
+        el.innerHTML = `
+          <div>
+            <span class="focus-subject-tag">${escapeHTML(t.subject_code)}</span>
+            <span style="font-weight: 600; margin-left: 4px;">${escapeHTML(t.title)}</span>
+            <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">${escapeHTML(t.task_type)} &bull; ${t.priority} priority</div>
+          </div>
+          <span class="status-chip is-overloaded" style="font-size: 11px;"><span class="status-dot"></span>Due</span>
+        `;
+        dueContainer.appendChild(el);
+      });
+    }
   }
 }

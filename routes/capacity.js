@@ -21,13 +21,20 @@ router.get('/', async (req, res, next) => {
 
     const overrides = overrideRows.map(r => ({
       capacity_id: r.capacity_id,
-      capacity_date: typeof r.capacity_date === 'string' ? r.capacity_date.substring(0, 10) : new Date(r.capacity_date).toISOString().substring(0, 10),
+      capacity_date: String(r.capacity_date).substring(0, 10),
       available_hours: Number(r.available_hours)
     }));
 
-    res.json({
+    const capacityData = {
       default_study_hours: defaultHours,
       overrides
+    };
+
+    res.json({
+      success: true,
+      message: 'Capacity settings retrieved successfully.',
+      ...capacityData,
+      data: capacityData
     });
   } catch (err) {
     next(err);
@@ -45,7 +52,11 @@ router.put('/:date', async (req, res, next) => {
 
     const hours = Number(available_hours);
     if (isNaN(hours) || hours < 0 || hours > 24) {
-      return res.status(400).json({ error: 'Available hours must be a number between 0 and 24.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Available hours must be a number between 0 and 24.'
+      });
     }
 
     await query(
@@ -55,11 +66,16 @@ router.put('/:date', async (req, res, next) => {
       [req.userId, dateStr, hours]
     );
 
+    const result = {
+      capacity_date: dateStr,
+      available_hours: hours
+    };
+
     res.json({
       success: true,
       message: `Study capacity for ${dateStr} set to ${hours}h.`,
-      capacity_date: dateStr,
-      available_hours: hours
+      ...result,
+      data: result
     });
   } catch (err) {
     next(err);
@@ -77,7 +93,8 @@ router.delete('/:date', async (req, res, next) => {
 
     res.json({
       success: true,
-      message: `Date override removed for ${dateStr}. Reverted to default study capacity.`
+      message: `Date override removed for ${dateStr}. Reverted to default study capacity.`,
+      data: { capacity_date: dateStr }
     });
   } catch (err) {
     next(err);

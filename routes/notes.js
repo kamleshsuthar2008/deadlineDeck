@@ -48,7 +48,12 @@ router.get('/', async (req, res, next) => {
       is_pinned: Boolean(r.is_pinned)
     }));
 
-    res.json({ notes });
+    res.json({
+      success: true,
+      message: 'Notes retrieved successfully.',
+      notes,
+      data: { notes }
+    });
   } catch (err) {
     next(err);
   }
@@ -63,7 +68,11 @@ router.post('/', async (req, res, next) => {
     const { subject_id, title, content, is_pinned } = req.body;
 
     if (!title || !title.trim()) {
-      return res.status(400).json({ error: 'Note title is required.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Note title is required.'
+      });
     }
 
     const subId = subject_id ? Number(subject_id) : null;
@@ -74,16 +83,19 @@ router.post('/', async (req, res, next) => {
       [req.userId, subId, title.trim(), content ? content.trim() : null, pinned]
     );
 
+    const newNote = {
+      note_id: result.insertId,
+      subject_id: subId,
+      title: title.trim(),
+      content: content ? content.trim() : null,
+      is_pinned: Boolean(pinned)
+    };
+
     res.status(201).json({
       success: true,
-      message: 'Note saved.',
-      note: {
-        note_id: result.insertId,
-        subject_id: subId,
-        title: title.trim(),
-        content: content ? content.trim() : null,
-        is_pinned: Boolean(pinned)
-      }
+      message: 'Note saved successfully.',
+      note: newNote,
+      data: { note: newNote }
     });
   } catch (err) {
     next(err);
@@ -100,11 +112,21 @@ router.put('/:id', async (req, res, next) => {
     const { subject_id, title, content, is_pinned } = req.body;
 
     if (!title || !title.trim()) {
-      return res.status(400).json({ error: 'Note title is required.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Note title is required.'
+      });
     }
 
     const rows = await query('SELECT note_id FROM notes WHERE note_id = ? AND user_id = ?', [noteId, req.userId]);
-    if (rows.length === 0) return res.status(404).json({ error: 'Note not found.' });
+    if (rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        errorCode: 'NOT_FOUND',
+        message: 'Note not found.'
+      });
+    }
 
     const subId = subject_id ? Number(subject_id) : null;
     const pinned = is_pinned ? 1 : 0;
@@ -114,7 +136,20 @@ router.put('/:id', async (req, res, next) => {
       [subId, title.trim(), content ? content.trim() : null, pinned, noteId, req.userId]
     );
 
-    res.json({ success: true, message: 'Note updated.' });
+    const updatedNote = {
+      note_id: noteId,
+      subject_id: subId,
+      title: title.trim(),
+      content: content ? content.trim() : null,
+      is_pinned: Boolean(pinned)
+    };
+
+    res.json({
+      success: true,
+      message: 'Note updated successfully.',
+      note: updatedNote,
+      data: { note: updatedNote }
+    });
   } catch (err) {
     next(err);
   }
@@ -128,12 +163,23 @@ router.patch('/:id/pin', async (req, res, next) => {
   try {
     const noteId = Number(req.params.id);
     const rows = await query('SELECT note_id, is_pinned FROM notes WHERE note_id = ? AND user_id = ?', [noteId, req.userId]);
-    if (rows.length === 0) return res.status(404).json({ error: 'Note not found.' });
+    if (rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        errorCode: 'NOT_FOUND',
+        message: 'Note not found.'
+      });
+    }
 
     const newPinned = rows[0].is_pinned ? 0 : 1;
     await query('UPDATE notes SET is_pinned = ? WHERE note_id = ? AND user_id = ?', [newPinned, noteId, req.userId]);
 
-    res.json({ success: true, is_pinned: Boolean(newPinned) });
+    res.json({
+      success: true,
+      message: newPinned ? 'Note pinned.' : 'Note unpinned.',
+      is_pinned: Boolean(newPinned),
+      data: { note_id: noteId, is_pinned: Boolean(newPinned) }
+    });
   } catch (err) {
     next(err);
   }
@@ -147,10 +193,20 @@ router.delete('/:id', async (req, res, next) => {
   try {
     const noteId = Number(req.params.id);
     const rows = await query('SELECT note_id FROM notes WHERE note_id = ? AND user_id = ?', [noteId, req.userId]);
-    if (rows.length === 0) return res.status(404).json({ error: 'Note not found.' });
+    if (rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        errorCode: 'NOT_FOUND',
+        message: 'Note not found.'
+      });
+    }
 
     await query('DELETE FROM notes WHERE note_id = ? AND user_id = ?', [noteId, req.userId]);
-    res.json({ success: true, message: 'Note deleted.' });
+    res.json({
+      success: true,
+      message: 'Note deleted successfully.',
+      data: { note_id: noteId }
+    });
   } catch (err) {
     next(err);
   }

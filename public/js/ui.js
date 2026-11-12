@@ -1,5 +1,6 @@
 /**
- * DeadlineDeck - Core UI Utilities (Modal, Drawer, Toast, Focus Trap)
+ * DeadlineDeck - Core UI Controller & Navigation Helper
+ * Handles Horizontal Nav active states, Mobile Drawer, Modals, and Toasts.
  */
 
 const UI = {
@@ -7,10 +8,64 @@ const UI = {
   previousFocusElement: null,
 
   init() {
-    this.bindDrawer();
+    this.highlightActiveNav();
+    this.bindMobileDrawer();
     this.bindModalDismissals();
   },
 
+  /**
+   * Automatically sets .active on the horizontal nav link corresponding to the current URL.
+   */
+  highlightActiveNav() {
+    const currentPath = window.location.pathname.toLowerCase();
+    const navLinks = document.querySelectorAll('.nav-link, .nav-item-link');
+
+    navLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (!href) return;
+      const linkPath = href.toLowerCase().split('?')[0];
+
+      let isMatch = false;
+      if (linkPath === '/' && (currentPath === '/' || currentPath.endsWith('index.html'))) {
+        isMatch = true;
+      } else if (linkPath !== '/' && currentPath.includes(linkPath.replace('.html', ''))) {
+        isMatch = true;
+      } else if (currentPath.includes('/tools/') && (linkPath.includes('toolkit') || linkPath.includes('tools'))) {
+        isMatch = true;
+      }
+
+      if (isMatch) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  },
+
+  /**
+   * Binds mobile hamburger toggle and drawer.
+   */
+  bindMobileDrawer() {
+    const toggle = document.querySelector('.mobile-hamburger, .mobile-menu-toggle');
+    const drawer = document.querySelector('.mobile-drawer');
+
+    if (toggle && drawer) {
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        drawer.classList.toggle('open');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!drawer.contains(e.target) && !toggle.contains(e.target)) {
+          drawer.classList.remove('open');
+        }
+      });
+    }
+  },
+
+  /**
+   * Show toast notification.
+   */
   showToast(message, type = 'success') {
     let container = document.getElementById('toast-container');
     if (!container) {
@@ -35,6 +90,9 @@ const UI = {
     }, 4000);
   },
 
+  /**
+   * Modal dialog management with focus preservation.
+   */
   openModal(modalId) {
     const modal = document.getElementById(modalId);
     if (!modal) return;
@@ -42,9 +100,9 @@ const UI = {
     this.previousFocusElement = document.activeElement;
     this.activeModal = modal;
     modal.classList.add('is-open');
+    modal.classList.add('open');
     document.body.style.overflow = 'hidden';
 
-    // Focus first input or close button
     const focusable = modal.querySelector('input, select, textarea, button:not(.modal-close-btn)');
     if (focusable) focusable.focus();
   },
@@ -54,6 +112,7 @@ const UI = {
     if (!modal) return;
 
     modal.classList.remove('is-open');
+    modal.classList.remove('open');
     document.body.style.overflow = '';
 
     if (this.previousFocusElement && typeof this.previousFocusElement.focus === 'function') {
@@ -69,7 +128,7 @@ const UI = {
       }
     });
 
-    document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+    document.querySelectorAll('.modal-backdrop, .modal-overlay').forEach(backdrop => {
       backdrop.addEventListener('click', (e) => {
         if (e.target === backdrop) {
           this.closeModal(backdrop.id);
@@ -79,33 +138,15 @@ const UI = {
 
     document.querySelectorAll('[data-dismiss="modal"]').forEach(btn => {
       btn.addEventListener('click', () => {
-        const modal = btn.closest('.modal-backdrop');
+        const modal = btn.closest('.modal-backdrop, .modal-overlay');
         if (modal) this.closeModal(modal.id);
       });
     });
-  },
-
-  bindDrawer() {
-    const toggleBtn = document.querySelector('.mobile-menu-btn');
-    const sidebar = document.querySelector('.sidebar');
-    const overlay = document.querySelector('.sidebar-overlay');
-
-    if (toggleBtn && sidebar && overlay) {
-      toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('is-open');
-        overlay.classList.toggle('is-open');
-      });
-
-      overlay.addEventListener('click', () => {
-        sidebar.classList.remove('is-open');
-        overlay.classList.remove('is-open');
-      });
-    }
   }
 };
 
 /**
- * Basic HTML escaping utility
+ * Universal HTML escape helper to prevent XSS.
  */
 function escapeHTML(str) {
   if (str === null || str === undefined) return '';

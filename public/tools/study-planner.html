@@ -4,14 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Study Session Planner — DeadlineDeck</title>
+  
+  <link rel="stylesheet" href="/css/design-system.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/toolkit.css">
   <link rel="stylesheet" href="/css/responsive.css">
+
   <style>
     .timer-display {
-      font-family: var(--font-display);
       font-size: 56px;
       font-weight: 600;
       color: var(--text-primary);
@@ -19,171 +21,155 @@
       margin: var(--space-16) 0;
       letter-spacing: -0.02em;
     }
+
+    .study-grid-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-20);
+      margin-top: var(--space-20);
+    }
+
+    @media (max-width: 800px) {
+      .study-grid-split {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <div class="app-container">
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="brand-logo-mark">
+  <!-- TOP HORIZONTAL NAVIGATION -->
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="/dashboard.html" class="nav-brand">
+        <div class="brand-symbol">
           <svg><use href="/icons.svg#icon-logo"></use></svg>
         </div>
-        <span class="brand-wordmark">DeadlineDeck</span>
-      </div>
+        <span class="brand-title">DeadlineDeck</span>
+      </a>
 
-      <nav class="sidebar-nav">
-        <a href="/dashboard.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-dashboard"></use></svg>
-          <span>Dashboard</span>
-        </a>
-        <a href="/planner.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-planner"></use></svg>
-          <span>My Planner</span>
-        </a>
-        <a href="/tasks.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-tasks"></use></svg>
-          <span>Tasks</span>
-        </a>
-        <a href="/calendar.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-calendar"></use></svg>
-          <span>Calendar</span>
-        </a>
-        <a href="/subjects.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-subjects"></use></svg>
-          <span>Subjects</span>
-        </a>
-        <a href="/insights.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-insights"></use></svg>
-          <span>Insights &amp; Reports</span>
-        </a>
-        <a href="/toolkit.html" class="nav-link active">
-          <svg><use href="/icons.svg#icon-toolkit"></use></svg>
-          <span>Student Toolkit</span>
-        </a>
-        <a href="/settings.html" class="nav-link">
+      <ul class="nav-center">
+        <li><a href="/dashboard.html" class="nav-link"><svg><use href="/icons.svg#icon-dashboard"></use></svg>Overview</a></li>
+        <li><a href="/planner.html" class="nav-link"><svg><use href="/icons.svg#icon-planner"></use></svg>Planner</a></li>
+        <li><a href="/tasks.html" class="nav-link"><svg><use href="/icons.svg#icon-tasks"></use></svg>Tasks</a></li>
+        <li><a href="/calendar.html" class="nav-link"><svg><use href="/icons.svg#icon-calendar"></use></svg>Calendar</a></li>
+        <li><a href="/subjects.html" class="nav-link"><svg><use href="/icons.svg#icon-subjects"></use></svg>Subjects</a></li>
+        <li><a href="/toolkit.html" class="nav-link active"><svg><use href="/icons.svg#icon-toolkit"></use></svg>Toolkit</a></li>
+        <li><a href="/insights.html" class="nav-link"><svg><use href="/icons.svg#icon-insights"></use></svg>Insights</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <div class="user-nav-profile">
+          <span class="user-avatar-pill user-avatar-monogram">ST</span>
+          <span class="user-display-name">Student</span>
+        </div>
+        <a href="/settings.html" class="btn-nav-icon" title="Settings">
           <svg><use href="/icons.svg#icon-settings"></use></svg>
-          <span>Settings</span>
         </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <div class="user-profile-badge">
-          <div class="user-avatar-monogram">--</div>
-          <div class="user-info-text">
-            <div class="user-display-name">Loading...</div>
-            <div class="user-display-email">student@college.edu</div>
-          </div>
-        </div>
-        <button class="btn-sidebar-logout">
+        <button class="btn-nav-icon btn-nav-logout" data-action="logout" title="Sign Out">
           <svg><use href="/icons.svg#icon-logout"></use></svg>
-          <span>Log out</span>
+        </button>
+        <button class="mobile-hamburger" aria-label="Toggle navigation">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
       </div>
-    </aside>
+    </div>
 
-    <div class="sidebar-overlay"></div>
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer">
+      <a href="/dashboard.html" class="nav-link"><svg><use href="/icons.svg#icon-dashboard"></use></svg>Overview</a>
+      <a href="/planner.html" class="nav-link"><svg><use href="/icons.svg#icon-planner"></use></svg>Planner</a>
+      <a href="/tasks.html" class="nav-link"><svg><use href="/icons.svg#icon-tasks"></use></svg>Tasks</a>
+      <a href="/calendar.html" class="nav-link"><svg><use href="/icons.svg#icon-calendar"></use></svg>Calendar</a>
+      <a href="/subjects.html" class="nav-link"><svg><use href="/icons.svg#icon-subjects"></use></svg>Subjects</a>
+      <a href="/toolkit.html" class="nav-link active"><svg><use href="/icons.svg#icon-toolkit"></use></svg>Toolkit</a>
+      <a href="/insights.html" class="nav-link"><svg><use href="/icons.svg#icon-insights"></use></svg>Insights</a>
+      <a href="/settings.html" class="nav-link"><svg><use href="/icons.svg#icon-settings"></use></svg>Settings</a>
+    </div>
+  </header>
 
-    <div class="main-wrapper">
-      <header class="mobile-top-bar">
-        <div class="mobile-brand">
-          <svg style="width:20px;height:20px;"><use href="/icons.svg#icon-logo"></use></svg>
-          <span>DeadlineDeck</span>
+  <!-- MAIN WORKSPACE -->
+  <main class="main-wrapper">
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="page-header-text">
+        <a href="/toolkit.html" style="font-size:12px; color:var(--accent); font-weight:600; text-decoration:none; margin-bottom:4px; display:inline-block;">&larr; Back to Toolkit</a>
+        <h1 class="page-title">Study Session Planner &amp; Focus Timer</h1>
+        <p class="page-subtitle">Plan structured study intervals and record verified focus sessions into MySQL.</p>
+      </div>
+    </div>
+
+    <div class="tool-workspace" style="display:flex; flex-direction:column; gap:var(--space-24);">
+      <!-- Focus Timer Panel -->
+      <div class="editorial-card" style="padding:var(--space-32); display:flex; flex-direction:column; align-items:center; gap:var(--space-12);">
+        <span class="section-eyebrow" id="timer-state-label" style="margin-bottom:0;">Ready to study</span>
+        <div id="timer-display" class="timer-display tabular">25:00</div>
+
+        <div style="display:flex; gap:var(--space-12); align-items:center; flex-wrap:wrap; justify-content:center;">
+          <button id="btn-timer-toggle" class="btn btn-primary" style="height:40px; padding:0 var(--space-24);">
+            <svg style="width:16px;height:16px;margin-right:6px;"><use href="/icons.svg#icon-play"></use></svg>
+            <span id="btn-timer-label">Start focus block</span>
+          </button>
+          <button id="btn-timer-reset" class="btn btn-secondary" style="height:40px;">
+            <svg style="width:16px;height:16px;margin-right:6px;"><use href="/icons.svg#icon-reset"></use></svg>
+            <span>Reset</span>
+          </button>
+          <button id="btn-timer-complete" class="btn btn-secondary" style="height:40px;">
+            <svg style="width:16px;height:16px;margin-right:6px;"><use href="/icons.svg#icon-check"></use></svg>
+            <span>Log completed session</span>
+          </button>
         </div>
-        <button class="mobile-menu-btn" aria-label="Open navigation menu">
-          <svg><use href="/icons.svg#icon-menu"></use></svg>
-        </button>
-      </header>
 
-      <main class="main-canvas">
-        <div class="single-column-workspace">
-          <nav class="tool-breadcrumb">
-            <a href="/toolkit.html">&larr; Student Toolkit</a>
-            <span>/</span>
-            <span>Study Session Planner</span>
-          </nav>
+        <!-- Select Linked Task (optional) -->
+        <div style="display:flex; gap:var(--space-8); align-items:center; margin-top:var(--space-12); flex-wrap:wrap; justify-content:center;">
+          <label for="session-task-select" class="form-label" style="margin:0; font-size:13px;">Link to task:</label>
+          <select id="session-task-select" class="form-select" style="width:260px; height:36px; font-size:13px;">
+            <option value="">None (Independent focus)</option>
+          </select>
+        </div>
+      </div>
 
-          <div class="tool-workspace">
-            <div>
-              <span class="label-eyebrow">Academic Utility 3</span>
-              <h1 class="page-title">Study Session Planner &amp; Focus Timer</h1>
-              <p class="secondary" style="margin-top: 4px;">Plan structured study intervals and record verified focus sessions into MySQL.</p>
-            </div>
+      <!-- Session Configuration & Schedule Generator -->
+      <div class="study-grid-split">
+        <div class="editorial-card" style="display:flex; flex-direction:column; gap:var(--space-16);">
+          <span class="section-eyebrow">Session Structure</span>
+          <div class="form-group" style="margin:0;">
+            <label class="form-label" for="cfg-available-mins">Total available time (minutes)</label>
+            <input type="number" id="cfg-available-mins" class="form-input tabular" value="120" min="20" step="10">
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label class="form-label" for="cfg-block-mins">Study block length (minutes)</label>
+            <input type="number" id="cfg-block-mins" class="form-input tabular" value="25" min="15" step="5">
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label class="form-label" for="cfg-break-mins">Break length (minutes)</label>
+            <input type="number" id="cfg-break-mins" class="form-input tabular" value="5" min="3" step="1">
+          </div>
+          <button id="btn-generate-schedule" class="btn btn-secondary" style="align-self:flex-start;">Generate session schedule</button>
+        </div>
 
-            <!-- Focus Timer Panel -->
-            <div style="background: var(--surface); border: 1px solid var(--border-hairline); border-radius: var(--radius-panel); padding: var(--space-32); display: flex; flex-direction: column; align-items: center; gap: var(--space-12);">
-              <span class="label-eyebrow" id="timer-state-label">Ready to study</span>
-              <div id="timer-display" class="timer-display tabular">25:00</div>
-
-              <div style="display: flex; gap: var(--space-12); align-items: center;">
-                <button id="btn-timer-toggle" class="btn btn-primary" style="height: 40px; padding: 0 var(--space-24);">
-                  <svg style="width:16px;height:16px;"><use href="/icons.svg#icon-play"></use></svg>
-                  <span id="btn-timer-label">Start focus block</span>
-                </button>
-                <button id="btn-timer-reset" class="btn btn-secondary" style="height: 40px;">
-                  <svg style="width:16px;height:16px;"><use href="/icons.svg#icon-reset"></use></svg>
-                  <span>Reset</span>
-                </button>
-                <button id="btn-timer-complete" class="btn btn-ghost" style="height: 40px;">
-                  <svg style="width:16px;height:16px;"><use href="/icons.svg#icon-check"></use></svg>
-                  <span>Log completed session</span>
-                </button>
-              </div>
-
-              <!-- Select Linked Task (optional) -->
-              <div style="display: flex; gap: var(--space-8); align-items: center; margin-top: var(--space-12);">
-                <label for="session-task-select" class="form-label" style="margin: 0; font-size: 12px;">Link to task:</label>
-                <select id="session-task-select" class="input-select" style="width: 220px; height: 32px; font-size: 12px;">
-                  <option value="">None (Independent focus)</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Session Configuration & Schedule Generator -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-20);">
-              <div style="background: var(--card); border: 1px solid var(--border-hairline); border-radius: var(--radius-md); padding: var(--space-20); display: flex; flex-direction: column; gap: var(--space-12);">
-                <span class="label-eyebrow">Session Structure</span>
-                <div class="form-group" style="margin: 0;">
-                  <label class="form-label" for="cfg-available-mins">Total available time (minutes)</label>
-                  <input type="number" id="cfg-available-mins" class="input-text tabular" value="120" min="20" step="10">
-                </div>
-                <div class="form-group" style="margin: 0;">
-                  <label class="form-label" for="cfg-block-mins">Study block length (minutes)</label>
-                  <input type="number" id="cfg-block-mins" class="input-text tabular" value="25" min="15" step="5">
-                </div>
-                <div class="form-group" style="margin: 0;">
-                  <label class="form-label" for="cfg-break-mins">Break length (minutes)</label>
-                  <input type="number" id="cfg-break-mins" class="input-text tabular" value="5" min="3" step="1">
-                </div>
-                <button id="btn-generate-schedule" class="btn btn-secondary">Generate session schedule</button>
-              </div>
-
-              <!-- Generated Schedule Output -->
-              <div style="background: var(--card); border: 1px solid var(--border-hairline); border-radius: var(--radius-md); padding: var(--space-20); display: flex; flex-direction: column; gap: var(--space-12);">
-                <span class="label-eyebrow">Suggested Interval Schedule</span>
-                <div id="schedule-output-list" style="display: flex; flex-direction: column; gap: 6px; font-size: 13px;">
-                  <span class="secondary">Configure your available minutes and click generate schedule.</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Recent Completed Sessions History (MySQL Persisted) -->
-            <div>
-              <span class="label-eyebrow" style="margin-bottom: var(--space-12); display: block;">Recent Focus Session History (MySQL Persisted)</span>
-              <div id="session-history-container" style="display: flex; flex-direction: column; gap: 8px;">
-                <!-- Populated dynamically -->
-              </div>
-            </div>
-
+        <!-- Generated Schedule Output -->
+        <div class="editorial-card" style="display:flex; flex-direction:column; gap:var(--space-12);">
+          <span class="section-eyebrow">Suggested Interval Schedule</span>
+          <div id="schedule-output-list" style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
+            <span style="color:var(--text-secondary);">Configure your available minutes and click generate schedule.</span>
           </div>
         </div>
-      </main>
+      </div>
+
+      <!-- Recent Completed Sessions History (MySQL Persisted) -->
+      <div class="editorial-card">
+        <span class="section-eyebrow" style="margin-bottom:var(--space-16); display:block;">Recent Focus Session History (MySQL Persisted)</span>
+        <div id="session-history-container" style="display:flex; flex-direction:column; gap:8px;">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
     </div>
-  </div>
+  </main>
 
   <script src="/js/api.js"></script>
-  <script src="/js/auth.js"></script>
   <script src="/js/ui.js"></script>
+  <script src="/js/auth.js"></script>
   <script src="/js/tools/study-planner.js"></script>
 </body>
 </html>

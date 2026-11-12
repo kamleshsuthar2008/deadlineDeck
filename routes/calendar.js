@@ -16,7 +16,6 @@ router.get('/', async (req, res, next) => {
 
     // Compute month boundary
     const startStr = `${year}-${String(month).padStart(2, '0')}-01`;
-    // Last day of month: day 0 of next month
     const lastDay = new Date(year, month, 0).getDate();
     const endStr = `${year}-${String(month).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
 
@@ -46,17 +45,24 @@ router.get('/', async (req, res, next) => {
 
     const events = rows.map(r => ({
       ...r,
-      due_date: typeof r.due_date === 'string' ? r.due_date.substring(0, 10) : new Date(r.due_date).toISOString().substring(0, 10),
-      planned_date: typeof r.planned_date === 'string' ? r.planned_date.substring(0, 10) : new Date(r.planned_date).toISOString().substring(0, 10),
+      due_date: String(r.due_date).substring(0, 10),
+      planned_date: String(r.planned_date).substring(0, 10),
       estimated_hours: Number(r.estimated_hours)
     }));
 
-    res.json({
+    const calendarData = {
       year,
       month,
       start_date: startStr,
       end_date: endStr,
       events
+    };
+
+    res.json({
+      success: true,
+      message: 'Calendar events retrieved successfully.',
+      ...calendarData,
+      data: calendarData
     });
   } catch (err) {
     next(err);

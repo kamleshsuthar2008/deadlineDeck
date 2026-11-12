@@ -4,180 +4,186 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Subjects — DeadlineDeck</title>
+  
+  <link rel="stylesheet" href="/css/design-system.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/responsive.css">
+
+  <style>
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: var(--space-24);
+    }
+
+    .subject-card {
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-16);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .subject-card:hover {
+      box-shadow: var(--shadow-dropdown);
+      transform: translateY(-2px);
+    }
+
+    .subject-header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-12);
+    }
+
+    .subject-code-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      background-color: var(--soft-blue);
+      border: 1px solid #DCE3FA;
+      color: var(--accent);
+      border-radius: var(--radius-sm);
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .subject-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+      padding: var(--space-12) 0;
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      text-align: center;
+    }
+
+    .subject-stat-num {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .subject-stat-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  </style>
 </head>
 <body>
 
-  <div class="app-container">
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="brand-logo-mark">
+  <!-- TOP HORIZONTAL NAVIGATION -->
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="/dashboard.html" class="nav-brand">
+        <div class="brand-symbol">
           <svg><use href="/icons.svg#icon-logo"></use></svg>
         </div>
-        <span class="brand-wordmark">DeadlineDeck</span>
-      </div>
+        <span class="brand-title">DeadlineDeck</span>
+      </a>
 
-      <nav class="sidebar-nav">
-        <a href="/dashboard.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-dashboard"></use></svg>
-          <span>Dashboard</span>
-        </a>
-        <a href="/planner.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-planner"></use></svg>
-          <span>My Planner</span>
-        </a>
-        <a href="/tasks.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-tasks"></use></svg>
-          <span>Tasks</span>
-        </a>
-        <a href="/calendar.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-calendar"></use></svg>
-          <span>Calendar</span>
-        </a>
-        <a href="/subjects.html" class="nav-link active">
-          <svg><use href="/icons.svg#icon-subjects"></use></svg>
-          <span>Subjects</span>
-        </a>
-        <a href="/insights.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-insights"></use></svg>
-          <span>Insights &amp; Reports</span>
-        </a>
-        <a href="/toolkit.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-toolkit"></use></svg>
-          <span>Student Toolkit</span>
-        </a>
-        <a href="/settings.html" class="nav-link">
+      <ul class="nav-center">
+        <li><a href="/dashboard.html" class="nav-link"><svg><use href="/icons.svg#icon-dashboard"></use></svg>Overview</a></li>
+        <li><a href="/planner.html" class="nav-link"><svg><use href="/icons.svg#icon-planner"></use></svg>Planner</a></li>
+        <li><a href="/tasks.html" class="nav-link"><svg><use href="/icons.svg#icon-tasks"></use></svg>Tasks</a></li>
+        <li><a href="/calendar.html" class="nav-link"><svg><use href="/icons.svg#icon-calendar"></use></svg>Calendar</a></li>
+        <li><a href="/subjects.html" class="nav-link active"><svg><use href="/icons.svg#icon-subjects"></use></svg>Subjects</a></li>
+        <li><a href="/toolkit.html" class="nav-link"><svg><use href="/icons.svg#icon-toolkit"></use></svg>Toolkit</a></li>
+        <li><a href="/insights.html" class="nav-link"><svg><use href="/icons.svg#icon-insights"></use></svg>Insights</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <div class="user-nav-profile">
+          <span class="user-avatar-pill user-avatar-monogram">ST</span>
+          <span class="user-display-name">Student</span>
+        </div>
+        <a href="/settings.html" class="btn-nav-icon" title="Settings">
           <svg><use href="/icons.svg#icon-settings"></use></svg>
-          <span>Settings</span>
         </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <div class="user-profile-badge">
-          <div class="user-avatar-monogram">--</div>
-          <div class="user-info-text">
-            <div class="user-display-name">Loading...</div>
-            <div class="user-display-email">student@college.edu</div>
-          </div>
-        </div>
-        <button class="btn-sidebar-logout">
+        <button class="btn-nav-icon btn-nav-logout" data-action="logout" title="Sign Out">
           <svg><use href="/icons.svg#icon-logout"></use></svg>
-          <span>Log out</span>
+        </button>
+        <button class="mobile-hamburger" aria-label="Toggle navigation">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
       </div>
-    </aside>
-
-    <div class="sidebar-overlay"></div>
-
-    <div class="main-wrapper">
-      <header class="mobile-top-bar">
-        <div class="mobile-brand">
-          <svg style="width:20px;height:20px;"><use href="/icons.svg#icon-logo"></use></svg>
-          <span>DeadlineDeck</span>
-        </div>
-        <button class="mobile-menu-btn" aria-label="Open navigation menu">
-          <svg><use href="/icons.svg#icon-menu"></use></svg>
-        </button>
-      </header>
-
-      <main class="main-canvas">
-        <div class="page-header" style="margin-bottom: var(--space-24);">
-          <div class="page-header-text">
-            <span class="label-eyebrow">Academic Curriculum</span>
-            <h1 class="page-title">Enrolled Subjects</h1>
-          </div>
-          <div class="page-actions">
-            <button id="btn-add-subject" class="btn btn-primary">
-              <svg><use href="/icons.svg#icon-plus"></use></svg>
-              <span>Add subject</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Subjects Ledger Panel -->
-        <div class="panel">
-          <div class="table-container">
-            <table class="ledger-table">
-              <thead>
-                <tr>
-                  <th style="width: 120px;">Code</th>
-                  <th>Subject name</th>
-                  <th class="col-numeral">Total tasks</th>
-                  <th class="col-numeral">Pending</th>
-                  <th class="col-numeral">Completed</th>
-                  <th class="col-numeral">Pending hours</th>
-                  <th>Next deadline</th>
-                  <th class="col-actions">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="subjects-tbody">
-                <!-- Rendered by subjects.js -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </main>
     </div>
-  </div>
 
-  <nav class="mobile-bottom-nav">
-    <a href="/dashboard.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-dashboard"></use></svg>
-      <span>Dashboard</span>
-    </a>
-    <a href="/planner.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-planner"></use></svg>
-      <span>Planner</span>
-    </a>
-    <a href="/tasks.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-tasks"></use></svg>
-      <span>Tasks</span>
-    </a>
-    <a href="/calendar.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-calendar"></use></svg>
-      <span>Calendar</span>
-    </a>
-    <a href="/toolkit.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-toolkit"></use></svg>
-      <span>Toolkit</span>
-    </a>
-  </nav>
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer">
+      <a href="/dashboard.html" class="nav-link"><svg><use href="/icons.svg#icon-dashboard"></use></svg>Overview</a>
+      <a href="/planner.html" class="nav-link"><svg><use href="/icons.svg#icon-planner"></use></svg>Planner</a>
+      <a href="/tasks.html" class="nav-link"><svg><use href="/icons.svg#icon-tasks"></use></svg>Tasks</a>
+      <a href="/calendar.html" class="nav-link"><svg><use href="/icons.svg#icon-calendar"></use></svg>Calendar</a>
+      <a href="/subjects.html" class="nav-link active"><svg><use href="/icons.svg#icon-subjects"></use></svg>Subjects</a>
+      <a href="/toolkit.html" class="nav-link"><svg><use href="/icons.svg#icon-toolkit"></use></svg>Toolkit</a>
+      <a href="/insights.html" class="nav-link"><svg><use href="/icons.svg#icon-insights"></use></svg>Insights</a>
+      <a href="/settings.html" class="nav-link"><svg><use href="/icons.svg#icon-settings"></use></svg>Settings</a>
+    </div>
+  </header>
 
-  <!-- Add/Edit Subject Modal -->
-  <div id="subject-modal" class="modal-backdrop">
-    <div class="modal-dialog" role="dialog" aria-modal="true">
-      <div class="modal-header">
-        <h2 id="subject-modal-heading" class="modal-title">Add academic subject</h2>
-        <button class="modal-close-btn" data-dismiss="modal">
-          <svg><use href="/icons.svg#icon-close"></use></svg>
+  <!-- MAIN WORKSPACE -->
+  <main class="main-wrapper">
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="page-header-text">
+        <span class="page-eyebrow">Academic Curriculum Directory</span>
+        <h1 class="page-title">Enrolled Subjects</h1>
+        <p class="page-subtitle">Manage course codes, inspect workload distributions, and track pending deadlines by academic module.</p>
+      </div>
+      <div class="page-actions">
+        <button id="btn-open-create-subject" class="btn btn-primary">
+          <svg style="width:16px;height:16px;"><use href="/icons.svg#icon-plus"></use></svg>
+          <span>Add Subject</span>
         </button>
       </div>
-      <form id="subject-form">
-        <input type="hidden" id="modal-sub-id">
+    </div>
+
+    <!-- SUBJECTS GRID -->
+    <div id="subjects-container" class="subjects-grid">
+      <!-- Populated dynamically by subjects.js -->
+    </div>
+  </main>
+
+  <!-- CREATE / EDIT SUBJECT MODAL -->
+  <div id="modal-subject-editor" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-subject-heading" class="modal-title">Add Course Subject</h3>
+        <button class="btn btn-ghost btn-sm" data-dismiss="modal">&times;</button>
+      </div>
+      <form id="form-subject-editor">
+        <input type="hidden" id="edit-subject-id">
         <div class="modal-body">
           <div class="form-group">
-            <label class="form-label" for="sub-code">Subject code</label>
-            <input type="text" id="sub-code" class="input-text" required placeholder="e.g. CS305" maxlength="20">
+            <label class="form-label" for="dlg-subject-code">Course Code</label>
+            <input type="text" id="dlg-subject-code" class="form-input" placeholder="e.g. CS301" required>
+            <span style="font-size:12px; color:var(--text-secondary); margin-top:4px;">Unique academic identifier.</span>
           </div>
           <div class="form-group">
-            <label class="form-label" for="sub-name">Subject name</label>
-            <input type="text" id="sub-name" class="input-text" required placeholder="e.g. Computer Networks">
+            <label class="form-label" for="dlg-subject-name">Subject Name</label>
+            <input type="text" id="dlg-subject-name" class="form-input" placeholder="e.g. Database Management Systems" required>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-primary" id="btn-save-sub">Save subject</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Save Subject</button>
         </div>
       </form>
     </div>
   </div>
 
   <script src="/js/api.js"></script>
-  <script src="/js/auth.js"></script>
   <script src="/js/ui.js"></script>
+  <script src="/js/auth.js"></script>
   <script src="/js/subjects.js"></script>
 </body>
 </html>

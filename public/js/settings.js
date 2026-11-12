@@ -14,23 +14,36 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function populateProfileForm(user) {
-  document.getElementById('setting-name').value = user.name || '';
-  document.getElementById('setting-email').value = user.email || '';
-  document.getElementById('setting-default-hours').value = user.default_study_hours || 4.00;
+  const nameEl = document.getElementById('setting-name');
+  if (nameEl) nameEl.value = user.name || '';
+
+  const emailEl = document.getElementById('setting-email');
+  if (emailEl) emailEl.value = user.email || '';
+
+  const hoursEl = document.getElementById('setting-study-hours') || document.getElementById('setting-default-hours');
+  if (hoursEl) hoursEl.value = user.default_study_hours || 4.00;
 }
 
 function setupProfileForm() {
-  document.getElementById('form-profile').addEventListener('submit', async (e) => {
+  const form = document.getElementById('form-profile-settings') || document.getElementById('form-profile');
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const nameEl = document.getElementById('setting-name');
+    const hoursEl = document.getElementById('setting-study-hours') || document.getElementById('setting-default-hours');
+
     try {
       const res = await API.put('/api/auth/profile', {
-        name: document.getElementById('setting-name').value.trim(),
-        default_study_hours: document.getElementById('setting-default-hours').value
+        name: nameEl ? nameEl.value.trim() : '',
+        default_study_hours: hoursEl ? hoursEl.value : 4.00
       });
       UI.showToast('Profile and default study capacity saved.');
-      Auth.currentUser.name = res.user.name;
-      Auth.currentUser.default_study_hours = res.user.default_study_hours;
-      Auth.updateSidebarUser(Auth.currentUser);
+      if (Auth.currentUser && res.user) {
+        Auth.currentUser.name = res.user.name;
+        Auth.currentUser.default_study_hours = res.user.default_study_hours;
+        Auth.syncUserHeader();
+      }
     } catch (err) {
       UI.showToast(err.message || 'Failed to update profile', 'error');
     }
@@ -38,15 +51,21 @@ function setupProfileForm() {
 }
 
 function setupPasswordForm() {
-  document.getElementById('form-password').addEventListener('submit', async (e) => {
+  const form = document.getElementById('form-password-settings') || document.getElementById('form-password');
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const curPw = document.getElementById('setting-current-pw') || document.getElementById('current-pwd');
+    const newPw = document.getElementById('setting-new-pw') || document.getElementById('new-pwd');
+
     try {
       await API.put('/api/auth/password', {
-        current_password: document.getElementById('current-pwd').value,
-        new_password: document.getElementById('new-pwd').value
+        current_password: curPw ? curPw.value : '',
+        new_password: newPw ? newPw.value : ''
       });
       UI.showToast('Password updated successfully.');
-      document.getElementById('form-password').reset();
+      form.reset();
     } catch (err) {
       UI.showToast(err.message || 'Failed to update password', 'error');
     }
@@ -55,6 +74,8 @@ function setupPasswordForm() {
 
 async function loadCapacityOverrides() {
   const container = document.getElementById('overrides-list');
+  if (!container) return;
+
   try {
     const data = await API.get('/api/capacity');
     container.innerHTML = '';
@@ -94,7 +115,10 @@ async function loadCapacityOverrides() {
 }
 
 function setupCapacityOverrideForm() {
-  document.getElementById('form-capacity-override').addEventListener('submit', async (e) => {
+  const form = document.getElementById('form-add-override') || document.getElementById('form-capacity-override');
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const date = document.getElementById('override-date').value;
     const hours = document.getElementById('override-hours').value;

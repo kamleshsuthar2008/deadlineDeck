@@ -532,30 +532,32 @@
    Signature Instrument Panel Component
    ========================================================================== */
 .workload-gauge-track {
-  width: 18px;
-  height: 120px;
-  background-color: var(--surface);
-  border-radius: var(--radius-sm);
+  width: 22px;
+  height: 110px;
+  background-color: #EFEFEA;
+  border-radius: var(--radius-full);
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column-reverse;
-  border: 1px solid var(--border-hairline);
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  box-shadow: inset 0 2px 4px rgba(17, 17, 17, 0.06);
 }
 
 /* Planned hours fill from bottom in status color */
 .workload-gauge-fill {
   width: 100%;
-  background-color: var(--status-teal);
-  transition: height var(--transition-fast);
+  background: linear-gradient(180deg, #438875 0%, #2F6E5D 100%);
+  border-radius: var(--radius-full);
+  transition: height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .workload-gauge-fill.is-near-capacity {
-  background-color: var(--status-amber);
+  background: linear-gradient(180deg, #E5A84B 0%, #C4852B 100%);
 }
 
 .workload-gauge-fill.is-overloaded {
-  background-color: var(--status-coral);
+  background: linear-gradient(180deg, #D96966 0%, #B54D49 100%);
 }
 
 /* Capacity tick line marking available hours */
@@ -564,8 +566,9 @@
   left: 0;
   right: 0;
   height: 2px;
-  background-color: var(--text-primary);
+  background-color: #111111;
   z-index: 5;
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
 }
 
 /* Coral diagonal hatch pattern for overflow */
@@ -573,15 +576,28 @@
   width: 100%;
   background: repeating-linear-gradient(
     -45deg,
-    var(--status-coral),
-    var(--status-coral) 3px,
-    #B54D49 3px,
-    #B54D49 6px
+    #C96865,
+    #C96865 3px,
+    #9C3632 3px,
+    #9C3632 6px
   );
+  border-radius: 4px 4px 0 0;
 }
 
 /* Zero capacity state */
 .workload-gauge-track.is-empty-capacity {
   border: 1px dashed var(--border-strong);
   background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gauge-empty-text {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  letter-spacing: 0.05em;
 }

@@ -4,170 +4,194 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Citation Generator — DeadlineDeck</title>
+  
+  <link rel="stylesheet" href="/css/design-system.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/toolkit.css">
   <link rel="stylesheet" href="/css/responsive.css">
+
+  <style>
+    .citation-editor-card {
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      box-shadow: var(--shadow-card);
+      max-width: 820px;
+    }
+
+    .style-picker-group {
+      display: flex;
+      gap: var(--space-16);
+      margin-bottom: var(--space-24);
+    }
+
+    .style-radio-card {
+      flex: 1;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-16);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      transition: all var(--transition-fast);
+      background-color: var(--bg-main);
+    }
+
+    .style-radio-card:hover {
+      background-color: var(--bg-secondary);
+    }
+
+    .style-radio-card input:checked + .radio-label {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .citation-output-box {
+      margin-top: var(--space-24);
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-20);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+  </style>
 </head>
 <body>
 
-  <div class="app-container">
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="brand-logo-mark">
+  <!-- TOP HORIZONTAL NAVIGATION -->
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="/dashboard.html" class="nav-brand">
+        <div class="brand-symbol">
           <svg><use href="/icons.svg#icon-logo"></use></svg>
         </div>
-        <span class="brand-wordmark">DeadlineDeck</span>
-      </div>
+        <span class="brand-title">DeadlineDeck</span>
+      </a>
 
-      <nav class="sidebar-nav">
-        <a href="/dashboard.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-dashboard"></use></svg>
-          <span>Dashboard</span>
-        </a>
-        <a href="/planner.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-planner"></use></svg>
-          <span>My Planner</span>
-        </a>
-        <a href="/tasks.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-tasks"></use></svg>
-          <span>Tasks</span>
-        </a>
-        <a href="/calendar.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-calendar"></use></svg>
-          <span>Calendar</span>
-        </a>
-        <a href="/subjects.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-subjects"></use></svg>
-          <span>Subjects</span>
-        </a>
-        <a href="/insights.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-insights"></use></svg>
-          <span>Insights &amp; Reports</span>
-        </a>
-        <a href="/toolkit.html" class="nav-link active">
-          <svg><use href="/icons.svg#icon-toolkit"></use></svg>
-          <span>Student Toolkit</span>
-        </a>
-        <a href="/settings.html" class="nav-link">
+      <ul class="nav-center">
+        <li><a href="/dashboard.html" class="nav-link"><svg><use href="/icons.svg#icon-dashboard"></use></svg>Overview</a></li>
+        <li><a href="/planner.html" class="nav-link"><svg><use href="/icons.svg#icon-planner"></use></svg>Planner</a></li>
+        <li><a href="/tasks.html" class="nav-link"><svg><use href="/icons.svg#icon-tasks"></use></svg>Tasks</a></li>
+        <li><a href="/calendar.html" class="nav-link"><svg><use href="/icons.svg#icon-calendar"></use></svg>Calendar</a></li>
+        <li><a href="/subjects.html" class="nav-link"><svg><use href="/icons.svg#icon-subjects"></use></svg>Subjects</a></li>
+        <li><a href="/toolkit.html" class="nav-link active"><svg><use href="/icons.svg#icon-toolkit"></use></svg>Toolkit</a></li>
+        <li><a href="/insights.html" class="nav-link"><svg><use href="/icons.svg#icon-insights"></use></svg>Insights</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <div class="user-nav-profile">
+          <span class="user-avatar-pill user-avatar-monogram">ST</span>
+          <span class="user-display-name">Student</span>
+        </div>
+        <a href="/settings.html" class="btn-nav-icon" title="Settings">
           <svg><use href="/icons.svg#icon-settings"></use></svg>
-          <span>Settings</span>
         </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <div class="user-profile-badge">
-          <div class="user-avatar-monogram">--</div>
-          <div class="user-info-text">
-            <div class="user-display-name">Loading...</div>
-            <div class="user-display-email">student@college.edu</div>
-          </div>
-        </div>
-        <button class="btn-sidebar-logout">
+        <button class="btn-nav-icon btn-nav-logout" data-action="logout" title="Sign Out">
           <svg><use href="/icons.svg#icon-logout"></use></svg>
-          <span>Log out</span>
+        </button>
+        <button class="mobile-hamburger" aria-label="Toggle navigation">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
       </div>
-    </aside>
+    </div>
 
-    <div class="sidebar-overlay"></div>
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer">
+      <a href="/dashboard.html" class="nav-link"><svg><use href="/icons.svg#icon-dashboard"></use></svg>Overview</a>
+      <a href="/planner.html" class="nav-link"><svg><use href="/icons.svg#icon-planner"></use></svg>Planner</a>
+      <a href="/tasks.html" class="nav-link"><svg><use href="/icons.svg#icon-tasks"></use></svg>Tasks</a>
+      <a href="/calendar.html" class="nav-link"><svg><use href="/icons.svg#icon-calendar"></use></svg>Calendar</a>
+      <a href="/subjects.html" class="nav-link"><svg><use href="/icons.svg#icon-subjects"></use></svg>Subjects</a>
+      <a href="/toolkit.html" class="nav-link active"><svg><use href="/icons.svg#icon-toolkit"></use></svg>Toolkit</a>
+      <a href="/insights.html" class="nav-link"><svg><use href="/icons.svg#icon-insights"></use></svg>Insights</a>
+      <a href="/settings.html" class="nav-link"><svg><use href="/icons.svg#icon-settings"></use></svg>Settings</a>
+    </div>
+  </header>
 
-    <div class="main-wrapper">
-      <header class="mobile-top-bar">
-        <div class="mobile-brand">
-          <svg style="width:20px;height:20px;"><use href="/icons.svg#icon-logo"></use></svg>
-          <span>DeadlineDeck</span>
+  <!-- MAIN WORKSPACE -->
+  <main class="main-wrapper">
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="page-header-text">
+        <a href="/toolkit.html" style="font-size:12px; color:var(--accent); font-weight:600; text-decoration:none; margin-bottom:4px; display:inline-block;">&larr; Back to Toolkit</a>
+        <h1 class="page-title">Citation Generator</h1>
+        <p class="page-subtitle">Format standardized references in APA 7th edition and IEEE styles for course assignments and technical reports.</p>
+      </div>
+      <div class="page-actions">
+        <button id="btn-sample-cite" class="btn btn-secondary btn-sm">Load CSE Textbook Sample</button>
+      </div>
+    </div>
+
+    <div class="citation-editor-card">
+      <form id="citation-form">
+        <!-- Style Radios -->
+        <div class="style-picker-group">
+          <label class="style-radio-card">
+            <input type="radio" name="cite_style" id="radio-apa" value="apa" checked>
+            <span class="radio-label">APA 7th Edition</span>
+          </label>
+          <label class="style-radio-card">
+            <input type="radio" name="cite_style" id="radio-ieee" value="ieee">
+            <span class="radio-label">IEEE Style</span>
+          </label>
         </div>
-        <button class="mobile-menu-btn" aria-label="Open navigation menu">
-          <svg><use href="/icons.svg#icon-menu"></use></svg>
-        </button>
-      </header>
 
-      <main class="main-canvas">
-        <div class="single-column-workspace">
-          <nav class="tool-breadcrumb">
-            <a href="/toolkit.html">&larr; Student Toolkit</a>
-            <span>/</span>
-            <span>Citation Generator</span>
-          </nav>
+        <div class="form-group">
+          <label class="form-label" for="cite-author">Author(s)</label>
+          <input type="text" id="cite-author" class="form-input" placeholder="e.g. Tanenbaum, A. S. or Silberschatz, A., &amp; Korth, H. F." required>
+        </div>
 
-          <div class="tool-workspace">
-            <div>
-              <span class="label-eyebrow">Academic Utility 2</span>
-              <h1 class="page-title">Citation Generator</h1>
-              <p class="secondary" style="margin-top: 4px;">Generate properly formatted APA 7th Edition and IEEE bibliographic references.</p>
-            </div>
-
-            <!-- Format Toggle -->
-            <div style="display: flex; gap: var(--space-12); align-items: center;">
-              <span class="label-eyebrow">Style format:</span>
-              <label class="custom-checkbox" style="gap: 6px;">
-                <input type="radio" name="citation-style" value="APA" checked id="radio-apa">
-                <span>APA (7th Edition)</span>
-              </label>
-              <label class="custom-checkbox" style="gap: 6px;">
-                <input type="radio" name="citation-style" value="IEEE" id="radio-ieee">
-                <span>IEEE</span>
-              </label>
-            </div>
-
-            <!-- Citation Input Fields -->
-            <form id="citation-form" style="display: flex; flex-direction: column; gap: var(--space-16);">
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-12);">
-                <div class="form-group" style="margin: 0;">
-                  <label class="form-label" for="cite-author">Author(s)</label>
-                  <input type="text" id="cite-author" class="input-text" placeholder="e.g. Silberschatz, A., Korth, H. F., &amp; Sudarshan, S." required>
-                </div>
-                <div class="form-group" style="margin: 0;">
-                  <label class="form-label" for="cite-year">Publication year</label>
-                  <input type="text" id="cite-year" class="input-text tabular" placeholder="e.g. 2020" required>
-                </div>
-              </div>
-
-              <div class="form-group" style="margin: 0;">
-                <label class="form-label" for="cite-title">Title of work / paper / article</label>
-                <input type="text" id="cite-title" class="input-text" placeholder="e.g. Database System Concepts" required>
-              </div>
-
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-12);">
-                <div class="form-group" style="margin: 0;">
-                  <label class="form-label" for="cite-publisher">Publisher / Journal name</label>
-                  <input type="text" id="cite-publisher" class="input-text" placeholder="e.g. McGraw-Hill">
-                </div>
-                <div class="form-group" style="margin: 0;">
-                  <label class="form-label" for="cite-url">URL / DOI (optional)</label>
-                  <input type="url" id="cite-url" class="input-text" placeholder="https://doi.org/...">
-                </div>
-              </div>
-
-              <div style="display: flex; gap: var(--space-12); align-items: center; margin-top: var(--space-8);">
-                <button type="submit" class="btn btn-primary">Generate citation</button>
-                <button type="button" id="btn-sample-cite" class="btn btn-secondary">Fill sample</button>
-                <button type="button" id="btn-clear-cite" class="btn btn-ghost">Clear</button>
-              </div>
-            </form>
-
-            <!-- Result Box -->
-            <div id="citation-result-box" style="display: none; background: var(--surface); border: 1px solid var(--border-hairline); border-radius: var(--radius-md); padding: var(--space-20); flex-direction: column; gap: var(--space-12);">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span class="label-eyebrow" id="result-format-label">Formatted APA Citation</span>
-                <button id="btn-copy-cite" class="btn btn-secondary" style="height: 32px; font-size: 12.5px;">
-                  <svg style="width:14px;height:14px;"><use href="/icons.svg#icon-copy"></use></svg>
-                  <span>Copy reference</span>
-                </button>
-              </div>
-              <div id="citation-text" style="font-size: 14.5px; line-height: 1.6; color: var(--text-primary); font-family: var(--font-display); background: var(--card); padding: var(--space-16); border-radius: var(--radius-sm); border: 1px solid var(--border-hairline);"></div>
-            </div>
+        <div style="display:grid; grid-template-columns:3fr 1fr; gap:var(--space-12);">
+          <div class="form-group">
+            <label class="form-label" for="cite-title">Title of Book / Paper / Article</label>
+            <input type="text" id="cite-title" class="form-input" placeholder="e.g. Modern Operating Systems" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cite-year">Year</label>
+            <input type="text" id="cite-year" class="form-input" placeholder="e.g. 2021" required>
           </div>
         </div>
-      </main>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-12);">
+          <div class="form-group">
+            <label class="form-label" for="cite-publisher">Publisher or Organization</label>
+            <input type="text" id="cite-publisher" class="form-input" placeholder="e.g. Pearson or IEEE Press">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cite-url">URL / DOI (Optional)</label>
+            <input type="text" id="cite-url" class="form-input" placeholder="e.g. https://doi.org/10.1145/...">
+          </div>
+        </div>
+
+        <div style="display:flex; gap:var(--space-12); margin-top:var(--space-16);">
+          <button type="submit" class="btn btn-primary btn-sm">Format Citation</button>
+          <button type="button" id="btn-clear-cite" class="btn btn-ghost btn-sm">Clear Form</button>
+        </div>
+      </form>
+
+      <!-- FORMATTED RESULT BOX -->
+      <div id="citation-result-box" class="citation-output-box" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span class="section-eyebrow" id="result-format-label">Formatted Reference</span>
+          <button id="btn-copy-cite" class="btn btn-secondary btn-sm" style="height:28px;">Copy Reference</button>
+        </div>
+        <p id="citation-text" style="font-size:14.5px; line-height:1.6; color:var(--text-primary); font-family:var(--font-editorial);"></p>
+        <span style="font-size:11.5px; color:var(--text-secondary); margin-top:4px;">
+          Note: Formatted using standard deterministic grammar rules. Verify with your course rubric before final submission.
+        </span>
+      </div>
     </div>
-  </div>
+  </main>
 
   <script src="/js/api.js"></script>
-  <script src="/js/auth.js"></script>
   <script src="/js/ui.js"></script>
+  <script src="/js/auth.js"></script>
   <script src="/js/tools/citation-generator.js"></script>
 </body>
 </html>

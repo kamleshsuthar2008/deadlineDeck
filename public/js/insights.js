@@ -14,14 +14,26 @@ async function loadReports() {
     const data = await API.get('/api/reports/overview');
     const s = data.summary;
 
-    document.getElementById('editorial-summary-text').textContent = data.editorial_summary;
+    const summaryEl = document.getElementById('report-editorial-text') || document.getElementById('editorial-summary-text');
+    if (summaryEl) summaryEl.textContent = data.editorial_summary;
 
-    document.getElementById('stat-rep-total').textContent = s.total_tasks;
-    document.getElementById('stat-rep-completed').textContent = s.completed_tasks;
-    document.getElementById('stat-rep-rate').textContent = `${s.completion_rate}%`;
-    document.getElementById('stat-rep-overloaded-days').textContent = s.overloaded_days_past_month;
+    const totalEl = document.getElementById('metric-total-tasks') || document.getElementById('stat-rep-total');
+    if (totalEl) totalEl.textContent = s.total_tasks;
 
-    const container = document.getElementById('reports-subject-bars');
+    const completedEl = document.getElementById('metric-completed-tasks') || document.getElementById('stat-rep-completed');
+    if (completedEl) completedEl.textContent = s.completed_tasks;
+
+    const pendingEl = document.getElementById('metric-pending-tasks');
+    if (pendingEl) pendingEl.textContent = s.pending_tasks !== undefined ? s.pending_tasks : (s.total_tasks - s.completed_tasks);
+
+    const rateEl = document.getElementById('metric-completion-rate') || document.getElementById('stat-rep-rate');
+    if (rateEl) rateEl.textContent = `${s.completion_rate}%`;
+
+    const overloadEl = document.getElementById('metric-overloaded-days') || document.getElementById('stat-rep-overloaded-days');
+    if (overloadEl) overloadEl.textContent = s.overloaded_days_past_month;
+
+    const container = document.getElementById('subject-distribution-chart') || document.getElementById('reports-subject-bars');
+    if (!container) return;
     container.innerHTML = '';
 
     if (!data.subject_distribution || data.subject_distribution.length === 0) {

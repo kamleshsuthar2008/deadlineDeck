@@ -4,262 +4,207 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Toolkit — DeadlineDeck</title>
+  
+  <link rel="stylesheet" href="/css/design-system.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/toolkit.css">
   <link rel="stylesheet" href="/css/responsive.css">
+
+  <style>
+    .toolkit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: var(--space-24);
+    }
+
+    .tool-hub-card {
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-16);
+      text-decoration: none;
+      color: inherit;
+      transition: all var(--transition-fast);
+      position: relative;
+    }
+
+    .tool-hub-card:hover {
+      box-shadow: var(--shadow-dropdown);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .tool-num-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .tool-card-title {
+      font-family: var(--font-editorial);
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.25;
+    }
+
+    .tool-card-desc {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .tool-card-action {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: auto;
+    }
+  </style>
 </head>
 <body>
 
-  <div class="app-container">
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="brand-logo-mark">
+  <!-- TOP HORIZONTAL NAVIGATION -->
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="/dashboard.html" class="nav-brand">
+        <div class="brand-symbol">
           <svg><use href="/icons.svg#icon-logo"></use></svg>
         </div>
-        <span class="brand-wordmark">DeadlineDeck</span>
-      </div>
+        <span class="brand-title">DeadlineDeck</span>
+      </a>
 
-      <nav class="sidebar-nav">
-        <a href="/dashboard.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-dashboard"></use></svg>
-          <span>Dashboard</span>
-        </a>
-        <a href="/planner.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-planner"></use></svg>
-          <span>My Planner</span>
-        </a>
-        <a href="/tasks.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-tasks"></use></svg>
-          <span>Tasks</span>
-        </a>
-        <a href="/calendar.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-calendar"></use></svg>
-          <span>Calendar</span>
-        </a>
-        <a href="/subjects.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-subjects"></use></svg>
-          <span>Subjects</span>
-        </a>
-        <a href="/insights.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-insights"></use></svg>
-          <span>Insights &amp; Reports</span>
-        </a>
-        <a href="/toolkit.html" class="nav-link active">
-          <svg><use href="/icons.svg#icon-toolkit"></use></svg>
-          <span>Student Toolkit</span>
-        </a>
-        <a href="/settings.html" class="nav-link">
+      <ul class="nav-center">
+        <li><a href="/dashboard.html" class="nav-link"><svg><use href="/icons.svg#icon-dashboard"></use></svg>Overview</a></li>
+        <li><a href="/planner.html" class="nav-link"><svg><use href="/icons.svg#icon-planner"></use></svg>Planner</a></li>
+        <li><a href="/tasks.html" class="nav-link"><svg><use href="/icons.svg#icon-tasks"></use></svg>Tasks</a></li>
+        <li><a href="/calendar.html" class="nav-link"><svg><use href="/icons.svg#icon-calendar"></use></svg>Calendar</a></li>
+        <li><a href="/subjects.html" class="nav-link"><svg><use href="/icons.svg#icon-subjects"></use></svg>Subjects</a></li>
+        <li><a href="/toolkit.html" class="nav-link active"><svg><use href="/icons.svg#icon-toolkit"></use></svg>Toolkit</a></li>
+        <li><a href="/insights.html" class="nav-link"><svg><use href="/icons.svg#icon-insights"></use></svg>Insights</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <div class="user-nav-profile">
+          <span class="user-avatar-pill user-avatar-monogram">ST</span>
+          <span class="user-display-name">Student</span>
+        </div>
+        <a href="/settings.html" class="btn-nav-icon" title="Settings">
           <svg><use href="/icons.svg#icon-settings"></use></svg>
-          <span>Settings</span>
         </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <div class="user-profile-badge">
-          <div class="user-avatar-monogram">--</div>
-          <div class="user-info-text">
-            <div class="user-display-name">Loading...</div>
-            <div class="user-display-email">student@college.edu</div>
-          </div>
-        </div>
-        <button class="btn-sidebar-logout">
+        <button class="btn-nav-icon btn-nav-logout" data-action="logout" title="Sign Out">
           <svg><use href="/icons.svg#icon-logout"></use></svg>
-          <span>Log out</span>
+        </button>
+        <button class="mobile-hamburger" aria-label="Toggle navigation">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
       </div>
-    </aside>
-
-    <div class="sidebar-overlay"></div>
-
-    <div class="main-wrapper">
-      <header class="mobile-top-bar">
-        <div class="mobile-brand">
-          <svg style="width:20px;height:20px;"><use href="/icons.svg#icon-logo"></use></svg>
-          <span>DeadlineDeck</span>
-        </div>
-        <button class="mobile-menu-btn" aria-label="Open navigation menu">
-          <svg><use href="/icons.svg#icon-menu"></use></svg>
-        </button>
-      </header>
-
-      <main class="main-canvas">
-        <div class="page-header" style="margin-bottom: var(--space-32);">
-          <div class="page-header-text">
-            <span class="label-eyebrow">Academic Utility Library</span>
-            <h1 class="page-title">Student Toolkit</h1>
-            <p class="secondary" style="margin: 0;">Small tools for smarter academic work.</p>
-          </div>
-        </div>
-
-        <!-- 3x2 Library Grid -->
-        <div class="toolkit-grid">
-          
-          <!-- Tool 1: Word & Character Counter -->
-          <a href="/tools/word-counter.html" class="toolkit-card">
-            <div class="toolkit-card-illustration">
-              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor">
-                <rect x="12" y="8" width="40" height="48" rx="4" stroke-width="2"/>
-                <line x1="20" y1="20" x2="44" y2="20" stroke-width="2" stroke-linecap="round"/>
-                <line x1="20" y1="28" x2="44" y2="28" stroke-width="2" stroke-linecap="round"/>
-                <line x1="20" y1="36" x2="36" y2="36" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="42" cy="44" r="7" stroke-width="2"/>
-                <line x1="47" y1="49" x2="52" y2="54" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="toolkit-card-content">
-              <span class="label-eyebrow">Text Utility</span>
-              <h2 class="toolkit-card-title">Word and Character Counter</h2>
-              <p class="toolkit-card-purpose">Track live word and character counts, reading time, and target progress for lab reports and thesis essays.</p>
-              <div class="toolkit-card-action">
-                <span>Open tool &rarr;</span>
-              </div>
-            </div>
-          </a>
-
-          <!-- Tool 2: Citation Generator -->
-          <a href="/tools/citation-generator.html" class="toolkit-card">
-            <div class="toolkit-card-illustration">
-              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor">
-                <path d="M16 12C16 10 18 8 20 8H48V52H20C18 52 16 50 16 48V12Z" stroke-width="2"/>
-                <line x1="16" y1="44" x2="48" y2="44" stroke-width="2"/>
-                <path d="M26 22H38M26 28H34" stroke-width="2" stroke-linecap="round"/>
-                <path d="M24 16L27 19L33 13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <div class="toolkit-card-content">
-              <span class="label-eyebrow">Reference Formatter</span>
-              <h2 class="toolkit-card-title">Citation Generator</h2>
-              <p class="toolkit-card-purpose">Format academic references in standard APA and IEEE formats with instant clipboard copy.</p>
-              <div class="toolkit-card-action">
-                <span>Open tool &rarr;</span>
-              </div>
-            </div>
-          </a>
-
-          <!-- Tool 3: Study Session Planner -->
-          <a href="/tools/study-planner.html" class="toolkit-card">
-            <div class="toolkit-card-illustration">
-              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor">
-                <circle cx="32" cy="34" r="20" stroke-width="2"/>
-                <polyline points="32 22 32 34 42 38" stroke-width="2" stroke-linecap="round"/>
-                <path d="M28 8H36M32 8V14" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="toolkit-card-content">
-              <span class="label-eyebrow">Focus Timer</span>
-              <h2 class="toolkit-card-title">Study Session Planner</h2>
-              <p class="toolkit-card-purpose">Structure deep study blocks and breaks with an active timer that persists completed sessions into MySQL.</p>
-              <div class="toolkit-card-action">
-                <span>Open tool &rarr;</span>
-              </div>
-            </div>
-          </a>
-
-          <!-- Tool 4: Assignment Checklist Builder -->
-          <a href="/tools/checklist.html" class="toolkit-card">
-            <div class="toolkit-card-illustration">
-              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor">
-                <rect x="14" y="10" width="36" height="44" rx="3" stroke-width="2"/>
-                <rect x="20" y="18" width="6" height="6" rx="1" stroke-width="1.8"/>
-                <line x1="30" y1="21" x2="42" y2="21" stroke-width="1.8" stroke-linecap="round"/>
-                <path d="M20 31L23 34L28 29" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                <line x1="32" y1="31" x2="42" y2="31" stroke-width="1.8" stroke-linecap="round"/>
-                <rect x="20" y="40" width="6" height="6" rx="1" stroke-width="1.8"/>
-                <line x1="30" y1="43" x2="40" y2="43" stroke-width="1.8" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="toolkit-card-content">
-              <span class="label-eyebrow">Task Sub-steps</span>
-              <h2 class="toolkit-card-title">Assignment Checklist Builder</h2>
-              <p class="toolkit-card-purpose">Break down coursework submissions into manageable verification items with persistent percentage tracking.</p>
-              <div class="toolkit-card-action">
-                <span>Open tool &rarr;</span>
-              </div>
-            </div>
-          </a>
-
-          <!-- Tool 5: Quick Notes -->
-          <a href="/tools/notes.html" class="toolkit-card">
-            <div class="toolkit-card-illustration">
-              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor">
-                <path d="M14 12C14 10.9 14.9 10 16 10H48C49.1 10 50 10.9 50 12V52C50 53.1 49.1 54 48 54H16C14.9 54 14 53.1 14 52V12Z" stroke-width="2"/>
-                <line x1="22" y1="20" x2="42" y2="20" stroke-width="2" stroke-linecap="round"/>
-                <line x1="22" y1="28" x2="38" y2="28" stroke-width="2" stroke-linecap="round"/>
-                <line x1="22" y1="36" x2="32" y2="36" stroke-width="2" stroke-linecap="round"/>
-                <path d="M36 44L44 36L48 40L40 48H36V44Z" stroke-width="2"/>
-              </svg>
-            </div>
-            <div class="toolkit-card-content">
-              <span class="label-eyebrow">Subject Notebook</span>
-              <h2 class="toolkit-card-title">Quick Notes</h2>
-              <p class="toolkit-card-purpose">Capture subject-specific study notes, algorithm definitions, and revision summaries with pinning.</p>
-              <div class="toolkit-card-action">
-                <span>Open tool &rarr;</span>
-              </div>
-            </div>
-          </a>
-
-          <!-- Tool 6: Marks and Percentage Calculator -->
-          <a href="/tools/marks-calculator.html" class="toolkit-card">
-            <div class="toolkit-card-illustration">
-              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor">
-                <rect x="16" y="10" width="32" height="44" rx="4" stroke-width="2"/>
-                <rect x="22" y="16" width="20" height="10" rx="2" stroke-width="1.8"/>
-                <circle cx="25" cy="34" r="2" fill="currentColor"/>
-                <circle cx="32" cy="34" r="2" fill="currentColor"/>
-                <circle cx="39" cy="34" r="2" fill="currentColor"/>
-                <circle cx="25" cy="42" r="2" fill="currentColor"/>
-                <circle cx="32" cy="42" r="2" fill="currentColor"/>
-                <circle cx="39" cy="42" r="2" fill="currentColor"/>
-              </svg>
-            </div>
-            <div class="toolkit-card-content">
-              <span class="label-eyebrow">Grade Estimation</span>
-              <h2 class="toolkit-card-title">Marks &amp; Percentage Calculator</h2>
-              <p class="toolkit-card-purpose">Compute aggregate percentages, weighted continuous assessments, and required target exam marks.</p>
-              <div class="toolkit-card-action">
-                <span>Open tool &rarr;</span>
-              </div>
-            </div>
-          </a>
-
-        </div>
-      </main>
     </div>
-  </div>
 
-  <nav class="mobile-bottom-nav">
-    <a href="/dashboard.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-dashboard"></use></svg>
-      <span>Dashboard</span>
-    </a>
-    <a href="/planner.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-planner"></use></svg>
-      <span>Planner</span>
-    </a>
-    <a href="/tasks.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-tasks"></use></svg>
-      <span>Tasks</span>
-    </a>
-    <a href="/calendar.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-calendar"></use></svg>
-      <span>Calendar</span>
-    </a>
-    <a href="/toolkit.html" class="bottom-nav-item active">
-      <svg><use href="/icons.svg#icon-toolkit"></use></svg>
-      <span>Toolkit</span>
-    </a>
-  </nav>
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer">
+      <a href="/dashboard.html" class="nav-link"><svg><use href="/icons.svg#icon-dashboard"></use></svg>Overview</a>
+      <a href="/planner.html" class="nav-link"><svg><use href="/icons.svg#icon-planner"></use></svg>Planner</a>
+      <a href="/tasks.html" class="nav-link"><svg><use href="/icons.svg#icon-tasks"></use></svg>Tasks</a>
+      <a href="/calendar.html" class="nav-link"><svg><use href="/icons.svg#icon-calendar"></use></svg>Calendar</a>
+      <a href="/subjects.html" class="nav-link"><svg><use href="/icons.svg#icon-subjects"></use></svg>Subjects</a>
+      <a href="/toolkit.html" class="nav-link active"><svg><use href="/icons.svg#icon-toolkit"></use></svg>Toolkit</a>
+      <a href="/insights.html" class="nav-link"><svg><use href="/icons.svg#icon-insights"></use></svg>Insights</a>
+      <a href="/settings.html" class="nav-link"><svg><use href="/icons.svg#icon-settings"></use></svg>Settings</a>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE (SECTION 16) -->
+  <main class="main-wrapper">
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="page-header-text">
+        <span class="page-eyebrow">Academic Utility Library</span>
+        <h1 class="page-title">Your academic toolkit.</h1>
+        <p class="page-subtitle">Small tools for a smarter study workflow.</p>
+      </div>
+    </div>
+
+    <!-- 6-TOOL EDITORIAL GRID -->
+    <div class="toolkit-grid">
+      <!-- 1. Word Counter -->
+      <a href="/tools/word-counter.html" class="tool-hub-card">
+        <span class="tool-num-tag">Utility 01</span>
+        <h2 class="tool-card-title">Word &amp; Character Counter</h2>
+        <p class="tool-card-desc">
+          Live words, character count with and without spaces, paragraphs, reading time, and target word count progress for essays and report submissions.
+        </p>
+        <span class="tool-card-action">Launch Word Counter &rarr;</span>
+      </a>
+
+      <!-- 2. Citation Generator -->
+      <a href="/tools/citation-generator.html" class="tool-hub-card">
+        <span class="tool-num-tag">Utility 02</span>
+        <h2 class="tool-card-title">Citation Generator</h2>
+        <p class="tool-card-desc">
+          Generate accurate references formatted in APA 7th edition and IEEE styles with one-click clipboard copying.
+        </p>
+        <span class="tool-card-action">Launch Citation Generator &rarr;</span>
+      </a>
+
+      <!-- 3. Study Session Planner -->
+      <a href="/tools/study-planner.html" class="tool-hub-card">
+        <span class="tool-num-tag">Utility 03</span>
+        <h2 class="tool-card-title">Study Session Planner</h2>
+        <p class="tool-card-desc">
+          Calculates focused study interval sequences with built-in timer and automatically logs completed hours to MySQL.
+        </p>
+        <span class="tool-card-action">Launch Study Timer &rarr;</span>
+      </a>
+
+      <!-- 4. Assignment Checklist -->
+      <a href="/tools/checklist.html" class="tool-hub-card">
+        <span class="tool-num-tag">Utility 04</span>
+        <h2 class="tool-card-title">Assignment Checklist Builder</h2>
+        <p class="tool-card-desc">
+          Create granular checklists for complex assignments and project deliverables, persist items in MySQL, and link to existing tasks.
+        </p>
+        <span class="tool-card-action">Launch Checklist Builder &rarr;</span>
+      </a>
+
+      <!-- 5. Quick Notes -->
+      <a href="/tools/notes.html" class="tool-hub-card">
+        <span class="tool-num-tag">Utility 05</span>
+        <h2 class="tool-card-title">Quick Notes</h2>
+        <p class="tool-card-desc">
+          Capture fast subject-wise study notes, formulas, and references with instant search and pinning, stored in MySQL.
+        </p>
+        <span class="tool-card-action">Launch Quick Notes &rarr;</span>
+      </a>
+
+      <!-- 6. Marks Calculator -->
+      <a href="/tools/marks-calculator.html" class="tool-hub-card">
+        <span class="tool-num-tag">Utility 06</span>
+        <h2 class="tool-card-title">Marks &amp; Percentage Calculator</h2>
+        <p class="tool-card-desc">
+          Calculate overall subject percentages, weighted internal-to-external scores, and target marks needed to achieve your goal grade.
+        </p>
+        <span class="tool-card-action">Launch Marks Calculator &rarr;</span>
+      </a>
+    </div>
+  </main>
 
   <script src="/js/api.js"></script>
-  <script src="/js/auth.js"></script>
   <script src="/js/ui.js"></script>
+  <script src="/js/auth.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      await Auth.init(true);
-    });
+    document.addEventListener('DOMContentLoaded', () => Auth.init(true));
   </script>
 </body>
 </html>

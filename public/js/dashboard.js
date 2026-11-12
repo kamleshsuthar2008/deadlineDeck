@@ -190,15 +190,14 @@ async function loadWorkloadMap(offset = 0) {
         <div class="day-column-header">
           <span class="day-weekday-label">${day.weekday}</span>
           <span class="day-numeral tabular">${day.dayNum}</span>
+          ${day.is_today ? '<span class="today-micro-badge">TODAY</span>' : ''}
         </div>
         ${gaugeHtml}
         <div class="day-metrics">
-          <span class="day-hours-ratio tabular">${day.planned_hours} / ${day.available_hours}h</span>
-          <span class="day-percentage tabular">${day.utilization_percentage !== null ? day.utilization_percentage + '%' : '—'}</span>
+          <span class="day-hours-ratio tabular"><strong>${day.planned_hours}</strong><span class="day-ratio-denom"> / ${day.available_hours}h</span></span>
+          <span class="day-util-badge status-badge-${day.status_code}">${day.utilization_percentage !== null ? day.utilization_percentage + '%' : '—'}</span>
           <span class="day-task-count">${day.task_count} task${day.task_count === 1 ? '' : 's'}</span>
-          <span class="day-status-text status-${day.status_code}">
-            ${day.available_hours <= 0 ? 'Not set' : day.status}
-          </span>
+          <span class="day-status-text status-${day.status_code}">${day.available_hours <= 0 ? 'Not set' : day.status}</span>
         </div>
       `;
 
@@ -232,16 +231,35 @@ function renderSelectedDayDetail(dateStr) {
   const day = cachedWorkloadData.days.find(d => d.dateStr === dateStr);
   if (!day) return;
 
-  const sentenceEl = document.getElementById('workload-detail-sentence');
-  sentenceEl.textContent = day.summary_message;
+  const dateTitleEl = document.getElementById('shelf-date-title');
+  if (dateTitleEl) {
+    const isToday = day.is_today;
+    dateTitleEl.textContent = `${day.weekday}, ${day.monthShort} ${day.dayNum}${isToday ? ' (Today)' : ''}`;
+  }
 
-  const listContainer = document.getElementById('day-task-mini-container');
+  const statusPillEl = document.getElementById('shelf-status-pill');
+  if (statusPillEl) {
+    statusPillEl.className = `status-pill ${day.status_code}`;
+    statusPillEl.innerHTML = `<span class="status-dot"></span>${day.status}`;
+  }
+
+  const sentenceEl = document.getElementById('workload-detail-sentence');
+  if (sentenceEl) {
+    sentenceEl.className = `workload-sentence-banner ${day.status_code}`;
+    sentenceEl.innerHTML = `
+      <svg style="width:16px;height:16px;flex-shrink:0;"><use href="/icons.svg#icon-info"></use></svg>
+      <span>${escapeHTML(day.summary_message)}</span>
+    `;
+  }
+
+  const listContainer = document.getElementById('shelf-tasks-list') || document.getElementById('day-task-mini-container');
+  if (!listContainer) return;
   listContainer.innerHTML = '';
 
   if (!day.tasks || day.tasks.length === 0) {
     listContainer.innerHTML = `
-      <div style="font-size: 13px; color: var(--text-secondary); padding: var(--space-8) 0;">
-        No study tasks planned for ${day.weekday}, ${day.monthShort} ${day.dayNum}.
+      <div style="font-size: 13.5px; color: var(--text-secondary); text-align: center; padding: var(--space-20) var(--space-16); background: var(--white); border: 1px dashed var(--border); border-radius: var(--radius-md);">
+        No study tasks planned for ${day.weekday}, ${day.monthShort} ${day.dayNum}. Click "Add Task for This Day" above to schedule tasks.
       </div>
     `;
     return;
@@ -249,17 +267,29 @@ function renderSelectedDayDetail(dateStr) {
 
   day.tasks.forEach(task => {
     const item = document.createElement('div');
-    item.className = 'day-task-mini-item';
+    item.className = 'shelf-task-card';
+    const pClass = task.priority === 'High' ? 'p-high' : (task.priority === 'Medium' ? 'p-med' : 'p-low');
+
     item.innerHTML = `
-      <div style="display: flex; align-items: center; gap: var(--space-8); min-width: 0;">
+      <div style="display: flex; align-items: center; gap: var(--space-12); min-width: 0;">
         <span class="focus-subject-tag">${escapeHTML(task.subject_code)}</span>
-        <span style="font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-          ${escapeHTML(task.title)}
-        </span>
+        <div style="min-width: 0;">
+          <div style="font-weight: 600; font-size: 14px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            ${escapeHTML(task.title)}
+          </div>
+          <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">
+            ${escapeHTML(task.task_type)} &bull; Due ${task.due_date ? task.due_date.substring(0, 10) : ''}
+          </div>
+        </div>
       </div>
-      <div style="display: flex; align-items: center; gap: var(--space-12); flex-shrink: 0;">
-        <span class="tabular" style="font-size: 12.5px; font-weight: 600;">${task.estimated_hours}h</span>
-        <span style="font-size: 11.5px; color: var(--text-secondary);">Due ${task.due_date ? task.due_date.substring(0, 10) : ''}</span>
+      <div style="display: flex; align-items: center; gap: var(--space-16); flex-shrink: 0;">
+        <div class="priority-indicator">
+          <div class="priority-mark ${pClass}"><span></span><span></span><span></span></div>
+          <span style="font-size: 11.5px;">${escapeHTML(task.priority)}</span>
+        </div>
+        <span class="tabular" style="font-size: 13px; font-weight: 700; background: var(--surface); padding: 3px 8px; border-radius: var(--radius-sm);">
+          ${task.estimated_hours}h
+        </span>
       </div>
     `;
     listContainer.appendChild(item);
@@ -270,7 +300,7 @@ function renderSelectedDayDetail(dateStr) {
  * 6. Render Today's Focus (Ranked list with rank numerals & human-readable reasons)
  */
 function renderFocusList(focusTasks) {
-  const container = document.getElementById('focus-list-container');
+  const container = document.getElementById('focus-tasks-list') || document.getElementById('focus-list-container');
   if (!container) return;
   container.innerHTML = '';
 
@@ -318,7 +348,7 @@ function renderFocusList(focusTasks) {
  * 7. Render Upcoming Deadlines Timeline
  */
 function renderDeadlinesTimeline(deadlines) {
-  const container = document.getElementById('deadlines-timeline-container');
+  const container = document.getElementById('upcoming-deadlines-container') || document.getElementById('deadlines-timeline-container');
   if (!container) return;
   container.innerHTML = '';
 
@@ -356,7 +386,7 @@ function renderDeadlinesTimeline(deadlines) {
  * 8. Render Subject Workload Horizontal Bars
  */
 function renderSubjectWorkload(subjects) {
-  const container = document.getElementById('subject-workload-container');
+  const container = document.getElementById('subject-workload-bars') || document.getElementById('subject-workload-container');
   if (!container) return;
   container.innerHTML = '';
 
@@ -392,37 +422,73 @@ function renderSubjectWorkload(subjects) {
  * 9. Render Insights Rail
  */
 function renderInsightsRail(summaryData) {
+  const container = document.getElementById('insights-rail-widgets');
   const tw = summaryData.today_workload;
-
-  document.getElementById('rail-capacity-hours').textContent = `${tw.available_hours} h`;
-
-  // Pressure Chip
-  const chipContainer = document.getElementById('rail-status-chip-container');
-  const chipClass = tw.status_code === 'overloaded' ? 'is-overloaded' : (tw.status_code === 'near_capacity' ? 'is-near-capacity' : 'is-balanced');
-  chipContainer.innerHTML = `
-    <div class="status-chip ${chipClass}">
-      <span class="status-dot"></span>
-      <span>${tw.status} (${tw.planned_hours} / ${tw.available_hours}h)</span>
-    </div>
-  `;
-  document.getElementById('rail-status-sentence').textContent = tw.summary_message;
-
-  // Completion Ring
   const pct = summaryData.ribbon.completion_rate;
-  document.getElementById('rail-completion-percentage').textContent = `${pct}%`;
-  const ringFill = document.getElementById('completion-ring-fill');
-  if (ringFill) {
-    ringFill.setAttribute('stroke-dasharray', `${pct}, 100`);
+
+  if (container) {
+    const chipClass = tw.status_code === 'overloaded' ? 'overloaded' : (tw.status_code === 'near_capacity' ? 'near_capacity' : 'balanced');
+    container.innerHTML = `
+      <div style="background:var(--white); padding:var(--space-16); border-radius:var(--radius-md); border:1px solid var(--border);">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:11px; font-weight:600; text-transform:uppercase; color:var(--text-secondary);">Today's Workload</span>
+          <span class="status-pill ${chipClass}"><span class="status-dot"></span>${tw.status}</span>
+        </div>
+        <div style="margin-top:var(--space-8); font-size:13px; color:var(--text-primary); font-weight:500;">
+          ${tw.summary_message}
+        </div>
+        <div style="margin-top:var(--space-8); font-size:12px; color:var(--text-secondary);" class="tabular">
+          Planned: <strong>${tw.planned_hours}h</strong> / Capacity: <strong>${tw.available_hours}h</strong>
+        </div>
+      </div>
+
+      <div style="background:var(--white); padding:var(--space-16); border-radius:var(--radius-md); border:1px solid var(--border);">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:11px; font-weight:600; text-transform:uppercase; color:var(--text-secondary);">Semester Progress</span>
+          <strong style="font-size:16px; color:var(--accent);" class="tabular">${pct}%</strong>
+        </div>
+        <div style="margin-top:var(--space-8); height:6px; background:var(--bg-secondary); border-radius:var(--radius-full); overflow:hidden;">
+          <div style="width:${pct}%; height:100%; background:var(--accent); border-radius:var(--radius-full);"></div>
+        </div>
+      </div>
+    `;
   }
 
-  // Next Deadline Countdown
-  if (summaryData.upcoming_deadlines && summaryData.upcoming_deadlines.length > 0) {
-    const nextD = summaryData.upcoming_deadlines[0];
-    document.getElementById('rail-next-deadline-title').textContent = nextD.title;
-    document.getElementById('rail-next-deadline-sub').textContent = `${nextD.subject_code} • Due ${nextD.due_date}`;
-  } else {
-    document.getElementById('rail-next-deadline-title').textContent = 'No imminent deadlines';
-    document.getElementById('rail-next-deadline-sub').textContent = 'All academic targets met';
+  // Also gracefully update legacy rail elements if present
+  const railCap = document.getElementById('rail-capacity-hours');
+  if (railCap) railCap.textContent = `${tw.available_hours} h`;
+
+  const chipContainer = document.getElementById('rail-status-chip-container');
+  if (chipContainer) {
+    const chipClass = tw.status_code === 'overloaded' ? 'is-overloaded' : (tw.status_code === 'near_capacity' ? 'is-near-capacity' : 'is-balanced');
+    chipContainer.innerHTML = `
+      <div class="status-chip ${chipClass}">
+        <span class="status-dot"></span>
+        <span>${tw.status} (${tw.planned_hours} / ${tw.available_hours}h)</span>
+      </div>
+    `;
+  }
+
+  const railSentence = document.getElementById('rail-status-sentence');
+  if (railSentence) railSentence.textContent = tw.summary_message;
+
+  const railPct = document.getElementById('rail-completion-percentage');
+  if (railPct) railPct.textContent = `${pct}%`;
+
+  const ringFill = document.getElementById('completion-ring-fill');
+  if (ringFill) ringFill.setAttribute('stroke-dasharray', `${pct}, 100`);
+
+  const nextTitle = document.getElementById('rail-next-deadline-title');
+  const nextSub = document.getElementById('rail-next-deadline-sub');
+  if (nextTitle && nextSub) {
+    if (summaryData.upcoming_deadlines && summaryData.upcoming_deadlines.length > 0) {
+      const nextD = summaryData.upcoming_deadlines[0];
+      nextTitle.textContent = nextD.title;
+      nextSub.textContent = `${nextD.subject_code} • Due ${nextD.due_date}`;
+    } else {
+      nextTitle.textContent = 'No imminent deadlines';
+      nextSub.textContent = 'All academic targets met';
+    }
   }
 }
 
@@ -449,41 +515,99 @@ async function loadSubjects() {
 
 function setupQuickAddModal() {
   const btn = document.getElementById('btn-quick-add-task');
-  const modalForm = document.getElementById('task-modal-form');
+  const shelfBtn = document.getElementById('btn-shelf-add-task');
+  const modal = document.getElementById('modal-quick-task');
+  const modalForm = document.getElementById('form-quick-task');
+
+  const openTaskModal = (targetDate) => {
+    const todayStr = new Date().toISOString().substring(0, 10);
+    const dateToUse = targetDate || selectedDateStr || todayStr;
+    const plannedDateInput = document.getElementById('task-planned-date');
+    const dueDateInput = document.getElementById('task-due-date');
+    if (plannedDateInput) plannedDateInput.value = dateToUse;
+    if (dueDateInput) dueDateInput.value = dateToUse;
+
+    // Pre-select first subject if none selected
+    const subSelect = document.getElementById('task-subject');
+    if (subSelect && !subSelect.value && subSelect.options.length > 0) {
+      subSelect.selectedIndex = 0;
+    }
+
+    UI.openModal('modal-quick-task');
+  };
 
   if (btn) {
-    btn.addEventListener('click', () => {
-      // Default dates to today
-      const todayStr = new Date().toISOString().substring(0, 10);
-      document.getElementById('task-planned-date').value = selectedDateStr || todayStr;
-      document.getElementById('task-due-date').value = selectedDateStr || todayStr;
-      UI.openModal('task-modal');
+    btn.addEventListener('click', () => openTaskModal());
+  }
+
+  if (shelfBtn) {
+    shelfBtn.addEventListener('click', () => openTaskModal(selectedDateStr));
+  }
+
+  // Explicit close listener for cancel/close buttons
+  if (modal) {
+    modal.querySelectorAll('[data-dismiss="modal"]').forEach(dismissBtn => {
+      dismissBtn.addEventListener('click', () => {
+        UI.closeModal('modal-quick-task');
+      });
     });
   }
 
   if (modalForm) {
     modalForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const saveBtn = document.getElementById('btn-save-task');
-      saveBtn.disabled = true;
-      saveBtn.textContent = 'Saving...';
+      const saveBtn = modalForm.querySelector('button[type="submit"]');
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving...';
+      }
 
       try {
+        const title = (document.getElementById('task-title')?.value || '').trim();
+        const subjectId = document.getElementById('task-subject')?.value;
+        const taskType = document.getElementById('task-type')?.value;
+        const priority = document.getElementById('task-priority')?.value;
+        const dueDate = document.getElementById('task-due-date')?.value;
+        const plannedDate = document.getElementById('task-planned-date')?.value;
+        const hoursVal = parseFloat(document.getElementById('task-hours')?.value);
+        const description = (document.getElementById('task-desc')?.value || document.getElementById('task-description')?.value || '').trim() || null;
+
+        if (!title) {
+          UI.showToast('Please enter a task title.', 'error');
+          document.getElementById('task-title')?.focus();
+          return;
+        }
+        if (!subjectId) {
+          UI.showToast('Please select an academic subject.', 'error');
+          document.getElementById('task-subject')?.focus();
+          return;
+        }
+        if (!dueDate) {
+          UI.showToast('Please select a submission due date.', 'error');
+          document.getElementById('task-due-date')?.focus();
+          return;
+        }
+        if (!plannedDate) {
+          UI.showToast('Please select a planned study date.', 'error');
+          document.getElementById('task-planned-date')?.focus();
+          return;
+        }
+
         await API.post('/api/tasks', {
-          title: document.getElementById('task-title').value,
-          subject_id: document.getElementById('task-subject').value,
-          task_type: document.getElementById('task-type').value,
-          planned_date: document.getElementById('task-planned-date').value,
-          due_date: document.getElementById('task-due-date').value,
-          estimated_hours: document.getElementById('task-hours').value,
-          priority: document.getElementById('task-priority').value,
-          description: document.getElementById('task-description').value,
+          title,
+          subject_id: subjectId,
+          task_type: taskType,
+          due_date: dueDate,
+          planned_date: plannedDate,
+          estimated_hours: isNaN(hoursVal) || hoursVal <= 0 ? 1.0 : hoursVal,
+          priority,
+          description,
           status: 'Pending'
         });
 
-        UI.closeModal('task-modal');
+        UI.closeModal('modal-quick-task');
         modalForm.reset();
-        UI.showToast('Academic task created successfully.');
+        UI.showToast('Academic task added successfully.');
 
         // Refresh dashboard immediately from real saved data
         await loadDashboardSummary();
@@ -491,8 +615,10 @@ function setupQuickAddModal() {
       } catch (err) {
         UI.showToast(err.message || 'Failed to create task.', 'error');
       } finally {
-        saveBtn.disabled = false;
-        saveBtn.textContent = 'Save task';
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = 'Save Task';
+        }
       }
     });
   }

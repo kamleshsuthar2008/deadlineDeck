@@ -26,7 +26,12 @@ router.get('/', async (req, res, next) => {
     const checklists = await query(listSql, [req.userId]);
 
     if (checklists.length === 0) {
-      return res.json({ checklists: [] });
+      return res.json({
+        success: true,
+        message: 'No checklists found.',
+        checklists: [],
+        data: { checklists: [] }
+      });
     }
 
     const ids = checklists.map(c => c.checklist_id);
@@ -69,7 +74,12 @@ router.get('/', async (req, res, next) => {
       };
     });
 
-    res.json({ checklists: results });
+    res.json({
+      success: true,
+      message: 'Checklists retrieved successfully.',
+      checklists: results,
+      data: { checklists: results }
+    });
   } catch (err) {
     next(err);
   }
@@ -84,7 +94,11 @@ router.post('/', async (req, res, next) => {
     const { title, task_id } = req.body;
 
     if (!title || !title.trim()) {
-      return res.status(400).json({ error: 'Checklist title is required.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Checklist title is required.'
+      });
     }
 
     const taskId = task_id ? Number(task_id) : null;
@@ -93,18 +107,67 @@ router.post('/', async (req, res, next) => {
       [req.userId, taskId, title.trim()]
     );
 
+    const newChecklist = {
+      checklist_id: result.insertId,
+      task_id: taskId,
+      title: title.trim(),
+      total_items: 0,
+      completed_items: 0,
+      completion_percentage: 0,
+      items: []
+    };
+
     res.status(201).json({
       success: true,
-      message: 'Checklist created.',
-      checklist: {
-        checklist_id: result.insertId,
-        task_id: taskId,
-        title: title.trim(),
-        total_items: 0,
-        completed_items: 0,
-        completion_percentage: 0,
-        items: []
-      }
+      message: 'Checklist created successfully.',
+      checklist: newChecklist,
+      data: { checklist: newChecklist }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * PUT /api/checklists/:id
+ * Update checklist title and task_id
+ */
+router.put('/:id', async (req, res, next) => {
+  try {
+    const checklistId = Number(req.params.id);
+    const { title, task_id } = req.body;
+
+    if (!title || !title.trim()) {
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Checklist title is required.'
+      });
+    }
+
+    const rows = await query('SELECT checklist_id FROM checklists WHERE checklist_id = ? AND user_id = ?', [checklistId, req.userId]);
+    if (rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        errorCode: 'NOT_FOUND',
+        message: 'Checklist not found.'
+      });
+    }
+
+    const taskId = task_id ? Number(task_id) : null;
+    await query('UPDATE checklists SET title = ?, task_id = ? WHERE checklist_id = ? AND user_id = ?', [title.trim(), taskId, checklistId, req.userId]);
+
+    const updated = {
+      checklist_id: checklistId,
+      title: title.trim(),
+      task_id: taskId
+    };
+
+    res.json({
+      success: true,
+      message: 'Checklist updated successfully.',
+      checklist: updated,
+      data: { checklist: updated }
     });
   } catch (err) {
     next(err);
@@ -121,12 +184,22 @@ router.post('/:id/items', async (req, res, next) => {
     const { item_text } = req.body;
 
     if (!item_text || !item_text.trim()) {
-      return res.status(400).json({ error: 'Item description cannot be empty.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Item description cannot be empty.'
+      });
     }
 
     // Ownership check
     const rows = await query('SELECT checklist_id FROM checklists WHERE checklist_id = ? AND user_id = ?', [checklistId, req.userId]);
-    if (rows.length === 0) return res.status(404).json({ error: 'Checklist not found.' });
+    if (rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        errorCode: 'NOT_FOUND',
+        message: 'Checklist not found.'
+      });
+    }
 
     const maxOrderRows = await query('SELECT COALESCE(MAX(sort_order), 0) + 1 AS next_order FROM checklist_items WHERE checklist_id = ?', [checklistId]);
     const nextOrder = maxOrderRows[0].next_order;
@@ -136,15 +209,19 @@ router.post('/:id/items', async (req, res, next) => {
       [checklistId, item_text.trim(), nextOrder]
     );
 
+    const newItem = {
+      item_id: result.insertId,
+      checklist_id: checklistId,
+      item_text: item_text.trim(),
+      is_completed: false,
+      sort_order: nextOrder
+    };
+
     res.status(201).json({
       success: true,
-      item: {
-        item_id: result.insertId,
-        checklist_id: checklistId,
-        item_text: item_text.trim(),
-        is_completed: false,
-        sort_order: nextOrder
-      }
+      message: 'Item added successfully.',
+      item: newItem,
+      data: { item: newItem }
     });
   } catch (err) {
     next(err);
@@ -167,12 +244,23 @@ router.patch('/items/:item_id/toggle', async (req, res, next) => {
       WHERE ci.item_id = ? AND c.user_id = ?
     `;
     const rows = await query(sql, [itemId, req.userId]);
-    if (rows.length === 0) return res.status(404).json({ error: 'Item not found.' });
+    if (rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        errorCode: 'NOT_FOUND',
+        message: 'Item not found.'
+      });
+    }
 
     const newStatus = rows[0].is_completed ? 0 : 1;
     await query('UPDATE checklist_items SET is_completed = ? WHERE item_id = ?', [newStatus, itemId]);
 
-    res.json({ success: true, is_completed: Boolean(newStatus) });
+    res.json({
+      success: true,
+      message: newStatus ? 'Item completed.' : 'Item unmarked.',
+      is_completed: Boolean(newStatus),
+      data: { item_id: itemId, is_completed: Boolean(newStatus) }
+    });
   } catch (err) {
     next(err);
   }
@@ -192,10 +280,20 @@ router.delete('/items/:item_id', async (req, res, next) => {
       WHERE ci.item_id = ? AND c.user_id = ?
     `;
     const rows = await query(sql, [itemId, req.userId]);
-    if (rows.length === 0) return res.status(404).json({ error: 'Item not found.' });
+    if (rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        errorCode: 'NOT_FOUND',
+        message: 'Item not found.'
+      });
+    }
 
     await query('DELETE FROM checklist_items WHERE item_id = ?', [itemId]);
-    res.json({ success: true, message: 'Item deleted.' });
+    res.json({
+      success: true,
+      message: 'Item deleted successfully.',
+      data: { item_id: itemId }
+    });
   } catch (err) {
     next(err);
   }
@@ -209,10 +307,20 @@ router.delete('/:id', async (req, res, next) => {
   try {
     const checklistId = Number(req.params.id);
     const rows = await query('SELECT checklist_id FROM checklists WHERE checklist_id = ? AND user_id = ?', [checklistId, req.userId]);
-    if (rows.length === 0) return res.status(404).json({ error: 'Checklist not found.' });
+    if (rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        errorCode: 'NOT_FOUND',
+        message: 'Checklist not found.'
+      });
+    }
 
     await query('DELETE FROM checklists WHERE checklist_id = ? AND user_id = ?', [checklistId, req.userId]);
-    res.json({ success: true, message: 'Checklist deleted.' });
+    res.json({
+      success: true,
+      message: 'Checklist deleted successfully.',
+      data: { checklist_id: checklistId }
+    });
   } catch (err) {
     next(err);
   }

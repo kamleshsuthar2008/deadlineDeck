@@ -3,16 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign in — DeadlineDeck</title>
+  <title>Sign In — DeadlineDeck</title>
+  
+  <link rel="stylesheet" href="/css/design-system.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+
   <style>
-    .auth-container {
+    .auth-page-container {
+      min-height: 100vh;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      min-height: 100vh;
+      background-color: var(--bg-main);
     }
-    .auth-form-side {
+
+    .auth-form-column {
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -21,22 +27,10 @@
       margin: 0 auto;
       width: 100%;
     }
-    .auth-brand {
-      display: flex;
-      align-items: center;
-      gap: var(--space-12);
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: var(--space-48);
-    }
-    .auth-brand svg {
-      width: 26px;
-      height: 26px;
-    }
-    .auth-panel-side {
-      background-color: var(--bg-sidebar);
-      color: #FFFFFF;
+
+    .auth-editorial-column {
+      background-color: var(--bg-secondary);
+      border-left: 1px solid var(--border);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -44,124 +38,83 @@
       padding: var(--space-64);
       position: relative;
     }
-    .auth-preview-card {
-      background-color: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: var(--radius-panel);
-      padding: var(--space-32);
-      width: 100%;
-      max-width: 420px;
+
+    .auth-quote-card {
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-40);
+      max-width: 440px;
+      box-shadow: var(--shadow-card);
       display: flex;
       flex-direction: column;
-      gap: var(--space-20);
+      gap: var(--space-16);
     }
-    .password-wrapper {
-      position: relative;
-    }
-    .password-toggle-btn {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      font-size: 12px;
-      color: var(--text-secondary);
-      cursor: pointer;
-    }
+
     @media (max-width: 900px) {
-      .auth-container { grid-template-columns: 1fr; }
-      .auth-panel-side { display: none; }
-      .auth-form-side { padding: var(--space-32) var(--space-20); }
+      .auth-page-container {
+        grid-template-columns: 1fr;
+      }
+      .auth-editorial-column {
+        display: none;
+      }
+      .auth-form-column {
+        padding: var(--space-48) var(--space-24);
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="auth-container">
-    <!-- Left: Login Form -->
-    <div class="auth-form-side">
-      <div class="auth-brand">
-        <svg><use href="/icons.svg#icon-logo"></use></svg>
-        <span>DeadlineDeck</span>
+  <div class="auth-page-container">
+    <!-- LEFT: FORM COLUMN -->
+    <div class="auth-form-column">
+      <a href="/" class="brand-anchor" style="margin-bottom: var(--space-40);">
+        <div class="brand-symbol">
+          <svg><use href="/icons.svg#icon-logo"></use></svg>
+        </div>
+        <span class="brand-name">DeadlineDeck</span>
+      </a>
+
+      <div>
+        <span class="section-eyebrow">Student Authentication</span>
+        <h1 class="editorial-title" style="font-size: 32px; margin-top: 4px;">Sign in to your desk.</h1>
+        <p class="editorial-subtitle">Access your academic workload, weekly planner, and productivity toolkit.</p>
       </div>
 
-      <div style="margin-bottom: var(--space-24);">
-        <h1 class="page-title">Sign in to your account</h1>
-        <p class="secondary" style="margin-top: 4px;">Enter your academic email and password to access your planner.</p>
-      </div>
+      <div id="auth-alert" style="display: none; margin-top: var(--space-16); padding: var(--space-12) var(--space-16); background-color: var(--status-overloaded-bg); border: 1px solid #F5C6C4; border-radius: var(--radius-md); font-size: 13px; color: var(--danger);"></div>
 
-      <div id="auth-error-alert" style="display: none; padding: var(--space-12); background-color: var(--status-coral-tint); border: 1px solid var(--status-coral); border-radius: var(--radius-md); color: var(--status-coral-text); font-size: 13px; margin-bottom: var(--space-16);"></div>
-
-      <form id="login-form">
+      <form id="form-login" style="margin-top: var(--space-24);">
         <div class="form-group">
-          <label class="form-label" for="login-email">Academic email</label>
-          <input type="email" id="login-email" class="input-text" required placeholder="student@college.edu" autocomplete="email">
+          <label class="form-label" for="login-email">University Email</label>
+          <input type="email" id="login-email" class="form-input" placeholder="student@college.edu" autocomplete="email" required>
         </div>
 
         <div class="form-group">
           <label class="form-label" for="login-password">Password</label>
-          <div class="password-wrapper">
-            <input type="password" id="login-password" class="input-text" required autocomplete="current-password" placeholder="••••••••">
-            <button type="button" class="password-toggle-btn" id="toggle-password">Show</button>
-          </div>
+          <input type="password" id="login-password" class="form-input" placeholder="••••••••" autocomplete="current-password" required>
         </div>
 
-        <button type="submit" id="btn-submit" class="btn btn-primary" style="width: 100%; height: 40px; margin-top: var(--space-8);">
-          <span>Sign in</span>
+        <button type="submit" id="btn-login-submit" class="btn btn-primary" style="width: 100%; height: 42px; margin-top: var(--space-8);">
+          Sign In
         </button>
       </form>
 
       <div style="margin-top: var(--space-24); font-size: 13.5px; color: var(--text-secondary); text-align: center;">
-        Don't have an account yet? <a href="/register.html">Create an account</a>
+        Don't have an account yet? <a href="/register.html" style="color: var(--accent); font-weight: 600;">Create student account</a>
       </div>
     </div>
 
-    <!-- Right: Navy Static Workload Map Sample -->
-    <div class="auth-panel-side">
-      <div class="auth-preview-card">
-        <div>
-          <span class="label-eyebrow" style="color: var(--text-on-dark-muted);">Workload Pressure Model</span>
-          <h2 style="font-size: 18px; font-weight: 500; color: #FFFFFF; margin-top: 4px;">Predictive Academic Scheduling</h2>
-        </div>
-
-        <p style="font-size: 13.5px; color: var(--text-on-dark-muted); line-height: 1.5; margin: 0;">
-          By calculating estimated task hours on planned study dates, DeadlineDeck warns you when a day exceeds your study capacity.
+    <!-- RIGHT: EDITORIAL PREVIEW COLUMN -->
+    <div class="auth-editorial-column">
+      <div class="auth-quote-card">
+        <span class="section-eyebrow">Academic Philosophy</span>
+        <p style="font-family: var(--font-editorial); font-size: 22px; line-height: 1.35; color: var(--text-primary);">
+          &ldquo;Workload clarity precedes academic mastery. When you know your real study capacity, deadlines cease to be emergencies.&rdquo;
         </p>
-
-        <!-- SVG Gauge Sample -->
-        <div style="display: flex; gap: var(--space-24); justify-content: center; padding: var(--space-16) 0;">
-          <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
-            <span style="font-size: 11px; color: var(--text-on-dark-muted); text-transform: uppercase;">Balanced</span>
-            <div class="workload-gauge-track" style="height: 80px; width: 14px; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15);">
-              <div class="workload-gauge-tick" style="bottom: 75%; background: #FFF;"></div>
-              <div class="workload-gauge-fill" style="height: 50%;"></div>
-            </div>
-            <span class="tabular" style="font-size: 11.5px; color: #FFF;">2.0 / 3.0 h</span>
-          </div>
-
-          <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
-            <span style="font-size: 11px; color: var(--text-on-dark-muted); text-transform: uppercase;">Near limit</span>
-            <div class="workload-gauge-track" style="height: 80px; width: 14px; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15);">
-              <div class="workload-gauge-tick" style="bottom: 75%; background: #FFF;"></div>
-              <div class="workload-gauge-fill is-near-capacity" style="height: 70%;"></div>
-            </div>
-            <span class="tabular" style="font-size: 11.5px; color: #FFF;">2.8 / 3.0 h</span>
-          </div>
-
-          <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
-            <span style="font-size: 11px; color: var(--text-on-dark-muted); text-transform: uppercase;">Overloaded</span>
-            <div class="workload-gauge-track" style="height: 80px; width: 14px; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15);">
-              <div class="workload-gauge-tick" style="bottom: 60%; background: #FFF;"></div>
-              <div class="workload-gauge-overflow" style="height: 25%;"></div>
-              <div class="workload-gauge-fill is-overloaded" style="height: 60%;"></div>
-            </div>
-            <span class="tabular" style="font-size: 11.5px; color: #FFF;">3.5 / 3.0 h</span>
-          </div>
-        </div>
-
-        <div style="font-size: 12px; color: var(--text-on-dark-muted); border-top: 1px solid rgba(255,255,255,0.08); padding-top: var(--space-12);">
-          B.Tech Computer Science &amp; Engineering minor project.
+        <div style="display: flex; align-items: center; gap: var(--space-12); margin-top: var(--space-8); padding-top: var(--space-16); border-top: 1px solid var(--border-light);">
+          <div style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--success);"></div>
+          <span style="font-size: 12.5px; color: var(--text-secondary); font-weight: 500;">DeadlineDeck Workload Engine</span>
         </div>
       </div>
     </div>
@@ -169,36 +122,44 @@
 
   <script src="/js/api.js"></script>
   <script>
-    const form = document.getElementById('login-form');
-    const alertBox = document.getElementById('auth-error-alert');
-    const pwdInput = document.getElementById('login-password');
-    const toggleBtn = document.getElementById('toggle-password');
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('form-login');
+      const alertBox = document.getElementById('auth-alert');
+      const submitBtn = document.getElementById('btn-login-submit');
 
-    toggleBtn.addEventListener('click', () => {
-      const isPwd = pwdInput.type === 'password';
-      pwdInput.type = isPwd ? 'text' : 'password';
-      toggleBtn.textContent = isPwd ? 'Hide' : 'Show';
-    });
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        alertBox.style.display = 'none';
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      alertBox.style.display = 'none';
-      const submitBtn = document.getElementById('btn-submit');
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Signing in...';
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value;
 
-      try {
-        await API.post('/api/auth/login', {
-          email: document.getElementById('login-email').value,
-          password: pwdInput.value
-        });
-        window.location.href = '/dashboard.html';
-      } catch (err) {
-        alertBox.textContent = err.data?.message || err.message || 'Incorrect email or password.';
-        alertBox.style.display = 'block';
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Sign in';
-      }
+        if (!email || !password) {
+          alertBox.textContent = 'Please enter both email and password.';
+          alertBox.style.display = 'block';
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Signing in...';
+
+        try {
+          const res = await API.post('/api/auth/login', { email, password });
+          if (res.success) {
+            window.location.href = '/dashboard.html';
+          } else {
+            alertBox.textContent = res.message || 'Incorrect email or password.';
+            alertBox.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Sign In';
+          }
+        } catch (err) {
+          alertBox.textContent = err.message || 'Failed to authenticate. Please verify your credentials.';
+          alertBox.style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Sign In';
+        }
+      });
     });
   </script>
 </body>

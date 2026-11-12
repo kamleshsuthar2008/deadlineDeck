@@ -3,254 +3,939 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="DeadlineDeck is an academic workload planning platform that compares pending task hours against available study time to keep student schedules balanced.">
+  <meta name="description" content="DeadlineDeck is a premium academic workload planning and student productivity platform designed for engineering and university students.">
   <title>DeadlineDeck — Academic Workload Planning & Student Productivity</title>
+  
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/design-system.css">
   <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+
   <style>
-    .landing-shell {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: var(--space-32) var(--space-24) var(--space-64);
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-64);
+    /* Premium Editorial Landing Specific Styles */
+    .landing-body {
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      overflow-x: hidden;
     }
-    .landing-nav {
+
+    /* Landing Header */
+    .landing-header {
+      background-color: rgba(248, 248, 246, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .landing-header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--space-32);
+      height: 70px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-bottom: var(--space-24);
-      border-bottom: 1px solid var(--border-hairline);
     }
-    .landing-brand {
+
+    .landing-nav-links {
       display: flex;
       align-items: center;
-      gap: var(--space-12);
-      font-size: 17px;
-      font-weight: 600;
+      gap: var(--space-32);
+      list-style: none;
+    }
+
+    .landing-nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color var(--transition-fast);
+      text-decoration: none;
+    }
+
+    .landing-nav-links a.btn-primary {
+      color: var(--white) !important;
+    }
+
+    .landing-nav-links a:hover {
       color: var(--text-primary);
     }
-    .landing-brand svg {
-      width: 24px;
-      height: 24px;
+
+    /* Hero Section (Asymmetric Editorial Composition) */
+    .hero-section {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: var(--space-64) var(--space-32) var(--space-80);
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+      gap: var(--space-64);
+      min-height: calc(100vh - 70px);
     }
-    .hero-content {
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-24);
+      max-width: 620px;
+    }
+
+    .hero-badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      padding: 4px 12px;
+      background-color: var(--soft-blue);
+      border: 1px solid #DCE3FA;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      width: fit-content;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-headline {
+      font-family: var(--font-editorial);
+      font-size: 64px;
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -0.025em;
+      color: var(--text-primary);
+    }
+
+    .hero-headline em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-lead {
+      font-size: 18px;
+      line-height: 1.55;
+      color: var(--text-secondary);
+      max-width: 520px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-20);
+      margin-top: var(--space-8);
+    }
+
+    .hero-cta-group .btn-explore {
+      font-size: 14.5px;
+      font-weight: 500;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-6);
+      transition: gap var(--transition-fast);
+    }
+
+    .hero-cta-group .btn-explore:hover {
+      gap: var(--space-10);
+      color: var(--accent);
+    }
+
+    /* 3D-Inspired Academic Sculpture (Pure CSS & SVG) */
+    .hero-right-stage {
+      position: relative;
+      width: 100%;
+      height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1200px;
+    }
+
+    .sculpture-assembly {
+      width: 440px;
+      height: 440px;
+      position: relative;
+      transform-style: preserve-3d;
+      transform: rotateX(14deg) rotateY(-18deg) rotateZ(2deg);
+      animation: gentleFloat 7s ease-in-out infinite alternate;
+    }
+
+    @keyframes gentleFloat {
+      0% { transform: rotateX(14deg) rotateY(-18deg) rotateZ(2deg) translateY(0px); }
+      100% { transform: rotateX(18deg) rotateY(-14deg) rotateZ(4deg) translateY(-14px); }
+    }
+
+    /* Sculpture Back Plate / Foundation Slab */
+    .sculpture-slab {
+      position: absolute;
+      top: 50px;
+      left: 30px;
+      width: 360px;
+      height: 280px;
+      background: linear-gradient(135deg, #FFFFFF 0%, #F1F1EE 100%);
+      border: 1px solid rgba(229, 229, 225, 0.8);
+      border-radius: 20px;
+      box-shadow: 0 30px 60px -15px rgba(23, 36, 56, 0.12), 0 10px 24px -5px rgba(0, 0, 0, 0.05);
+      transform: translateZ(0px);
+    }
+
+    /* Abstract Metallic Clock Ring */
+    .clock-ring {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 2px dashed rgba(74, 100, 216, 0.35);
+      transform: translateZ(45px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: slowSpin 40s linear infinite;
+    }
+
+    @keyframes slowSpin {
+      from { transform: translateZ(45px) rotate(0deg); }
+      to { transform: translateZ(45px) rotate(360deg); }
+    }
+
+    .clock-ring::before {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--accent);
+      top: -6px;
+      box-shadow: 0 0 14px var(--accent);
+    }
+
+    /* Floating Calendar Tile */
+    .floating-calendar-tile {
+      position: absolute;
+      top: 110px;
+      left: 10px;
+      width: 200px;
+      padding: var(--space-20);
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      box-shadow: 0 20px 40px -10px rgba(74, 100, 216, 0.15), 0 2px 8px rgba(0, 0, 0, 0.04);
+      transform: translateZ(85px);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+
+    .tile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+    }
+
+    .tile-mini-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .tile-cell {
+      height: 22px;
+      border-radius: 4px;
+      background-color: var(--bg-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .tile-cell.active-due {
+      background-color: var(--accent);
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(74, 100, 216, 0.4);
+    }
+
+    .tile-cell.active-plan {
+      background-color: var(--soft-blue);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    /* Sculptural 3D Sphere */
+    .sculptural-sphere {
+      position: absolute;
+      bottom: 40px;
+      right: 35px;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #E8E7F1 40%, #B8BDE6 75%, #4A64D8 100%);
+      box-shadow: 0 25px 50px -10px rgba(74, 100, 216, 0.35), inset -10px -10px 20px rgba(23, 36, 56, 0.3);
+      transform: translateZ(120px);
+    }
+
+    /* Layered Translucent Geometric Block */
+    .sculptural-block {
+      position: absolute;
+      bottom: 80px;
+      left: 120px;
+      width: 190px;
+      height: 90px;
+      background: linear-gradient(135deg, rgba(232, 231, 241, 0.75) 0%, rgba(237, 240, 255, 0.85) 100%);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 14px;
+      box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.08);
+      transform: translateZ(100px) rotate(-6deg);
+      padding: var(--space-16);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .block-metric {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .block-val {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    /* Floating Timeline Strip */
+    .sculptural-timeline {
+      position: absolute;
+      top: 40px;
+      left: 80px;
+      width: 240px;
+      height: 42px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.06);
+      transform: translateZ(110px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--space-16);
+    }
+
+    .timeline-node {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--border-strong);
+    }
+
+    .timeline-node.done {
+      background-color: var(--success);
+    }
+
+    .timeline-node.active {
+      background-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--soft-blue);
+    }
+
+    /* Feature Showcase Sections (Section 5.3) */
+    .features-showcase {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: var(--space-80) var(--space-32);
+      display: flex;
+      flex-direction: column;
+      gap: 120px;
+    }
+
+    .feature-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: var(--space-80);
+    }
+
+    .feature-row.reverse {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .feature-text-block {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-16);
+      max-width: 480px;
+    }
+
+    .feature-num {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    .feature-heading {
+      font-family: var(--font-editorial);
+      font-size: 44px;
+      font-weight: 500;
+      line-height: 1.15;
+      letter-spacing: -0.015em;
+      color: var(--text-primary);
+    }
+
+    .feature-desc {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    .feature-visual-card {
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-40);
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Visual 01: Academic Responsibility Ledger */
+    .ledger-preview {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+
+    .ledger-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-12) var(--space-16);
+      background-color: var(--bg-main);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+    }
+
+    /* Visual 02: Workload Pressure Indicator Meter */
+    .pressure-meter-showcase {
       display: flex;
       flex-direction: column;
       gap: var(--space-20);
-      max-width: 760px;
     }
-    .hero-heading {
-      font-family: var(--font-display);
-      font-size: 38px;
-      font-weight: 500;
-      line-height: 1.18;
-      letter-spacing: -0.01em;
-      color: var(--text-primary);
-    }
-    .hero-sub {
-      font-size: 16px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-    }
-    .hero-actions {
+
+    .meter-bar-group {
       display: flex;
-      gap: var(--space-12);
-      align-items: center;
-      margin-top: var(--space-8);
+      flex-direction: column;
+      gap: 6px;
     }
-    .landing-diagram-panel {
-      background-color: var(--card);
-      border: 1px solid var(--border-hairline);
-      border-radius: var(--radius-panel);
+
+    .meter-track {
+      height: 12px;
+      background-color: var(--bg-secondary);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .meter-fill-balanced {
+      height: 100%;
+      width: 65%;
+      background-color: var(--success);
+      border-radius: var(--radius-full);
+    }
+
+    .meter-fill-near {
+      height: 100%;
+      width: 90%;
+      background-color: var(--warning);
+      border-radius: var(--radius-full);
+    }
+
+    .meter-fill-overloaded {
+      height: 100%;
+      width: 116%;
+      background-color: var(--danger);
+      border-radius: var(--radius-full);
+    }
+
+    /* How It Works (Section 5.4) */
+    .how-it-works-section {
+      background-color: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: var(--space-80) var(--space-32);
+    }
+
+    .how-it-works-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-48);
+    }
+
+    .how-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-32);
+    }
+
+    .step-card {
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
       padding: var(--space-32);
       display: flex;
       flex-direction: column;
-      gap: var(--space-20);
+      gap: var(--space-16);
     }
-    .principles-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--space-24);
+
+    .step-num {
+      font-family: var(--font-editorial);
+      font-size: 32px;
+      font-weight: 500;
+      color: var(--accent);
+      line-height: 1;
     }
-    .principle-item {
-      background-color: var(--card);
-      border: 1px solid var(--border-hairline);
-      border-radius: var(--radius-panel);
-      padding: var(--space-24);
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-8);
-    }
-    .principle-title {
-      font-size: 15px;
+
+    .step-title {
+      font-size: 18px;
       font-weight: 600;
       color: var(--text-primary);
     }
-    .principle-body {
+
+    .step-body {
+      font-size: 14.5px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    /* Final CTA (Section 5.5) */
+    .final-cta-section {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: var(--space-80) var(--space-32);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-24);
+    }
+
+    .cta-heading {
+      font-family: var(--font-editorial);
+      font-size: 52px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+
+    /* Footer (Section 5.6) */
+    .site-footer {
+      background-color: var(--white);
+      border-top: 1px solid var(--border);
+      padding: var(--space-48) var(--space-32);
+    }
+
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-24);
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+
+    .footer-brand .brand-symbol {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+
+    .footer-brand svg {
+      width: 22px;
+      height: 22px;
+      display: block;
+    }
+
+    .footer-tagline {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    .footer-nav a {
       font-size: 13.5px;
       color: var(--text-secondary);
-      line-height: 1.5;
+      text-decoration: none;
     }
-    @media (max-width: 768px) {
-      .hero-heading { font-size: 28px; }
-      .principles-grid { grid-template-columns: 1fr; }
-      .landing-diagram-panel { padding: var(--space-16); }
+
+    .footer-nav a:hover {
+      color: var(--text-primary);
+    }
+
+    @media (max-width: 1024px) {
+      .hero-section {
+        grid-template-columns: 1fr;
+        padding: var(--space-48) var(--space-20);
+        gap: var(--space-48);
+      }
+      .hero-headline {
+        font-size: 48px;
+      }
+      .features-showcase {
+        gap: var(--space-64);
+        padding: var(--space-48) var(--space-20);
+      }
+      .feature-row, .feature-row.reverse {
+        grid-template-columns: 1fr;
+        gap: var(--space-32);
+      }
+      .how-steps-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
-<body>
+<body class="landing-body">
 
-  <div class="landing-shell">
-    <header class="landing-nav">
-      <div class="landing-brand">
-        <svg><use href="/icons.svg#icon-logo"></use></svg>
-        <span>DeadlineDeck</span>
-      </div>
-      <div style="display: flex; gap: var(--space-12); align-items: center;">
-        <a href="/login.html" class="btn btn-ghost">Sign in</a>
-        <a href="/register.html" class="btn btn-primary">Create account</a>
-      </div>
-    </header>
+  <!-- SECTION 5.1 — HEADER -->
+  <header class="landing-header">
+    <div class="landing-header-inner">
+      <a href="/" class="brand-anchor">
+        <div class="brand-symbol">
+          <svg><use href="/icons.svg#icon-logo"></use></svg>
+        </div>
+        <span class="brand-name">DeadlineDeck</span>
+      </a>
 
-    <section class="hero-content">
-      <span class="label-eyebrow">Academic Workload Planning</span>
-      <h1 class="hero-heading">Know your real study capacity before deadlines collide.</h1>
-      <p class="hero-sub">
-        DeadlineDeck tracks academic submissions by separating submission due dates from planned study dates, calculating daily workload pressure, and flagging overloaded study days before they happen.
-      </p>
-      <div class="hero-actions">
-        <a href="/register.html" class="btn btn-primary" style="height: 40px; padding: 0 var(--space-20);">Get started</a>
-        <a href="/login.html" class="btn btn-secondary" style="height: 40px; padding: 0 var(--space-20);">Sign in to dashboard</a>
+      <nav>
+        <ul class="landing-nav-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="/toolkit.html">Student Toolkit</a></li>
+          <li><a href="/login.html">Sign In</a></li>
+          <li><a href="/register.html" class="btn btn-primary btn-sm">Get Started</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- SECTION 5.2 — HERO SECTION (ASYMMETRICAL LAYOUT) -->
+  <main>
+    <section class="hero-section">
+      <!-- LEFT SIDE: Editorial Typography -->
+      <div class="hero-left">
+        <div class="hero-badge-tag">
+          <span>Make time for what matters</span>
+        </div>
+
+        <h1 class="hero-headline">
+          Your academic life.<br>
+          <em>In better focus.</em>
+        </h1>
+
+        <p class="hero-lead">
+          Plan your deadlines, balance your study hours, and make every academic day count. Designed specifically for university students managing rigorous coursework.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="/register.html" class="btn btn-primary btn-lg">Get Started</a>
+          <a href="#features" class="btn-explore">
+            <span>Explore Features</span>
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10h10M11 6l4 4-4 4"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDE: 3D-Inspired Academic Sculpture (SVG + CSS 3D Transforms) -->
+      <div class="hero-right-stage" aria-hidden="true">
+        <div class="sculpture-assembly">
+          <!-- Back Foundation Slab -->
+          <div class="sculpture-slab"></div>
+
+          <!-- Abstract Clock Geometry -->
+          <div class="clock-ring"></div>
+
+          <!-- Floating Timeline Indicator -->
+          <div class="sculptural-timeline">
+            <span style="font-size: 11px; font-weight: 600; color: var(--text-secondary);">Week 8 Schedule</span>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span class="timeline-node done"></span>
+              <span class="timeline-node done"></span>
+              <span class="timeline-node active"></span>
+              <span class="timeline-node"></span>
+              <span class="timeline-node"></span>
+            </div>
+          </div>
+
+          <!-- Floating Academic Calendar Structure -->
+          <div class="floating-calendar-tile">
+            <div class="tile-header">
+              <span>Nov 2026</span>
+              <span style="color: var(--accent); font-weight: 700;">DBMS Exam</span>
+            </div>
+            <div class="tile-mini-grid">
+              <div class="tile-cell">10</div>
+              <div class="tile-cell active-plan">11</div>
+              <div class="tile-cell">12</div>
+              <div class="tile-cell active-due">13</div>
+              <div class="tile-cell">14</div>
+              <div class="tile-cell">15</div>
+              <div class="tile-cell">16</div>
+              <div class="tile-cell">17</div>
+            </div>
+          </div>
+
+          <!-- Sculptural Sphere -->
+          <div class="sculptural-sphere"></div>
+
+          <!-- Layered Translucent Geometric Block -->
+          <div class="sculptural-block">
+            <span class="block-metric">Study Pressure</span>
+            <span class="block-val">
+              <span style="color: var(--success);">● Balanced</span>
+              <span style="font-size: 13px; font-weight: 500; color: var(--text-secondary);">3.2 / 4.0h</span>
+            </span>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Workload Map Illustration -->
-    <div class="landing-diagram-panel">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
+    <!-- SECTION 5.3 — FEATURE SHOWCASE (3 VISUALLY DISTINCT SECTIONS) -->
+    <section id="features" class="features-showcase">
+      <!-- FEATURE 01: Plan with clarity -->
+      <div class="feature-row">
+        <div class="feature-text-block">
+          <span class="feature-num">Feature 01</span>
+          <h2 class="feature-heading">Plan with clarity.</h2>
+          <p class="feature-desc">
+            Organize every subject, assignment, laboratory practical, and end-term examination into structured, priority-ranked workloads. Separate when an assignment is due from when you actually plan to study.
+          </p>
+          <a href="/register.html" class="btn btn-secondary btn-sm" style="width: fit-content;">Organize Coursework &rarr;</a>
+        </div>
+
+        <div class="feature-visual-card">
+          <div class="ledger-preview">
+            <div class="ledger-item">
+              <div>
+                <strong style="font-size: 14px; display: block;">CS301 &mdash; Relational Normalization</strong>
+                <span style="font-size: 12px; color: var(--text-secondary);">DBMS Assignment &bull; Planned: Nov 12</span>
+              </div>
+              <span class="priority-tag high">High Priority</span>
+            </div>
+            <div class="ledger-item">
+              <div>
+                <strong style="font-size: 14px; display: block;">CS302 &mdash; Virtual Memory Paging</strong>
+                <span style="font-size: 12px; color: var(--text-secondary);">OS Revision &bull; Planned: Nov 14</span>
+              </div>
+              <span class="priority-tag medium">Medium</span>
+            </div>
+            <div class="ledger-item">
+              <div>
+                <strong style="font-size: 14px; display: block;">CS303 &mdash; RESTful Express API</strong>
+                <span style="font-size: 12px; color: var(--text-secondary);">Web Dev Practical &bull; Planned: Nov 15</span>
+              </div>
+              <span class="priority-tag high">High Priority</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEATURE 02: Understand your workload -->
+      <div class="feature-row reverse">
+        <div class="feature-visual-card" style="background-color: var(--bg-secondary);">
+          <div class="pressure-meter-showcase">
+            <div>
+              <span class="section-eyebrow">Workload Engine in Action</span>
+              <h3 style="font-size: 16px; font-weight: 600; margin-top: 2px;">Daily Study Capacity Utilization</h3>
+            </div>
+
+            <div class="meter-bar-group">
+              <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                <span>Monday (3.0h planned / 4.5h available)</span>
+                <span style="color: var(--success); font-weight: 600;">66.7% Balanced</span>
+              </div>
+              <div class="meter-track">
+                <div class="meter-fill-balanced"></div>
+              </div>
+            </div>
+
+            <div class="meter-bar-group">
+              <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                <span>Wednesday (4.5h planned / 5.0h available)</span>
+                <span style="color: var(--warning); font-weight: 600;">90.0% Near Capacity</span>
+              </div>
+              <div class="meter-track">
+                <div class="meter-fill-near"></div>
+              </div>
+            </div>
+
+            <div class="meter-bar-group">
+              <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                <span>Friday (3.5h planned / 3.0h capacity)</span>
+                <span style="color: var(--danger); font-weight: 600;">116.7% Overloaded (+30m)</span>
+              </div>
+              <div class="meter-track">
+                <div class="meter-fill-overloaded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-text-block">
+          <span class="feature-num">Feature 02</span>
+          <h2 class="feature-heading">Understand your workload.</h2>
+          <p class="feature-desc">
+            The signature Workload Pressure Indicator analyzes your planned study hours against your realistic daily capacity. Get clear, plain-language warnings before overload compromises your academic performance.
+          </p>
+          <a href="/register.html" class="btn btn-secondary btn-sm" style="width: fit-content;">Calculate Your Workload &rarr;</a>
+        </div>
+      </div>
+
+      <!-- FEATURE 03: Make every study session count -->
+      <div class="feature-row">
+        <div class="feature-text-block">
+          <span class="feature-num">Feature 03</span>
+          <h2 class="feature-heading">Make every study session count.</h2>
+          <p class="feature-desc">
+            A built-in academic utility suite designed for university workflows: Word & Character Counter, IEEE & APA Citation Generator, Focus Study Timer, Assignment Checklists, Quick Subject Notes, and Weighted Marks Calculator.
+          </p>
+          <a href="/toolkit.html" class="btn btn-secondary btn-sm" style="width: fit-content;">Explore Student Toolkit &rarr;</a>
+        </div>
+
+        <div class="feature-visual-card">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-16);">
+            <div style="padding: var(--space-16); background: var(--bg-main); border: 1px solid var(--border); border-radius: var(--radius-md);">
+              <span class="section-eyebrow">Utility 01</span>
+              <strong style="font-size: 13.5px; display: block; margin-top: 4px;">Citation Generator</strong>
+              <span style="font-size: 12px; color: var(--text-secondary); margin-top: 2px; display: block;">Instant APA & IEEE references.</span>
+            </div>
+            <div style="padding: var(--space-16); background: var(--bg-main); border: 1px solid var(--border); border-radius: var(--radius-md);">
+              <span class="section-eyebrow">Utility 02</span>
+              <strong style="font-size: 13.5px; display: block; margin-top: 4px;">Study Session Timer</strong>
+              <span style="font-size: 12px; color: var(--text-secondary); margin-top: 2px; display: block;">Logs real hours to MySQL.</span>
+            </div>
+            <div style="padding: var(--space-16); background: var(--bg-main); border: 1px solid var(--border); border-radius: var(--radius-md);">
+              <span class="section-eyebrow">Utility 03</span>
+              <strong style="font-size: 13.5px; display: block; margin-top: 4px;">Assignment Checklist</strong>
+              <span style="font-size: 12px; color: var(--text-secondary); margin-top: 2px; display: block;">Task-linked step tracker.</span>
+            </div>
+            <div style="padding: var(--space-16); background: var(--bg-main); border: 1px solid var(--border); border-radius: var(--radius-md);">
+              <span class="section-eyebrow">Utility 04</span>
+              <strong style="font-size: 13.5px; display: block; margin-top: 4px;">Marks Calculator</strong>
+              <span style="font-size: 12px; color: var(--text-secondary); margin-top: 2px; display: block;">Weighted course score modeling.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5.4 — HOW IT WORKS -->
+    <section id="how-it-works" class="how-it-works-section">
+      <div class="how-it-works-inner">
         <div>
-          <span class="label-eyebrow">Signature Instrument</span>
-          <h2 style="font-size: 16px; font-weight: 600; margin-top: 2px;">The Workload Pressure Indicator</h2>
+          <span class="section-eyebrow">Streamlined Architecture</span>
+          <h2 class="editorial-title">How DeadlineDeck works.</h2>
         </div>
-        <div style="display: flex; gap: var(--space-16); font-size: 12px;">
-          <span class="status-chip is-balanced"><span class="status-dot"></span>Balanced &le; 80%</span>
-          <span class="status-chip is-near-capacity"><span class="status-dot"></span>Near capacity 81–100%</span>
-          <span class="status-chip is-overloaded"><span class="status-dot"></span>Overloaded &gt; 100%</span>
+
+        <div class="how-steps-grid">
+          <div class="step-card">
+            <span class="step-num">01</span>
+            <h3 class="step-title">Add academic responsibilities</h3>
+            <p class="step-body">
+              Input assignments, laboratory practicals, and exam dates with realistic estimated completion hours and subject tags.
+            </p>
+          </div>
+
+          <div class="step-card">
+            <span class="step-num">02</span>
+            <h3 class="step-title">Organize your study schedule</h3>
+            <p class="step-body">
+              Map out planned study sessions across the week without moving the instructor's submission deadline.
+            </p>
+          </div>
+
+          <div class="step-card">
+            <span class="step-num">03</span>
+            <h3 class="step-title">Understand and improve your workload</h3>
+            <p class="step-body">
+              Identify overloaded study days in advance, reschedule tasks smoothly, and maintain sustainable study progress.
+            </p>
+          </div>
         </div>
       </div>
+    </section>
 
-      <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background-color: var(--border-hairline); border: 1px solid var(--border-hairline); border-radius: var(--radius-md); overflow: hidden;">
-        <!-- Mon -->
-        <div style="background-color: var(--card); padding: var(--space-16) var(--space-8); display: flex; flex-direction: column; align-items: center; gap: var(--space-8);">
-          <span class="label-eyebrow">Mon</span>
-          <div class="workload-gauge-track" style="height: 90px; width: 14px;">
-            <div class="workload-gauge-tick" style="bottom: 75%;"></div>
-            <div class="workload-gauge-fill" style="height: 50%;"></div>
-          </div>
-          <span class="tabular" style="font-size: 12px; font-weight: 600;">2.0 / 3.0 h</span>
-          <span class="day-status-text status-balanced" style="font-size: 10.5px;">Balanced</span>
-        </div>
-
-        <!-- Tue -->
-        <div style="background-color: var(--card); padding: var(--space-16) var(--space-8); display: flex; flex-direction: column; align-items: center; gap: var(--space-8);">
-          <span class="label-eyebrow">Tue</span>
-          <div class="workload-gauge-track" style="height: 90px; width: 14px;">
-            <div class="workload-gauge-tick" style="bottom: 75%;"></div>
-            <div class="workload-gauge-fill is-near-capacity" style="height: 68%;"></div>
-          </div>
-          <span class="tabular" style="font-size: 12px; font-weight: 600;">2.75 / 3.0 h</span>
-          <span class="day-status-text status-near_capacity" style="font-size: 10.5px;">Near capacity</span>
-        </div>
-
-        <!-- Wed (Overloaded) -->
-        <div style="background-color: var(--surface); padding: var(--space-16) var(--space-8); display: flex; flex-direction: column; align-items: center; gap: var(--space-8); position: relative;">
-          <span class="label-eyebrow">Wed</span>
-          <div class="workload-gauge-track" style="height: 90px; width: 14px;">
-            <div class="workload-gauge-tick" style="bottom: 65%;"></div>
-            <div class="workload-gauge-overflow" style="height: 22%;"></div>
-            <div class="workload-gauge-fill is-overloaded" style="height: 65%;"></div>
-          </div>
-          <span class="tabular" style="font-size: 12px; font-weight: 600;">3.5 / 3.0 h</span>
-          <span class="day-status-text status-overloaded" style="font-size: 10.5px;">Overloaded</span>
-        </div>
-
-        <!-- Thu -->
-        <div style="background-color: var(--card); padding: var(--space-16) var(--space-8); display: flex; flex-direction: column; align-items: center; gap: var(--space-8);">
-          <span class="label-eyebrow">Thu</span>
-          <div class="workload-gauge-track" style="height: 90px; width: 14px;">
-            <div class="workload-gauge-tick" style="bottom: 80%;"></div>
-            <div class="workload-gauge-fill" style="height: 50%;"></div>
-          </div>
-          <span class="tabular" style="font-size: 12px; font-weight: 600;">2.5 / 4.0 h</span>
-          <span class="day-status-text status-balanced" style="font-size: 10.5px;">Balanced</span>
-        </div>
-
-        <!-- Fri -->
-        <div style="background-color: var(--card); padding: var(--space-16) var(--space-8); display: flex; flex-direction: column; align-items: center; gap: var(--space-8);">
-          <span class="label-eyebrow">Fri</span>
-          <div class="workload-gauge-track" style="height: 90px; width: 14px;">
-            <div class="workload-gauge-tick" style="bottom: 75%;"></div>
-            <div class="workload-gauge-fill" style="height: 35%;"></div>
-          </div>
-          <span class="tabular" style="font-size: 12px; font-weight: 600;">1.5 / 3.0 h</span>
-          <span class="day-status-text status-balanced" style="font-size: 10.5px;">Balanced</span>
-        </div>
-
-        <!-- Sat -->
-        <div style="background-color: var(--card); padding: var(--space-16) var(--space-8); display: flex; flex-direction: column; align-items: center; gap: var(--space-8);">
-          <span class="label-eyebrow">Sat</span>
-          <div class="workload-gauge-track" style="height: 90px; width: 14px;">
-            <div class="workload-gauge-tick" style="bottom: 75%;"></div>
-            <div class="workload-gauge-fill" style="height: 25%;"></div>
-          </div>
-          <span class="tabular" style="font-size: 12px; font-weight: 600;">1.0 / 3.0 h</span>
-          <span class="day-status-text status-balanced" style="font-size: 10.5px;">Balanced</span>
-        </div>
-
-        <!-- Sun -->
-        <div style="background-color: var(--card); padding: var(--space-16) var(--space-8); display: flex; flex-direction: column; align-items: center; gap: var(--space-8);">
-          <span class="label-eyebrow">Sun</span>
-          <div class="workload-gauge-track" style="height: 90px; width: 14px;">
-            <div class="workload-gauge-tick" style="bottom: 75%;"></div>
-            <div class="workload-gauge-fill" style="height: 0%;"></div>
-          </div>
-          <span class="tabular" style="font-size: 12px; font-weight: 600;">0.0 / 3.0 h</span>
-          <span class="day-status-text status-balanced" style="font-size: 10.5px;">Balanced</span>
-        </div>
-      </div>
-      <p class="secondary" style="margin: 0; text-align: center;">
-        Example: Wednesday has 3.5 hours planned against 3.0 hours capacity. The system signals overflow with clear warnings and rescheduling actions.
+    <!-- SECTION 5.5 — FINAL CTA -->
+    <section class="final-cta-section">
+      <h2 class="cta-heading">Take control of your academic time.</h2>
+      <p style="font-size: 16px; color: var(--text-secondary); max-width: 500px;">
+        Join students planning their semester with clarity, reduced stress, and accurate workload analytics.
       </p>
+      <a href="/register.html" class="btn btn-primary btn-lg" style="margin-top: var(--space-8);">Start Planning</a>
+    </section>
+  </main>
+
+  <!-- SECTION 5.6 — FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div style="display: flex; align-items: center; gap: var(--space-8);">
+          <div class="brand-symbol" style="width: 22px; height: 22px;">
+            <svg style="width: 22px; height: 22px; display: block;"><use href="/icons.svg#icon-logo"></use></svg>
+          </div>
+          <strong style="font-size: 15px;">DeadlineDeck</strong>
+        </div>
+        <span class="footer-tagline">Make time for what matters.</span>
+      </div>
+
+      <ul class="footer-nav">
+        <li><a href="#features">Product</a></li>
+        <li><a href="#how-it-works">About</a></li>
+        <li><a href="/toolkit.html">Student Toolkit</a></li>
+        <li><a href="/login.html">Sign In</a></li>
+      </ul>
+
+      <span style="font-size: 12.5px; color: var(--text-secondary);">
+        &copy; 2026 DeadlineDeck. All rights reserved.
+      </span>
     </div>
-
-    <!-- 3 Short Explanations -->
-    <div class="principles-grid">
-      <div class="principle-item">
-        <span class="label-eyebrow">Due Date vs Planned Date</span>
-        <h3 class="principle-title">Separate deadlines from study days</h3>
-        <p class="principle-body">
-          Traditional to-do apps cluster tasks on submission day. DeadlineDeck records when work must be delivered separately from when you plan to do the study.
-        </p>
-      </div>
-
-      <div class="principle-item">
-        <span class="label-eyebrow">Capacity Modeling</span>
-        <h3 class="principle-title">Real hours, not abstract points</h3>
-        <p class="principle-body">
-          Configure default study capacity and date-specific overrides. If laboratory classes or travel reduce your available time, the model adjusts automatically.
-        </p>
-      </div>
-
-      <div class="principle-item">
-        <span class="label-eyebrow">Student Toolkit</span>
-        <h3 class="principle-title">Built-in academic utilities</h3>
-        <p class="principle-body">
-          Includes six dedicated tools: word counter with target progression, APA/IEEE citation generator, focus study session timer, checklist builder, notes, and weighted marks calculator.
-        </p>
-      </div>
-    </div>
-  </div>
+  </footer>
 
 </body>
 </html>

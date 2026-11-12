@@ -4,289 +4,254 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calendar — DeadlineDeck</title>
+  
+  <link rel="stylesheet" href="/css/design-system.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/responsive.css">
+
   <style>
-    .calendar-container {
+    .calendar-layout {
       display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: var(--space-24);
+      grid-template-columns: 1fr 360px;
+      gap: var(--space-32);
       align-items: start;
     }
+
     .calendar-month-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      border: 1px solid var(--border-hairline);
-      border-radius: var(--radius-panel);
-      background-color: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background-color: var(--white);
+      box-shadow: var(--shadow-card);
       overflow: hidden;
     }
+
     .calendar-weekday-header {
-      padding: var(--space-8);
+      padding: var(--space-10) var(--space-8);
       font-size: 11px;
       font-weight: 600;
       text-transform: uppercase;
+      letter-spacing: 0.06em;
       color: var(--text-secondary);
       text-align: center;
-      background-color: var(--surface);
-      border-bottom: 1px solid var(--border-hairline);
+      background-color: var(--bg-main);
+      border-bottom: 1px solid var(--border);
     }
+
     .calendar-day-cell {
-      min-height: 84px;
-      padding: var(--space-6, 6px);
-      border-right: 1px solid var(--border-hairline);
-      border-bottom: 1px solid var(--border-hairline);
+      min-height: 96px;
+      padding: var(--space-8);
+      border-right: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
       display: flex;
       flex-direction: column;
       gap: 4px;
       cursor: pointer;
       transition: background-color var(--transition-fast);
       user-select: none;
+      background-color: var(--white);
     }
+
     .calendar-day-cell:nth-child(7n) {
       border-right: none;
     }
+
     .calendar-day-cell:hover {
-      background-color: var(--surface);
+      background-color: var(--bg-secondary);
     }
+
     .calendar-day-cell.is-selected {
-      background-color: var(--surface);
+      background-color: var(--white);
       box-shadow: inset 0 0 0 2px var(--accent);
     }
+
     .calendar-day-cell.is-outside-month {
       background-color: #FAFAFA;
-      opacity: 0.4;
+      opacity: 0.45;
     }
-    .cell-top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .cell-date-num {
-      font-family: var(--font-display);
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-    .cell-is-today {
+
+    .calendar-day-cell.is-today .day-cell-num {
       background-color: var(--accent);
-      color: #FFFFFF;
-      width: 20px;
-      height: 20px;
-      border-radius: var(--radius-full);
+      color: var(--white);
+      border-radius: 50%;
+    }
+
+    .day-cell-num {
+      width: 22px;
+      height: 22px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 11.5px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
     }
-    .cal-event-dot {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      line-height: 1.2;
+
+    /* Distinct Planned vs Due event pills */
+    .cal-pill-due {
+      background-color: #FCE8E7;
+      color: #A83633;
+      border: 1px solid #F5C6C4;
+      font-size: 10px;
+      font-weight: 600;
       padding: 1px 4px;
-      border-radius: var(--radius-sm);
+      border-radius: 3px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      width: 100%;
+      display: block;
     }
-    .cal-event-dot.type-planned {
-      border: 1px solid var(--border-strong);
-      color: var(--text-primary);
+
+    .cal-pill-plan {
+      background-color: var(--soft-blue);
+      color: var(--accent);
+      border: 1px solid #DCE3FA;
+      font-size: 10px;
+      font-weight: 500;
+      padding: 1px 4px;
+      border-radius: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
     }
-    .cal-event-dot.type-due {
-      background-color: var(--text-primary);
-      color: #FFFFFF;
-    }
-    .calendar-legend {
+
+    .side-shelf-card {
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      box-shadow: var(--shadow-card);
       display: flex;
+      flex-direction: column;
       gap: var(--space-16);
-      align-items: center;
-      font-size: 12px;
-      color: var(--text-secondary);
     }
+
     @media (max-width: 960px) {
-      .calendar-container { grid-template-columns: 1fr; }
+      .calendar-layout {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="app-container">
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="brand-logo-mark">
+  <!-- TOP HORIZONTAL NAVIGATION -->
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="/dashboard.html" class="nav-brand">
+        <div class="brand-symbol">
           <svg><use href="/icons.svg#icon-logo"></use></svg>
         </div>
-        <span class="brand-wordmark">DeadlineDeck</span>
-      </div>
+        <span class="brand-title">DeadlineDeck</span>
+      </a>
 
-      <nav class="sidebar-nav">
-        <a href="/dashboard.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-dashboard"></use></svg>
-          <span>Dashboard</span>
-        </a>
-        <a href="/planner.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-planner"></use></svg>
-          <span>My Planner</span>
-        </a>
-        <a href="/tasks.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-tasks"></use></svg>
-          <span>Tasks</span>
-        </a>
-        <a href="/calendar.html" class="nav-link active">
-          <svg><use href="/icons.svg#icon-calendar"></use></svg>
-          <span>Calendar</span>
-        </a>
-        <a href="/subjects.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-subjects"></use></svg>
-          <span>Subjects</span>
-        </a>
-        <a href="/insights.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-insights"></use></svg>
-          <span>Insights &amp; Reports</span>
-        </a>
-        <a href="/toolkit.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-toolkit"></use></svg>
-          <span>Student Toolkit</span>
-        </a>
-        <a href="/settings.html" class="nav-link">
+      <ul class="nav-center">
+        <li><a href="/dashboard.html" class="nav-link"><svg><use href="/icons.svg#icon-dashboard"></use></svg>Overview</a></li>
+        <li><a href="/planner.html" class="nav-link"><svg><use href="/icons.svg#icon-planner"></use></svg>Planner</a></li>
+        <li><a href="/tasks.html" class="nav-link"><svg><use href="/icons.svg#icon-tasks"></use></svg>Tasks</a></li>
+        <li><a href="/calendar.html" class="nav-link active"><svg><use href="/icons.svg#icon-calendar"></use></svg>Calendar</a></li>
+        <li><a href="/subjects.html" class="nav-link"><svg><use href="/icons.svg#icon-subjects"></use></svg>Subjects</a></li>
+        <li><a href="/toolkit.html" class="nav-link"><svg><use href="/icons.svg#icon-toolkit"></use></svg>Toolkit</a></li>
+        <li><a href="/insights.html" class="nav-link"><svg><use href="/icons.svg#icon-insights"></use></svg>Insights</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <div class="user-nav-profile">
+          <span class="user-avatar-pill user-avatar-monogram">ST</span>
+          <span class="user-display-name">Student</span>
+        </div>
+        <a href="/settings.html" class="btn-nav-icon" title="Settings">
           <svg><use href="/icons.svg#icon-settings"></use></svg>
-          <span>Settings</span>
         </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <div class="user-profile-badge">
-          <div class="user-avatar-monogram">--</div>
-          <div class="user-info-text">
-            <div class="user-display-name">Loading...</div>
-            <div class="user-display-email">student@college.edu</div>
-          </div>
-        </div>
-        <button class="btn-sidebar-logout">
+        <button class="btn-nav-icon btn-nav-logout" data-action="logout" title="Sign Out">
           <svg><use href="/icons.svg#icon-logout"></use></svg>
-          <span>Log out</span>
+        </button>
+        <button class="mobile-hamburger" aria-label="Toggle navigation">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
       </div>
-    </aside>
-
-    <div class="sidebar-overlay"></div>
-
-    <div class="main-wrapper">
-      <header class="mobile-top-bar">
-        <div class="mobile-brand">
-          <svg style="width:20px;height:20px;"><use href="/icons.svg#icon-logo"></use></svg>
-          <span>DeadlineDeck</span>
-        </div>
-        <button class="mobile-menu-btn" aria-label="Open navigation menu">
-          <svg><use href="/icons.svg#icon-menu"></use></svg>
-        </button>
-      </header>
-
-      <main class="main-canvas">
-        <div class="page-header" style="margin-bottom: var(--space-20);">
-          <div class="page-header-text">
-            <span class="label-eyebrow">Academic Schedule</span>
-            <h1 class="page-title" id="cal-month-title">Monthly Calendar</h1>
-          </div>
-          <div class="page-actions">
-            <div class="week-navigation-toolbar">
-              <button id="btn-cal-prev" class="btn btn-ghost" style="padding: 4px;">
-                <svg><use href="/icons.svg#icon-chevron-left"></use></svg>
-              </button>
-              <button id="btn-cal-today" class="btn btn-ghost" style="font-size: 12px; padding: 0 8px;">Today</button>
-              <button id="btn-cal-next" class="btn btn-ghost" style="padding: 4px;">
-                <svg><use href="/icons.svg#icon-chevron-right"></use></svg>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Legend -->
-        <div style="margin-bottom: var(--space-16); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-12);">
-          <div class="calendar-legend">
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <span class="cal-event-dot type-planned" style="width: auto; padding: 2px 6px;">Planned Study</span>
-              <span>Study scheduled</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <span class="cal-event-dot type-due" style="width: auto; padding: 2px 6px;">Due Date</span>
-              <span>Final submission deadline</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="calendar-container">
-          <!-- Calendar Month Grid -->
-          <div class="calendar-month-grid" id="calendar-grid">
-            <div class="calendar-weekday-header">Mon</div>
-            <div class="calendar-weekday-header">Tue</div>
-            <div class="calendar-weekday-header">Wed</div>
-            <div class="calendar-weekday-header">Thu</div>
-            <div class="calendar-weekday-header">Fri</div>
-            <div class="calendar-weekday-header">Sat</div>
-            <div class="calendar-weekday-header">Sun</div>
-            <!-- Days rendered dynamically -->
-          </div>
-
-          <!-- Day Inspector Side Panel -->
-          <div class="panel">
-            <div class="panel-header">
-              <div>
-                <span class="label-eyebrow" id="cal-day-label">Selected Date</span>
-                <h2 class="section-title" id="cal-day-heading">Day Overview</h2>
-              </div>
-            </div>
-            <div class="panel-body" style="display: flex; flex-direction: column; gap: var(--space-20);">
-              <!-- Section A: Study Planned -->
-              <div>
-                <span class="label-eyebrow" style="margin-bottom: var(--space-8); display: block;">Study Planned on this Date</span>
-                <div id="inspector-study-list" style="display: flex; flex-direction: column; gap: 6px;"></div>
-              </div>
-
-              <!-- Section B: Deadlines Due -->
-              <div style="border-top: 1px solid var(--border-hairline); padding-top: var(--space-16);">
-                <span class="label-eyebrow" style="margin-bottom: var(--space-8); display: block;">Submission Deadlines Due</span>
-                <div id="inspector-due-list" style="display: flex; flex-direction: column; gap: 6px;"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
     </div>
-  </div>
 
-  <nav class="mobile-bottom-nav">
-    <a href="/dashboard.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-dashboard"></use></svg>
-      <span>Dashboard</span>
-    </a>
-    <a href="/planner.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-planner"></use></svg>
-      <span>Planner</span>
-    </a>
-    <a href="/tasks.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-tasks"></use></svg>
-      <span>Tasks</span>
-    </a>
-    <a href="/calendar.html" class="bottom-nav-item active">
-      <svg><use href="/icons.svg#icon-calendar"></use></svg>
-      <span>Calendar</span>
-    </a>
-    <a href="/toolkit.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-toolkit"></use></svg>
-      <span>Toolkit</span>
-    </a>
-  </nav>
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer">
+      <a href="/dashboard.html" class="nav-link"><svg><use href="/icons.svg#icon-dashboard"></use></svg>Overview</a>
+      <a href="/planner.html" class="nav-link"><svg><use href="/icons.svg#icon-planner"></use></svg>Planner</a>
+      <a href="/tasks.html" class="nav-link"><svg><use href="/icons.svg#icon-tasks"></use></svg>Tasks</a>
+      <a href="/calendar.html" class="nav-link active"><svg><use href="/icons.svg#icon-calendar"></use></svg>Calendar</a>
+      <a href="/subjects.html" class="nav-link"><svg><use href="/icons.svg#icon-subjects"></use></svg>Subjects</a>
+      <a href="/toolkit.html" class="nav-link"><svg><use href="/icons.svg#icon-toolkit"></use></svg>Toolkit</a>
+      <a href="/insights.html" class="nav-link"><svg><use href="/icons.svg#icon-insights"></use></svg>Insights</a>
+      <a href="/settings.html" class="nav-link"><svg><use href="/icons.svg#icon-settings"></use></svg>Settings</a>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="main-wrapper">
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="page-header-text">
+        <span class="page-eyebrow">Academic Schedule Horizon</span>
+        <h1 class="page-title">Monthly Calendar</h1>
+        <p class="page-subtitle">Distinguish submission deadlines from planned study days with synchronized milestone tracking.</p>
+      </div>
+      <div class="page-actions">
+        <div style="display:flex; align-items:center; gap:8px; background:var(--white); border:1px solid var(--border); border-radius:var(--radius-md); padding:2px 8px;">
+          <button id="btn-prev-month" class="btn btn-ghost" style="padding:4px; height:28px;" title="Previous month">
+            <svg style="width:16px;height:16px;"><use href="/icons.svg#icon-chevron-left"></use></svg>
+          </button>
+          <span id="calendar-month-label" class="tabular" style="font-size:13px; font-weight:600; padding:0 8px;">November 2026</span>
+          <button id="btn-next-month" class="btn btn-ghost" style="padding:4px; height:28px;" title="Next month">
+            <svg style="width:16px;height:16px;"><use href="/icons.svg#icon-chevron-right"></use></svg>
+          </button>
+        </div>
+        <button id="btn-calendar-today" class="btn btn-secondary btn-sm">Today</button>
+      </div>
+    </div>
+
+    <!-- CALENDAR SPLIT VIEW -->
+    <div class="calendar-layout">
+      <!-- 7x5 MONTH GRID -->
+      <div>
+        <div style="display:flex; gap:16px; margin-bottom:12px; font-size:12px;">
+          <span style="display:inline-flex; align-items:center; gap:6px;"><span class="cal-pill-due" style="width:12px; height:12px; padding:0;"></span> Submission Deadline (Due)</span>
+          <span style="display:inline-flex; align-items:center; gap:6px;"><span class="cal-pill-plan" style="width:12px; height:12px; padding:0;"></span> Planned Study Date</span>
+        </div>
+
+        <div class="calendar-month-grid" id="calendar-grid">
+          <div class="calendar-weekday-header">Mon</div>
+          <div class="calendar-weekday-header">Tue</div>
+          <div class="calendar-weekday-header">Wed</div>
+          <div class="calendar-weekday-header">Thu</div>
+          <div class="calendar-weekday-header">Fri</div>
+          <div class="calendar-weekday-header">Sat</div>
+          <div class="calendar-weekday-header">Sun</div>
+          <!-- Days populated dynamically by calendar.js -->
+        </div>
+      </div>
+
+      <!-- SELECTED DATE SHELF -->
+      <div class="side-shelf-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:12px;">
+          <div>
+            <span class="section-eyebrow">Date Details</span>
+            <h3 id="shelf-selected-date" style="font-size:15px; font-weight:600;">Select a date</h3>
+          </div>
+          <button id="btn-quick-add-to-date" class="btn btn-primary btn-sm">+ Task</button>
+        </div>
+        <div id="shelf-events-container" style="display:flex; flex-direction:column; gap:12px;">
+          <p style="font-size:13px; color:var(--text-secondary);">Click any day in the monthly calendar to inspect scheduled study and deadlines.</p>
+        </div>
+      </div>
+    </div>
+  </main>
 
   <script src="/js/api.js"></script>
-  <script src="/js/auth.js"></script>
   <script src="/js/ui.js"></script>
+  <script src="/js/auth.js"></script>
   <script src="/js/calendar.js"></script>
 </body>
 </html>

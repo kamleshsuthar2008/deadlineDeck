@@ -15,21 +15,29 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function setupWeekControls() {
-  document.getElementById('btn-planner-prev').addEventListener('click', () => {
-    weekOffset--;
-    updatePlannerWeekLabel();
-    loadPlannerWeek(weekOffset);
-  });
+  const prevBtn = document.getElementById('btn-prev-week') || document.getElementById('btn-planner-prev');
+  const nextBtn = document.getElementById('btn-next-week') || document.getElementById('btn-planner-next');
 
-  document.getElementById('btn-planner-next').addEventListener('click', () => {
-    weekOffset++;
-    updatePlannerWeekLabel();
-    loadPlannerWeek(weekOffset);
-  });
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      weekOffset--;
+      updatePlannerWeekLabel();
+      loadPlannerWeek(weekOffset);
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      weekOffset++;
+      updatePlannerWeekLabel();
+      loadPlannerWeek(weekOffset);
+    });
+  }
 }
 
 function updatePlannerWeekLabel() {
-  const label = document.getElementById('planner-week-label');
+  const label = document.getElementById('week-display-label') || document.getElementById('planner-week-label');
+  if (!label) return;
   if (weekOffset === 0) label.textContent = 'This week';
   else if (weekOffset === -1) label.textContent = 'Previous week';
   else if (weekOffset === 1) label.textContent = 'Next week';
@@ -107,21 +115,42 @@ async function selectPlannerDate(dateStr) {
     const d = new Date(dateStr);
     const dateFormatted = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
 
-    document.getElementById('selected-day-eyebrow').textContent = `${wl.planned_hours} hours planned • ${wl.available_hours} hours available`;
-    document.getElementById('selected-day-title').textContent = dateFormatted;
+    const eyebrowEl = document.getElementById('detail-eyebrow') || document.getElementById('selected-day-eyebrow');
+    if (eyebrowEl) eyebrowEl.textContent = `${wl.planned_hours} hours planned • ${wl.available_hours} hours available`;
 
-    // Chip
+    const titleEl = document.getElementById('detail-date-heading') || document.getElementById('selected-day-title');
+    if (titleEl) titleEl.textContent = dateFormatted;
+
+    const capSubEl = document.getElementById('detail-capacity-sub');
+    if (capSubEl) capSubEl.textContent = `Study Capacity: ${wl.available_hours}h`;
+
+    const pillEl = document.getElementById('detail-status-pill');
+    if (pillEl) {
+      pillEl.className = `status-pill ${wl.status_code}`;
+      pillEl.textContent = wl.status;
+    }
+
     const chipContainer = document.getElementById('selected-day-chip-container');
-    const chipClass = wl.status_code === 'overloaded' ? 'is-overloaded' : (wl.status_code === 'near_capacity' ? 'is-near-capacity' : 'is-balanced');
-    chipContainer.innerHTML = `
-      <div class="status-chip ${chipClass}">
-        <span class="status-dot"></span>
-        <span>${wl.status} (${wl.utilization_percentage !== null ? wl.utilization_percentage + '%' : 'Not set'})</span>
-      </div>
-    `;
+    if (chipContainer) {
+      const chipClass = wl.status_code === 'overloaded' ? 'is-overloaded' : (wl.status_code === 'near_capacity' ? 'is-near-capacity' : 'is-balanced');
+      chipContainer.innerHTML = `
+        <div class="status-chip ${chipClass}">
+          <span class="status-dot"></span>
+          <span>${wl.status} (${wl.utilization_percentage !== null ? wl.utilization_percentage + '%' : 'Not set'})</span>
+        </div>
+      `;
+    }
 
-    // Verdict box
-    document.getElementById('planner-verdict-box').textContent = wl.summary_message;
+    const verdictEl = document.getElementById('workload-summary-text') || document.getElementById('planner-verdict-box');
+    if (verdictEl) verdictEl.textContent = wl.summary_message;
+
+    const utilBadge = document.getElementById('workload-utilization-badge');
+    if (utilBadge) utilBadge.textContent = wl.utilization_percentage !== null ? `${wl.utilization_percentage}%` : 'N/A';
+
+    const banner = document.getElementById('workload-summary-banner');
+    if (banner) {
+      banner.className = `workload-alert-banner ${wl.status_code}`;
+    }
 
     // Tasks list
     renderPlannerTasks(data.tasks);

@@ -3,16 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create account — DeadlineDeck</title>
+  <title>Create Account — DeadlineDeck</title>
+  
+  <link rel="stylesheet" href="/css/design-system.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+
   <style>
-    .auth-container {
+    .auth-page-container {
+      min-height: 100vh;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      min-height: 100vh;
+      background-color: var(--bg-main);
     }
-    .auth-form-side {
+
+    .auth-form-column {
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -21,137 +27,111 @@
       margin: 0 auto;
       width: 100%;
     }
-    .auth-brand {
-      display: flex;
-      align-items: center;
-      gap: var(--space-12);
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: var(--space-32);
-    }
-    .auth-brand svg {
-      width: 26px;
-      height: 26px;
-    }
-    .auth-panel-side {
-      background-color: var(--bg-sidebar);
-      color: #FFFFFF;
+
+    .auth-editorial-column {
+      background-color: var(--bg-secondary);
+      border-left: 1px solid var(--border);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       padding: var(--space-64);
+      position: relative;
     }
-    .auth-preview-card {
-      background-color: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: var(--radius-panel);
-      padding: var(--space-32);
-      width: 100%;
-      max-width: 420px;
+
+    .auth-quote-card {
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-40);
+      max-width: 440px;
+      box-shadow: var(--shadow-card);
       display: flex;
       flex-direction: column;
       gap: var(--space-16);
     }
-    .password-wrapper {
-      position: relative;
-    }
-    .password-toggle-btn {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      font-size: 12px;
-      color: var(--text-secondary);
-      cursor: pointer;
-    }
+
     @media (max-width: 900px) {
-      .auth-container { grid-template-columns: 1fr; }
-      .auth-panel-side { display: none; }
-      .auth-form-side { padding: var(--space-32) var(--space-20); }
+      .auth-page-container {
+        grid-template-columns: 1fr;
+      }
+      .auth-editorial-column {
+        display: none;
+      }
+      .auth-form-column {
+        padding: var(--space-48) var(--space-24);
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="auth-container">
-    <div class="auth-form-side">
-      <div class="auth-brand">
-        <svg><use href="/icons.svg#icon-logo"></use></svg>
-        <span>DeadlineDeck</span>
+  <div class="auth-page-container">
+    <!-- LEFT: REGISTRATION FORM COLUMN -->
+    <div class="auth-form-column">
+      <a href="/" class="brand-anchor" style="margin-bottom: var(--space-32);">
+        <div class="brand-symbol">
+          <svg><use href="/icons.svg#icon-logo"></use></svg>
+        </div>
+        <span class="brand-name">DeadlineDeck</span>
+      </a>
+
+      <div>
+        <span class="section-eyebrow">Student Registration</span>
+        <h1 class="editorial-title" style="font-size: 30px; margin-top: 4px;">Start with clarity.</h1>
+        <p class="editorial-subtitle">Join DeadlineDeck to plan course deadlines and balance your study hours.</p>
       </div>
 
-      <div style="margin-bottom: var(--space-24);">
-        <h1 class="page-title">Register student account</h1>
-        <p class="secondary" style="margin-top: 4px;">Set up your academic profile to begin tracking workloads.</p>
-      </div>
+      <div id="auth-alert" style="display: none; margin-top: var(--space-16); padding: var(--space-12) var(--space-16); background-color: var(--status-overloaded-bg); border: 1px solid #F5C6C4; border-radius: var(--radius-md); font-size: 13px; color: var(--danger);"></div>
 
-      <div id="auth-error-alert" style="display: none; padding: var(--space-12); background-color: var(--status-coral-tint); border: 1px solid var(--status-coral); border-radius: var(--radius-md); color: var(--status-coral-text); font-size: 13px; margin-bottom: var(--space-16);"></div>
-
-      <form id="register-form">
+      <form id="form-register" style="margin-top: var(--space-20);">
         <div class="form-group">
-          <label class="form-label" for="reg-name">Full name</label>
-          <input type="text" id="reg-name" class="input-text" required placeholder="Aarav Sharma" autocomplete="name">
+          <label class="form-label" for="reg-name">Full Name</label>
+          <input type="text" id="reg-name" class="form-input" placeholder="e.g. Aarav Sharma" required>
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="reg-email">Academic email</label>
-          <input type="email" id="reg-email" class="input-text" required placeholder="aarav.sharma@college.edu" autocomplete="email">
+          <label class="form-label" for="reg-email">University Email</label>
+          <input type="email" id="reg-email" class="form-input" placeholder="student@university.edu" autocomplete="email" required>
         </div>
 
-        <div class="form-group">
-          <label class="form-label" for="reg-password">Password</label>
-          <div class="password-wrapper">
-            <input type="password" id="reg-password" class="input-text" required minlength="6" placeholder="At least 6 characters" autocomplete="new-password">
-            <button type="button" class="password-toggle-btn" id="toggle-reg-password">Show</button>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-12);">
+          <div class="form-group">
+            <label class="form-label" for="reg-password">Password</label>
+            <input type="password" id="reg-password" class="form-input" placeholder="••••••••" minlength="6" autocomplete="new-password" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-confirm-password">Confirm Password</label>
+            <input type="password" id="reg-confirm-password" class="form-input" placeholder="••••••••" minlength="6" autocomplete="new-password" required>
           </div>
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="reg-hours">
-            <span>Default daily study hours</span>
-            <span class="form-hint">Can be adjusted per-date later</span>
-          </label>
-          <input type="number" id="reg-hours" class="input-text tabular" step="0.25" min="0.5" max="24" value="4.00">
+          <label class="form-label" for="reg-study-hours">Default Daily Study Capacity (Hours)</label>
+          <input type="number" id="reg-study-hours" class="form-input" step="0.25" min="0.5" max="24" value="4.0" required>
+          <span style="font-size: 11.5px; color: var(--text-secondary); margin-top: 4px;">Realistic daily hours you dedicate to coursework and revision.</span>
         </div>
 
-        <button type="submit" id="btn-reg-submit" class="btn btn-primary" style="width: 100%; height: 40px; margin-top: var(--space-8);">
-          <span>Create account</span>
+        <button type="submit" id="btn-register-submit" class="btn btn-primary" style="width: 100%; height: 42px; margin-top: var(--space-8);">
+          Create Student Account
         </button>
       </form>
 
-      <div style="margin-top: var(--space-24); font-size: 13.5px; color: var(--text-secondary); text-align: center;">
-        Already registered? <a href="/login.html">Sign in here</a>
+      <div style="margin-top: var(--space-20); font-size: 13.5px; color: var(--text-secondary); text-align: center;">
+        Already have an account? <a href="/login.html" style="color: var(--accent); font-weight: 600;">Sign in here</a>
       </div>
     </div>
 
-    <div class="auth-panel-side">
-      <div class="auth-preview-card">
-        <div>
-          <span class="label-eyebrow" style="color: var(--text-on-dark-muted);">Pre-configured Starter Pack</span>
-          <h2 style="font-size: 18px; font-weight: 500; color: #FFFFFF; margin-top: 4px;">Core Engineering Curriculum</h2>
-        </div>
-
-        <p style="font-size: 13.5px; color: var(--text-on-dark-muted); line-height: 1.5; margin: 0;">
-          Registration immediately provisions standard CSE semester subjects (DBMS, OS, Web Dev, DSA) and sets up your personalized 7-day capacity timeline.
+    <!-- RIGHT: EDITORIAL PREVIEW COLUMN -->
+    <div class="auth-editorial-column">
+      <div class="auth-quote-card">
+        <span class="section-eyebrow">Academic Focus</span>
+        <p style="font-family: var(--font-editorial); font-size: 22px; line-height: 1.35; color: var(--text-primary);">
+          &ldquo;Engineering coursework demands rigorous discipline, not midnight panic. Calculate your workload, pace your modules, and make time for what matters.&rdquo;
         </p>
-
-        <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: var(--space-16); display: flex; flex-direction: column; gap: 8px;">
-          <div style="display: flex; justify-content: space-between; font-size: 12.5px; color: #FFF;">
-            <span>CS301 &bull; Database Systems</span>
-            <span style="color: var(--status-teal);">Ready</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; font-size: 12.5px; color: #FFF;">
-            <span>CS302 &bull; Operating Systems</span>
-            <span style="color: var(--status-teal);">Ready</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; font-size: 12.5px; color: #FFF;">
-            <span>CS303 &bull; Web Development</span>
-            <span style="color: var(--status-teal);">Ready</span>
-          </div>
+        <div style="display: flex; align-items: center; gap: var(--space-12); margin-top: var(--space-8); padding-top: var(--space-16); border-top: 1px solid var(--border-light);">
+          <div style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--accent);"></div>
+          <span style="font-size: 12.5px; color: var(--text-secondary); font-weight: 500;">DeadlineDeck Workload Engine</span>
         </div>
       </div>
     </div>
@@ -159,38 +139,65 @@
 
   <script src="/js/api.js"></script>
   <script>
-    const form = document.getElementById('register-form');
-    const alertBox = document.getElementById('auth-error-alert');
-    const pwdInput = document.getElementById('reg-password');
-    const toggleBtn = document.getElementById('toggle-reg-password');
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('form-register');
+      const alertBox = document.getElementById('auth-alert');
+      const submitBtn = document.getElementById('btn-register-submit');
 
-    toggleBtn.addEventListener('click', () => {
-      const isPwd = pwdInput.type === 'password';
-      pwdInput.type = isPwd ? 'text' : 'password';
-      toggleBtn.textContent = isPwd ? 'Hide' : 'Show';
-    });
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        alertBox.style.display = 'none';
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      alertBox.style.display = 'none';
-      const submitBtn = document.getElementById('btn-reg-submit');
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Creating account...';
+        const name = document.getElementById('reg-name').value.trim();
+        const email = document.getElementById('reg-email').value.trim();
+        const password = document.getElementById('reg-password').value;
+        const confirmPassword = document.getElementById('reg-confirm-password').value;
+        const default_study_hours = document.getElementById('reg-study-hours').value;
 
-      try {
-        await API.post('/api/auth/register', {
-          name: document.getElementById('reg-name').value,
-          email: document.getElementById('reg-email').value,
-          password: pwdInput.value,
-          default_study_hours: document.getElementById('reg-hours').value
-        });
-        window.location.href = '/dashboard.html';
-      } catch (err) {
-        alertBox.textContent = err.data?.message || err.message || 'Registration failed.';
-        alertBox.style.display = 'block';
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Create account';
-      }
+        if (!name || !email || !password || !confirmPassword) {
+          alertBox.textContent = 'Please fill out all required fields.';
+          alertBox.style.display = 'block';
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          alertBox.textContent = 'Passwords do not match. Please re-enter.';
+          alertBox.style.display = 'block';
+          return;
+        }
+
+        if (password.length < 6) {
+          alertBox.textContent = 'Password must be at least 6 characters long.';
+          alertBox.style.display = 'block';
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Creating account...';
+
+        try {
+          const res = await API.post('/api/auth/register', {
+            name,
+            email,
+            password,
+            default_study_hours
+          });
+
+          if (res.success) {
+            window.location.href = '/dashboard.html';
+          } else {
+            alertBox.textContent = res.message || 'Registration failed. Please check your details.';
+            alertBox.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Create Student Account';
+          }
+        } catch (err) {
+          alertBox.textContent = err.message || 'Registration failed. An account with this email may already exist.';
+          alertBox.style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Create Student Account';
+        }
+      });
     });
   </script>
 </body>

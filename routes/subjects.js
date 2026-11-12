@@ -38,7 +38,12 @@ router.get('/', async (req, res, next) => {
       pending_hours: Number(Number(r.pending_hours).toFixed(2))
     }));
 
-    res.json({ subjects });
+    res.json({
+      success: true,
+      message: 'Subjects retrieved successfully.',
+      subjects,
+      data: { subjects }
+    });
   } catch (err) {
     next(err);
   }
@@ -53,10 +58,18 @@ router.post('/', async (req, res, next) => {
     const { subject_name, subject_code } = req.body;
 
     if (!subject_name || !subject_name.trim()) {
-      return res.status(400).json({ error: 'Subject name is required.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Subject name is required.'
+      });
     }
     if (!subject_code || !subject_code.trim()) {
-      return res.status(400).json({ error: 'Subject code is required (e.g. CS301).' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Subject code is required (e.g. CS301).'
+      });
     }
 
     const cleanName = subject_name.trim();
@@ -69,9 +82,10 @@ router.post('/', async (req, res, next) => {
     );
 
     if (existing.length > 0) {
-      return res.status(409).json({ 
-        error: 'Duplicate subject code', 
-        message: `You already have a subject with code ${cleanCode}.` 
+      return res.status(409).json({
+        success: false,
+        errorCode: 'DUPLICATE_CODE',
+        message: `You already have a subject with code ${cleanCode}.`
       });
     }
 
@@ -80,19 +94,22 @@ router.post('/', async (req, res, next) => {
       [req.userId, cleanName, cleanCode]
     );
 
+    const newSubject = {
+      subject_id: result.insertId,
+      subject_name: cleanName,
+      subject_code: cleanCode,
+      total_tasks: 0,
+      pending_tasks: 0,
+      completed_tasks: 0,
+      pending_hours: 0,
+      next_deadline: null
+    };
+
     res.status(201).json({
       success: true,
       message: 'Subject added successfully.',
-      subject: {
-        subject_id: result.insertId,
-        subject_name: cleanName,
-        subject_code: cleanCode,
-        total_tasks: 0,
-        pending_tasks: 0,
-        completed_tasks: 0,
-        pending_hours: 0,
-        next_deadline: null
-      }
+      subject: newSubject,
+      data: { subject: newSubject }
     });
   } catch (err) {
     next(err);
@@ -109,16 +126,28 @@ router.put('/:id', async (req, res, next) => {
     const { subject_name, subject_code } = req.body;
 
     if (!subject_name || !subject_name.trim()) {
-      return res.status(400).json({ error: 'Subject name is required.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Subject name is required.'
+      });
     }
     if (!subject_code || !subject_code.trim()) {
-      return res.status(400).json({ error: 'Subject code is required.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Subject code is required.'
+      });
     }
 
     // Verify ownership
     const rows = await query('SELECT subject_id FROM subjects WHERE subject_id = ? AND user_id = ?', [subjectId, req.userId]);
     if (rows.length === 0) {
-      return res.status(404).json({ error: 'Subject not found.' });
+      return res.status(404).json({
+        success: false,
+        errorCode: 'NOT_FOUND',
+        message: 'Subject not found.'
+      });
     }
 
     const cleanName = subject_name.trim();
@@ -130,7 +159,11 @@ router.put('/:id', async (req, res, next) => {
       [req.userId, cleanCode, subjectId]
     );
     if (duplicate.length > 0) {
-      return res.status(409).json({ error: `Subject code ${cleanCode} is already in use.` });
+      return res.status(409).json({
+        success: false,
+        errorCode: 'DUPLICATE_CODE',
+        message: `Subject code ${cleanCode} is already in use.`
+      });
     }
 
     await query(
@@ -138,10 +171,13 @@ router.put('/:id', async (req, res, next) => {
       [cleanName, cleanCode, subjectId, req.userId]
     );
 
+    const updated = { subject_id: subjectId, subject_name: cleanName, subject_code: cleanCode };
+
     res.json({
       success: true,
       message: 'Subject updated successfully.',
-      subject: { subject_id: subjectId, subject_name: cleanName, subject_code: cleanCode }
+      subject: updated,
+      data: { subject: updated }
     });
   } catch (err) {
     next(err);
@@ -159,7 +195,11 @@ router.delete('/:id', async (req, res, next) => {
     // Verify ownership
     const rows = await query('SELECT subject_id, subject_name FROM subjects WHERE subject_id = ? AND user_id = ?', [subjectId, req.userId]);
     if (rows.length === 0) {
-      return res.status(404).json({ error: 'Subject not found.' });
+      return res.status(404).json({
+        success: false,
+        errorCode: 'NOT_FOUND',
+        message: 'Subject not found.'
+      });
     }
 
     // Check if any tasks exist for this subject
@@ -168,14 +208,20 @@ router.delete('/:id', async (req, res, next) => {
 
     if (taskCount > 0) {
       return res.status(409).json({
-        error: 'Cannot delete subject',
+        success: false,
+        errorCode: 'ASSOCIATED_TASKS_EXIST',
         message: `This subject has ${taskCount} associated task${taskCount === 1 ? '' : 's'}. You must delete or reassign its tasks before deleting the subject.`,
-        task_count: taskCount
+        task_count: taskCount,
+        data: { task_count: taskCount }
       });
     }
 
     await query('DELETE FROM subjects WHERE subject_id = ? AND user_id = ?', [subjectId, req.userId]);
-    res.json({ success: true, message: 'Subject deleted successfully.' });
+    res.json({
+      success: true,
+      message: 'Subject deleted successfully.',
+      data: {}
+    });
   } catch (err) {
     next(err);
   }

@@ -4,116 +4,99 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Assignment Checklist Builder — DeadlineDeck</title>
+  
+  <link rel="stylesheet" href="/css/design-system.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/toolkit.css">
   <link rel="stylesheet" href="/css/responsive.css">
+
+  <style>
+    .checklist-card {
+      background-color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-24);
+      box-shadow: var(--shadow-subtle);
+      margin-bottom: var(--space-20);
+    }
+  </style>
 </head>
 <body>
 
-  <div class="app-container">
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="brand-logo-mark">
+  <!-- TOP HORIZONTAL NAVIGATION -->
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="/dashboard.html" class="nav-brand">
+        <div class="brand-symbol">
           <svg><use href="/icons.svg#icon-logo"></use></svg>
         </div>
-        <span class="brand-wordmark">DeadlineDeck</span>
-      </div>
+        <span class="brand-title">DeadlineDeck</span>
+      </a>
 
-      <nav class="sidebar-nav">
-        <a href="/dashboard.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-dashboard"></use></svg>
-          <span>Dashboard</span>
-        </a>
-        <a href="/planner.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-planner"></use></svg>
-          <span>My Planner</span>
-        </a>
-        <a href="/tasks.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-tasks"></use></svg>
-          <span>Tasks</span>
-        </a>
-        <a href="/calendar.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-calendar"></use></svg>
-          <span>Calendar</span>
-        </a>
-        <a href="/subjects.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-subjects"></use></svg>
-          <span>Subjects</span>
-        </a>
-        <a href="/insights.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-insights"></use></svg>
-          <span>Insights &amp; Reports</span>
-        </a>
-        <a href="/toolkit.html" class="nav-link active">
-          <svg><use href="/icons.svg#icon-toolkit"></use></svg>
-          <span>Student Toolkit</span>
-        </a>
-        <a href="/settings.html" class="nav-link">
+      <ul class="nav-center">
+        <li><a href="/dashboard.html" class="nav-link"><svg><use href="/icons.svg#icon-dashboard"></use></svg>Overview</a></li>
+        <li><a href="/planner.html" class="nav-link"><svg><use href="/icons.svg#icon-planner"></use></svg>Planner</a></li>
+        <li><a href="/tasks.html" class="nav-link"><svg><use href="/icons.svg#icon-tasks"></use></svg>Tasks</a></li>
+        <li><a href="/calendar.html" class="nav-link"><svg><use href="/icons.svg#icon-calendar"></use></svg>Calendar</a></li>
+        <li><a href="/subjects.html" class="nav-link"><svg><use href="/icons.svg#icon-subjects"></use></svg>Subjects</a></li>
+        <li><a href="/toolkit.html" class="nav-link active"><svg><use href="/icons.svg#icon-toolkit"></use></svg>Toolkit</a></li>
+        <li><a href="/insights.html" class="nav-link"><svg><use href="/icons.svg#icon-insights"></use></svg>Insights</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <div class="user-nav-profile">
+          <span class="user-avatar-pill user-avatar-monogram">ST</span>
+          <span class="user-display-name">Student</span>
+        </div>
+        <a href="/settings.html" class="btn-nav-icon" title="Settings">
           <svg><use href="/icons.svg#icon-settings"></use></svg>
-          <span>Settings</span>
         </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <div class="user-profile-badge">
-          <div class="user-avatar-monogram">--</div>
-          <div class="user-info-text">
-            <div class="user-display-name">Loading...</div>
-            <div class="user-display-email">student@college.edu</div>
-          </div>
-        </div>
-        <button class="btn-sidebar-logout">
+        <button class="btn-nav-icon btn-nav-logout" data-action="logout" title="Sign Out">
           <svg><use href="/icons.svg#icon-logout"></use></svg>
-          <span>Log out</span>
+        </button>
+        <button class="mobile-hamburger" aria-label="Toggle navigation">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
       </div>
-    </aside>
-
-    <div class="sidebar-overlay"></div>
-
-    <div class="main-wrapper">
-      <header class="mobile-top-bar">
-        <div class="mobile-brand">
-          <svg style="width:20px;height:20px;"><use href="/icons.svg#icon-logo"></use></svg>
-          <span>DeadlineDeck</span>
-        </div>
-        <button class="mobile-menu-btn" aria-label="Open navigation menu">
-          <svg><use href="/icons.svg#icon-menu"></use></svg>
-        </button>
-      </header>
-
-      <main class="main-canvas">
-        <div class="single-column-workspace">
-          <nav class="tool-breadcrumb">
-            <a href="/toolkit.html">&larr; Student Toolkit</a>
-            <span>/</span>
-            <span>Checklist Builder</span>
-          </nav>
-
-          <div class="tool-workspace">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-12);">
-              <div>
-                <span class="label-eyebrow">Academic Utility 4</span>
-                <h1 class="page-title">Assignment Checklist Builder</h1>
-                <p class="secondary" style="margin-top: 4px;">Decompose coursework deliverables into verified check items.</p>
-              </div>
-              <button id="btn-create-checklist" class="btn btn-primary">
-                <svg><use href="/icons.svg#icon-plus"></use></svg>
-                <span>New checklist</span>
-              </button>
-            </div>
-
-            <!-- Checklists Container -->
-            <div id="checklists-container" style="display: flex; flex-direction: column; gap: var(--space-20);">
-              <!-- Rendered dynamically from MySQL -->
-            </div>
-          </div>
-        </div>
-      </main>
     </div>
-  </div>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer">
+      <a href="/dashboard.html" class="nav-link"><svg><use href="/icons.svg#icon-dashboard"></use></svg>Overview</a>
+      <a href="/planner.html" class="nav-link"><svg><use href="/icons.svg#icon-planner"></use></svg>Planner</a>
+      <a href="/tasks.html" class="nav-link"><svg><use href="/icons.svg#icon-tasks"></use></svg>Tasks</a>
+      <a href="/calendar.html" class="nav-link"><svg><use href="/icons.svg#icon-calendar"></use></svg>Calendar</a>
+      <a href="/subjects.html" class="nav-link"><svg><use href="/icons.svg#icon-subjects"></use></svg>Subjects</a>
+      <a href="/toolkit.html" class="nav-link active"><svg><use href="/icons.svg#icon-toolkit"></use></svg>Toolkit</a>
+      <a href="/insights.html" class="nav-link"><svg><use href="/icons.svg#icon-insights"></use></svg>Insights</a>
+      <a href="/settings.html" class="nav-link"><svg><use href="/icons.svg#icon-settings"></use></svg>Settings</a>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="main-wrapper">
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="page-header-text">
+        <a href="/toolkit.html" style="font-size:12px; color:var(--accent); font-weight:600; text-decoration:none; margin-bottom:4px; display:inline-block;">&larr; Back to Toolkit</a>
+        <h1 class="page-title">Assignment Checklist Builder</h1>
+        <p class="page-subtitle">Decompose complex coursework deliverables into verified check items.</p>
+      </div>
+      <div class="page-actions">
+        <button id="btn-create-checklist" class="btn btn-primary">
+          <svg style="width:16px;height:16px;margin-right:6px;"><use href="/icons.svg#icon-plus"></use></svg>
+          <span>New checklist</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Checklists Container -->
+    <div id="checklists-container" style="display:flex; flex-direction:column; gap:var(--space-20);">
+      <!-- Rendered dynamically from MySQL -->
+    </div>
+  </main>
 
   <!-- New Checklist Modal -->
   <div id="checklist-modal" class="modal-backdrop">
@@ -128,14 +111,14 @@
         <div class="modal-body">
           <div class="form-group">
             <label class="form-label" for="cl-title">Checklist title</label>
-            <input type="text" id="cl-title" class="input-text" required placeholder="e.g. DBMS Final Project Submission Steps">
+            <input type="text" id="cl-title" class="form-input" required placeholder="e.g. DBMS Final Project Submission Steps">
           </div>
           <div class="form-group">
             <label class="form-label" for="cl-task">
               <span>Link to academic task</span>
-              <span class="form-hint">Optional</span>
+              <span class="form-hint" style="font-size:12px; color:var(--text-secondary); margin-left:6px;">(Optional)</span>
             </label>
-            <select id="cl-task" class="input-select">
+            <select id="cl-task" class="form-select">
               <option value="">No linked task</option>
             </select>
           </div>
@@ -149,8 +132,8 @@
   </div>
 
   <script src="/js/api.js"></script>
-  <script src="/js/auth.js"></script>
   <script src="/js/ui.js"></script>
+  <script src="/js/auth.js"></script>
   <script src="/js/tools/checklist.js"></script>
 </body>
 </html>

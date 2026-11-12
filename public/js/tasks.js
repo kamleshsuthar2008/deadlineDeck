@@ -245,60 +245,79 @@ async function loadTasks() {
 }
 
 function openEditDialog(task) {
-  document.getElementById('dialog-heading').textContent = 'Edit academic task';
-  document.getElementById('modal-task-id').value = task.task_id;
-  document.getElementById('dlg-title').value = task.title;
-  document.getElementById('dlg-subject').value = task.subject_id;
-  document.getElementById('dlg-type').value = task.task_type;
-  document.getElementById('dlg-planned').value = task.planned_date.substring(0, 10);
-  document.getElementById('dlg-due').value = task.due_date.substring(0, 10);
-  document.getElementById('dlg-hours').value = task.estimated_hours;
-  document.getElementById('dlg-priority').value = task.priority;
-  document.getElementById('dlg-status').value = task.status;
-  document.getElementById('dlg-desc').value = task.description || '';
+  const heading = document.getElementById('modal-task-heading') || document.getElementById('dialog-heading');
+  if (heading) heading.textContent = 'Edit academic task';
 
-  UI.openModal('task-dialog');
+  const idInput = document.getElementById('edit-task-id') || document.getElementById('modal-task-id');
+  if (idInput) idInput.value = task.task_id;
+
+  if (document.getElementById('dlg-title')) document.getElementById('dlg-title').value = task.title;
+  if (document.getElementById('dlg-subject')) document.getElementById('dlg-subject').value = task.subject_id;
+  if (document.getElementById('dlg-type')) document.getElementById('dlg-type').value = task.task_type;
+  if (document.getElementById('dlg-planned')) document.getElementById('dlg-planned').value = task.planned_date.substring(0, 10);
+  if (document.getElementById('dlg-due')) document.getElementById('dlg-due').value = task.due_date.substring(0, 10);
+  if (document.getElementById('dlg-hours')) document.getElementById('dlg-hours').value = task.estimated_hours;
+  if (document.getElementById('dlg-priority')) document.getElementById('dlg-priority').value = task.priority;
+  if (document.getElementById('dlg-status')) document.getElementById('dlg-status').value = task.status;
+  if (document.getElementById('dlg-desc')) document.getElementById('dlg-desc').value = task.description || '';
+
+  const modalId = document.getElementById('modal-task-form') ? 'modal-task-form' : 'task-dialog';
+  UI.openModal(modalId);
 }
 
 function setupModalForm() {
-  document.getElementById('btn-add-new-task').addEventListener('click', () => {
-    document.getElementById('dialog-heading').textContent = 'Create academic task';
-    document.getElementById('modal-task-id').value = '';
-    document.getElementById('dialog-form').reset();
-    const todayStr = new Date().toISOString().substring(0, 10);
-    document.getElementById('dlg-planned').value = todayStr;
-    document.getElementById('dlg-due').value = todayStr;
-    document.getElementById('dlg-hours').value = '1.00';
-    UI.openModal('task-dialog');
-  });
+  const addBtn = document.getElementById('btn-open-create-task') || document.getElementById('btn-add-new-task');
+  const form = document.getElementById('form-task-editor') || document.getElementById('dialog-form');
+  const modalId = document.getElementById('modal-task-form') ? 'modal-task-form' : 'task-dialog';
 
-  document.getElementById('dialog-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const id = document.getElementById('modal-task-id').value;
-    const body = {
-      title: document.getElementById('dlg-title').value,
-      subject_id: document.getElementById('dlg-subject').value,
-      task_type: document.getElementById('dlg-type').value,
-      planned_date: document.getElementById('dlg-planned').value,
-      due_date: document.getElementById('dlg-due').value,
-      estimated_hours: document.getElementById('dlg-hours').value,
-      priority: document.getElementById('dlg-priority').value,
-      status: document.getElementById('dlg-status').value,
-      description: document.getElementById('dlg-desc').value
-    };
+  if (addBtn) {
+    addBtn.addEventListener('click', () => {
+      const heading = document.getElementById('modal-task-heading') || document.getElementById('dialog-heading');
+      if (heading) heading.textContent = 'Create academic task';
 
-    try {
-      if (id) {
-        await API.put(`/api/tasks/${id}`, body);
-        UI.showToast('Task updated successfully.');
-      } else {
-        await API.post('/api/tasks', body);
-        UI.showToast('Task created successfully.');
+      const idInput = document.getElementById('edit-task-id') || document.getElementById('modal-task-id');
+      if (idInput) idInput.value = '';
+
+      if (form) form.reset();
+      const todayStr = new Date().toISOString().substring(0, 10);
+      if (document.getElementById('dlg-planned')) document.getElementById('dlg-planned').value = todayStr;
+      if (document.getElementById('dlg-due')) document.getElementById('dlg-due').value = todayStr;
+      if (document.getElementById('dlg-hours')) document.getElementById('dlg-hours').value = '1.00';
+      UI.openModal(modalId);
+    });
+  }
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const idInput = document.getElementById('edit-task-id') || document.getElementById('modal-task-id');
+      const id = idInput ? idInput.value : '';
+
+      const body = {
+        title: document.getElementById('dlg-title')?.value || '',
+        subject_id: document.getElementById('dlg-subject')?.value || '',
+        task_type: document.getElementById('dlg-type')?.value || 'Assignment',
+        planned_date: document.getElementById('dlg-planned')?.value || '',
+        due_date: document.getElementById('dlg-due')?.value || '',
+        estimated_hours: document.getElementById('dlg-hours')?.value || '1.00',
+        priority: document.getElementById('dlg-priority')?.value || 'Medium',
+        status: document.getElementById('dlg-status')?.value || 'Pending',
+        description: document.getElementById('dlg-desc')?.value || ''
+      };
+
+      try {
+        if (id) {
+          await API.put(`/api/tasks/${id}`, body);
+          UI.showToast('Task updated successfully.');
+        } else {
+          await API.post('/api/tasks', body);
+          UI.showToast('Task created successfully.');
+        }
+        UI.closeModal(modalId);
+        loadTasks();
+      } catch (err) {
+        UI.showToast(err.message, 'error');
       }
-      UI.closeModal('task-dialog');
-      loadTasks();
-    } catch (err) {
-      UI.showToast(err.message, 'error');
-    }
-  });
+    });
+  }
 }

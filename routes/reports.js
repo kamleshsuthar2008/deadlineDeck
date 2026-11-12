@@ -6,9 +6,16 @@ const { calculateDayWorkload } = require('../services/workloadService.js');
 
 router.use(requireAuth);
 
+function toDateString(d) {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 router.get('/overview', async (req, res, next) => {
   try {
-    const todayStr = new Date().toISOString().substring(0, 10);
+    const todayStr = toDateString(new Date());
 
     // 1. Overview counts
     const countsSql = `
@@ -71,14 +78,14 @@ router.get('/overview', async (req, res, next) => {
     const monthCapRows = await query(monthCapSql, [req.userId]);
     const capMap = {};
     for (const r of monthCapRows) {
-      const d = typeof r.capacity_date === 'string' ? r.capacity_date.substring(0, 10) : new Date(r.capacity_date).toISOString().substring(0, 10);
+      const d = String(r.capacity_date).substring(0, 10);
       capMap[d] = Number(r.available_hours);
     }
 
     // Group tasks by planned_date
     const dayTasksMap = {};
     for (const t of monthTasks) {
-      const d = typeof t.planned_date === 'string' ? t.planned_date.substring(0, 10) : new Date(t.planned_date).toISOString().substring(0, 10);
+      const d = String(t.planned_date).substring(0, 10);
       if (!dayTasksMap[d]) dayTasksMap[d] = [];
       dayTasksMap[d].push(t);
     }
@@ -86,8 +93,8 @@ router.get('/overview', async (req, res, next) => {
     let overloadedDaysCount = 0;
     for (const [d, tList] of Object.entries(dayTasksMap)) {
       const cap = capMap[d] !== undefined ? capMap[d] : defaultHours;
-      const res = calculateDayWorkload(tList, cap, d);
-      if (res.status_code === 'overloaded') {
+      const calc = calculateDayWorkload(tList, cap, d);
+      if (calc.status_code === 'overloaded') {
         overloadedDaysCount++;
       }
     }
@@ -105,7 +112,7 @@ router.get('/overview', async (req, res, next) => {
       }
     }
 
-    res.json({
+    const reportData = {
       summary: {
         total_tasks: total,
         completed_tasks: completed,
@@ -116,6 +123,13 @@ router.get('/overview', async (req, res, next) => {
       },
       editorial_summary: editorialSummary,
       subject_distribution: subjectDistribution
+    };
+
+    res.json({
+      success: true,
+      message: 'Overview reports retrieved successfully.',
+      ...reportData,
+      data: reportData
     });
   } catch (err) {
     next(err);

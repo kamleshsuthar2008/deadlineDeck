@@ -9,18 +9,16 @@
 
 USE `deadlinedeck`;
 
--- Demo student user (Email: aarav.sharma@college.edu, Password: Password@123)
--- bcrypt hash for 'Password@123' with 10 rounds:
--- $2b$10$w09d8n9p5mG2y2v4e4v1g.V8R1A.Xq8vK8v1g9b3p5mG2y2v4e4v1g is placeholder;
--- We insert or ignore if demo user already exists:
+-- Demo student user (Email: aarav.sharma@college.edu, Password: Student@123)
+-- Real bcrypt hash for 'Student@123' with 10 rounds:
 INSERT INTO `users` (`user_id`, `name`, `email`, `password_hash`, `default_study_hours`)
 VALUES (
   1,
   'Aarav Sharma',
   'aarav.sharma@college.edu',
-  '$2b$10$T8ZiqgHn8d7e2tK8uH7b6uW7Qv1n2k3l4m5n6o7p8q9r0s1t2u3v4',
+  '$2b$10$jJ9Ilgz/S45w6RIcDnqSNek9y86oQM94uj9Fa6rsqAUU0dBNZax1C',
   3.00
-) ON DUPLICATE KEY UPDATE `name` = VALUES(`name`);
+) ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `password_hash` = VALUES(`password_hash`);
 
 -- Core Computer Science & Engineering Subjects
 INSERT INTO `subjects` (`subject_id`, `user_id`, `subject_name`, `subject_code`)

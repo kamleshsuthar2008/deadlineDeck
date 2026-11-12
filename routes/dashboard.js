@@ -144,7 +144,7 @@ router.get('/summary', async (req, res, next) => {
     const todayCapacity = capacityRows.length > 0 ? Number(capacityRows[0].available_hours) : Number(user.default_study_hours);
     const todayWorkload = calculateDayWorkload(allTasks, todayCapacity, todayStr);
 
-    res.json({
+    const responseData = {
       student_name: user.name,
       today_date: todayStr,
       ribbon: {
@@ -158,6 +158,13 @@ router.get('/summary', async (req, res, next) => {
       upcoming_deadlines: upcomingDeadlines,
       subject_workload: subjectWorkload,
       today_workload: todayWorkload
+    };
+
+    res.json({
+      success: true,
+      message: 'Dashboard summary retrieved successfully.',
+      ...responseData,
+      data: responseData
     });
   } catch (err) {
     next(err);
@@ -228,11 +235,18 @@ router.get('/workload', async (req, res, next) => {
       };
     });
 
-    res.json({
+    const workloadData = {
       week_offset: offset,
       start_date: startDate,
       end_date: endDate,
       days
+    };
+
+    res.json({
+      success: true,
+      message: 'Weekly workload calculated successfully.',
+      ...workloadData,
+      data: workloadData
     });
   } catch (err) {
     next(err);

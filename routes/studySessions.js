@@ -5,6 +5,13 @@ const { requireAuth } = require('../middleware/auth.js');
 
 router.use(requireAuth);
 
+function toDateString(d) {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 /**
  * GET /api/study-sessions
  * Retrieve completed study focus sessions
@@ -30,11 +37,16 @@ router.get('/', async (req, res, next) => {
     const rows = await query(sql, [req.userId]);
     const sessions = rows.map(r => ({
       ...r,
-      planned_date: typeof r.planned_date === 'string' ? r.planned_date.substring(0, 10) : new Date(r.planned_date).toISOString().substring(0, 10),
+      planned_date: String(r.planned_date).substring(0, 10),
       duration_minutes: Number(r.duration_minutes)
     }));
 
-    res.json({ sessions });
+    res.json({
+      success: true,
+      message: 'Study sessions retrieved successfully.',
+      sessions,
+      data: { sessions }
+    });
   } catch (err) {
     next(err);
   }
@@ -50,10 +62,14 @@ router.post('/', async (req, res, next) => {
 
     const duration = Number(duration_minutes);
     if (isNaN(duration) || duration <= 0) {
-      return res.status(400).json({ error: 'Duration in minutes must be greater than zero.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Duration in minutes must be greater than zero.'
+      });
     }
 
-    const todayStr = new Date().toISOString().substring(0, 10);
+    const todayStr = toDateString(new Date());
     const taskId = task_id ? Number(task_id) : null;
 
     const result = await query(
@@ -61,11 +77,18 @@ router.post('/', async (req, res, next) => {
       [req.userId, taskId, todayStr, duration]
     );
 
+    const newSession = {
+      session_id: result.insertId,
+      task_id: taskId,
+      planned_date: todayStr,
+      duration_minutes: duration
+    };
+
     res.status(201).json({
       success: true,
-      message: 'Study session logged.',
-      session_id: result.insertId,
-      duration_minutes: duration
+      message: 'Study session logged successfully.',
+      ...newSession,
+      data: newSession
     });
   } catch (err) {
     next(err);

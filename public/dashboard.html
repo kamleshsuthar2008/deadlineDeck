@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard — DeadlineDeck</title>
+  
+  <link rel="stylesheet" href="/css/design-system.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/components.css">
@@ -12,316 +14,240 @@
 </head>
 <body>
 
-  <div class="app-container">
-    <!-- Sidebar Navigation Shell -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="brand-logo-mark">
+  <!-- TOP HORIZONTAL NAVIGATION (SECTION 4) -->
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="/dashboard.html" class="nav-brand">
+        <div class="brand-symbol">
           <svg><use href="/icons.svg#icon-logo"></use></svg>
         </div>
-        <span class="brand-wordmark">DeadlineDeck</span>
-      </div>
+        <span class="brand-title">DeadlineDeck</span>
+      </a>
 
-      <nav class="sidebar-nav">
-        <a href="/dashboard.html" class="nav-link active">
-          <svg><use href="/icons.svg#icon-dashboard"></use></svg>
-          <span>Dashboard</span>
-        </a>
-        <a href="/planner.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-planner"></use></svg>
-          <span>My Planner</span>
-        </a>
-        <a href="/tasks.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-tasks"></use></svg>
-          <span>Tasks</span>
-        </a>
-        <a href="/calendar.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-calendar"></use></svg>
-          <span>Calendar</span>
-        </a>
-        <a href="/subjects.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-subjects"></use></svg>
-          <span>Subjects</span>
-        </a>
-        <a href="/insights.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-insights"></use></svg>
-          <span>Insights &amp; Reports</span>
-        </a>
-        <a href="/toolkit.html" class="nav-link">
-          <svg><use href="/icons.svg#icon-toolkit"></use></svg>
-          <span>Student Toolkit</span>
-        </a>
-        <a href="/settings.html" class="nav-link">
+      <ul class="nav-center">
+        <li><a href="/dashboard.html" class="nav-link active"><svg><use href="/icons.svg#icon-dashboard"></use></svg>Overview</a></li>
+        <li><a href="/planner.html" class="nav-link"><svg><use href="/icons.svg#icon-planner"></use></svg>Planner</a></li>
+        <li><a href="/tasks.html" class="nav-link"><svg><use href="/icons.svg#icon-tasks"></use></svg>Tasks</a></li>
+        <li><a href="/calendar.html" class="nav-link"><svg><use href="/icons.svg#icon-calendar"></use></svg>Calendar</a></li>
+        <li><a href="/subjects.html" class="nav-link"><svg><use href="/icons.svg#icon-subjects"></use></svg>Subjects</a></li>
+        <li><a href="/toolkit.html" class="nav-link"><svg><use href="/icons.svg#icon-toolkit"></use></svg>Toolkit</a></li>
+        <li><a href="/insights.html" class="nav-link"><svg><use href="/icons.svg#icon-insights"></use></svg>Insights</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <div class="user-nav-profile">
+          <span class="user-avatar-pill user-avatar-monogram">ST</span>
+          <span class="user-display-name">Student</span>
+        </div>
+        <a href="/settings.html" class="btn-nav-icon" title="Settings">
           <svg><use href="/icons.svg#icon-settings"></use></svg>
-          <span>Settings</span>
         </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <div class="user-profile-badge">
-          <div class="user-avatar-monogram">--</div>
-          <div class="user-info-text">
-            <div class="user-display-name">Loading...</div>
-            <div class="user-display-email">student@college.edu</div>
-          </div>
-        </div>
-        <button class="btn-sidebar-logout" title="Sign out of DeadlineDeck">
+        <button class="btn-nav-icon btn-nav-logout" data-action="logout" title="Sign Out">
           <svg><use href="/icons.svg#icon-logout"></use></svg>
-          <span>Log out</span>
+        </button>
+        <button class="mobile-hamburger" aria-label="Toggle navigation">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
       </div>
-    </aside>
-
-    <!-- Mobile Drawer Overlay -->
-    <div class="sidebar-overlay"></div>
-
-    <!-- Main Workspace Area -->
-    <div class="main-wrapper">
-      <!-- Mobile Top Bar -->
-      <header class="mobile-top-bar">
-        <div class="mobile-brand">
-          <svg style="width:20px;height:20px;"><use href="/icons.svg#icon-logo"></use></svg>
-          <span>DeadlineDeck</span>
-        </div>
-        <button class="mobile-menu-btn" aria-label="Open navigation menu">
-          <svg><use href="/icons.svg#icon-menu"></use></svg>
-        </button>
-      </header>
-
-      <main class="main-canvas">
-        <div class="dashboard-layout">
-          <!-- Central Academic Workspace (Fluid, max 960px) -->
-          <div class="main-workspace">
-            
-            <!-- 1. Header with Time-of-day greeting & Week selector -->
-            <header class="dashboard-header">
-              <div>
-                <h1 id="greeting-heading" class="greeting-text">Good day, Student.</h1>
-                <div id="current-date-display" class="current-date-text">Loading academic date...</div>
-              </div>
-              <div class="page-actions">
-                <div class="week-navigation-toolbar">
-                  <button id="btn-prev-week" class="btn btn-ghost" style="padding: 4px;" title="Previous week">
-                    <svg><use href="/icons.svg#icon-chevron-left"></use></svg>
-                  </button>
-                  <span id="week-display-label" class="week-label tabular">This week</span>
-                  <button id="btn-next-week" class="btn btn-ghost" style="padding: 4px;" title="Next week">
-                    <svg><use href="/icons.svg#icon-chevron-right"></use></svg>
-                  </button>
-                </div>
-                <button id="btn-quick-add-task" class="btn btn-primary">
-                  <svg><use href="/icons.svg#icon-plus"></use></svg>
-                  <span>Add task</span>
-                </button>
-              </div>
-            </header>
-
-            <!-- 2. Academic Overview Ribbon (Single panel divided by hairlines) -->
-            <section class="overview-ribbon" aria-label="Academic Workload Summary">
-              <div class="overview-cell">
-                <span class="label-eyebrow">Pending Tasks</span>
-                <div id="stat-pending" class="overview-figure">--</div>
-              </div>
-              <div class="overview-cell">
-                <span class="label-eyebrow">Due Today</span>
-                <div id="stat-due-today" class="overview-figure">--</div>
-              </div>
-              <div class="overview-cell">
-                <span class="label-eyebrow">Completed</span>
-                <div id="stat-completed" class="overview-figure">--</div>
-              </div>
-              <div id="cell-overdue" class="overview-cell">
-                <span class="label-eyebrow">Overdue</span>
-                <div id="stat-overdue" class="overview-figure">--</div>
-              </div>
-              <div class="overview-cell">
-                <span class="label-eyebrow">Completion Rate</span>
-                <div id="stat-rate" class="overview-figure">--<span class="overview-unit">%</span></div>
-              </div>
-            </section>
-
-            <!-- 3. The Signature Weekly Workload Map (Part A5) -->
-            <section class="workload-map-panel" aria-label="Weekly Workload Pressure Map">
-              <div class="workload-map-header">
-                <div>
-                  <span class="label-eyebrow">Signature Instrument</span>
-                  <h2 class="section-title">Weekly Workload Pressure Map</h2>
-                </div>
-                <div style="display: flex; gap: var(--space-16); font-size: 11.5px;">
-                  <span class="status-chip is-balanced"><span class="status-dot"></span>Balanced &le; 80%</span>
-                  <span class="status-chip is-near-capacity"><span class="status-dot"></span>Near capacity 81–100%</span>
-                  <span class="status-chip is-overloaded"><span class="status-dot"></span>Overloaded &gt; 100%</span>
-                </div>
-              </div>
-
-              <!-- 7 Day Columns continuous panel -->
-              <div id="workload-map-grid" class="workload-map-grid">
-                <!-- Injected dynamically by dashboard.js -->
-              </div>
-
-              <!-- Selected Day Detail Panel beneath the map -->
-              <div id="workload-detail-panel" class="workload-detail-panel">
-                <div class="workload-detail-summary">
-                  <div id="workload-detail-sentence" class="workload-plain-sentence">
-                    Loading selected day workload metrics...
-                  </div>
-                  <div class="workload-detail-actions">
-                    <a href="/planner.html" class="btn btn-secondary" style="font-size: 12.5px;">Reschedule a task</a>
-                    <a href="/settings.html" class="btn btn-ghost" style="font-size: 12.5px;">Review study capacity</a>
-                  </div>
-                </div>
-
-                <div id="day-task-mini-container" class="day-task-mini-list">
-                  <!-- Scheduled tasks for selected day -->
-                </div>
-              </div>
-            </section>
-
-            <!-- 4. Today's Focus (Ranked with reasons) -->
-            <section class="panel">
-              <div class="panel-header">
-                <div>
-                  <span class="label-eyebrow">Smart Priority</span>
-                  <h2 class="section-title">Today's Focus</h2>
-                </div>
-                <span class="secondary" style="font-size: 12px;">Explainable rule-based ranking</span>
-              </div>
-              <div class="panel-body">
-                <div id="focus-list-container" class="focus-list">
-                  <!-- Injected by dashboard.js -->
-                </div>
-              </div>
-            </section>
-
-            <!-- 5. Two-column Grid: Upcoming Deadlines & Subject Workload -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-24);">
-              <!-- Upcoming Deadlines Timeline -->
-              <section class="panel">
-                <div class="panel-header">
-                  <span class="section-title">Upcoming Deadlines</span>
-                  <a href="/calendar.html" class="btn btn-ghost" style="font-size: 12px; padding: 2px 6px;">Calendar &rarr;</a>
-                </div>
-                <div class="panel-body">
-                  <div id="deadlines-timeline-container" class="deadline-timeline">
-                    <!-- Injected by dashboard.js -->
-                  </div>
-                </div>
-              </section>
-
-              <!-- Subject-wise Workload Distribution -->
-              <section class="panel">
-                <div class="panel-header">
-                  <span class="section-title">Subject Workload</span>
-                  <a href="/subjects.html" class="btn btn-ghost" style="font-size: 12px; padding: 2px 6px;">All subjects &rarr;</a>
-                </div>
-                <div class="panel-body">
-                  <div id="subject-workload-container" class="subject-workload-list">
-                    <!-- Injected by dashboard.js -->
-                  </div>
-                </div>
-              </section>
-            </div>
-
-          </div>
-
-          <!-- Compact Right-side Insights Rail (320px) -->
-          <aside class="insights-rail" aria-label="Productivity Insights">
-            <!-- Widget 1: Today's Available Hours -->
-            <div class="rail-widget">
-              <span class="rail-widget-title">Daily Study Capacity</span>
-              <div id="rail-capacity-hours" class="rail-stat-value">-- h</div>
-              <p id="rail-capacity-note" class="secondary" style="margin: 0;">Configured daily capacity for today.</p>
-            </div>
-
-            <!-- Widget 2: Current Workload Status -->
-            <div class="rail-widget">
-              <span class="rail-widget-title">Today's Pressure</span>
-              <div id="rail-status-chip-container" style="margin: var(--space-4) 0;">
-                <div class="status-chip is-balanced">
-                  <span class="status-dot"></span>
-                  <span id="rail-status-label">Balanced</span>
-                </div>
-              </div>
-              <p id="rail-status-sentence" class="secondary" style="margin: 0; font-size: 13px;">Planned work is within study limits.</p>
-            </div>
-
-            <!-- Widget 3: Overall Completion Ring -->
-            <div class="rail-widget">
-              <span class="rail-widget-title">Completion Ratio</span>
-              <div class="completion-ring-container">
-                <svg class="completion-ring-svg" viewBox="0 0 36 36">
-                  <path class="completion-ring-track" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                  <path id="completion-ring-fill" class="completion-ring-fill" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                </svg>
-                <div>
-                  <div id="rail-completion-percentage" class="rail-stat-value">0%</div>
-                  <span class="secondary" style="font-size: 12px;">Active task progress</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Widget 4: Next Urgent Deadline Countdown -->
-            <div class="rail-widget">
-              <span class="rail-widget-title">Next Deadline</span>
-              <div id="rail-next-deadline-title" style="font-size: 14px; font-weight: 600; color: var(--text-primary);">--</div>
-              <div id="rail-next-deadline-sub" class="secondary" style="font-size: 12.5px;">--</div>
-            </div>
-          </aside>
-        </div>
-      </main>
     </div>
-  </div>
 
-  <!-- Mobile Bottom Navigation Bar (< 640px) -->
-  <nav class="mobile-bottom-nav">
-    <a href="/dashboard.html" class="bottom-nav-item active">
-      <svg><use href="/icons.svg#icon-dashboard"></use></svg>
-      <span>Dashboard</span>
-    </a>
-    <a href="/planner.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-planner"></use></svg>
-      <span>Planner</span>
-    </a>
-    <a href="/tasks.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-tasks"></use></svg>
-      <span>Tasks</span>
-    </a>
-    <a href="/calendar.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-calendar"></use></svg>
-      <span>Calendar</span>
-    </a>
-    <a href="/toolkit.html" class="bottom-nav-item">
-      <svg><use href="/icons.svg#icon-toolkit"></use></svg>
-      <span>Toolkit</span>
-    </a>
-  </nav>
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer">
+      <a href="/dashboard.html" class="nav-link active"><svg><use href="/icons.svg#icon-dashboard"></use></svg>Overview</a>
+      <a href="/planner.html" class="nav-link"><svg><use href="/icons.svg#icon-planner"></use></svg>Planner</a>
+      <a href="/tasks.html" class="nav-link"><svg><use href="/icons.svg#icon-tasks"></use></svg>Tasks</a>
+      <a href="/calendar.html" class="nav-link"><svg><use href="/icons.svg#icon-calendar"></use></svg>Calendar</a>
+      <a href="/subjects.html" class="nav-link"><svg><use href="/icons.svg#icon-subjects"></use></svg>Subjects</a>
+      <a href="/toolkit.html" class="nav-link"><svg><use href="/icons.svg#icon-toolkit"></use></svg>Toolkit</a>
+      <a href="/insights.html" class="nav-link"><svg><use href="/icons.svg#icon-insights"></use></svg>Insights</a>
+      <a href="/settings.html" class="nav-link"><svg><use href="/icons.svg#icon-settings"></use></svg>Settings</a>
+    </div>
+  </header>
 
-  <!-- Add Task Modal -->
-  <div id="task-modal" class="modal-backdrop">
-    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="task-modal-title">
-      <div class="modal-header">
-        <h2 id="task-modal-title" class="modal-title">Add academic task</h2>
-        <button class="modal-close-btn" data-dismiss="modal" aria-label="Close dialog">
-          <svg><use href="/icons.svg#icon-close"></use></svg>
+  <!-- MAIN WORKSPACE -->
+  <main class="main-wrapper">
+    <!-- SECTION 8 HEADER -->
+    <div class="page-header">
+      <div class="page-header-text">
+        <span class="page-eyebrow" id="current-date-display">Academic Term 2026</span>
+        <h1 class="page-title">Your week, in focus.</h1>
+        <p class="page-subtitle" id="greeting-heading">Good day, Student.</p>
+      </div>
+      <div class="page-actions">
+        <div class="week-navigation-toolbar" style="display:flex; align-items:center; gap:8px; background:var(--white); border:1px solid var(--border); border-radius:var(--radius-md); padding:2px 8px;">
+          <button id="btn-prev-week" class="btn btn-ghost" style="padding:4px; height:28px;" title="Previous week">
+            <svg style="width:16px;height:16px;"><use href="/icons.svg#icon-chevron-left"></use></svg>
+          </button>
+          <span id="week-display-label" class="week-label tabular" style="font-size:12.5px; font-weight:600; padding:0 6px;">This week</span>
+          <button id="btn-next-week" class="btn btn-ghost" style="padding:4px; height:28px;" title="Next week">
+            <svg style="width:16px;height:16px;"><use href="/icons.svg#icon-chevron-right"></use></svg>
+          </button>
+        </div>
+        <button id="btn-quick-add-task" class="btn btn-primary">
+          <svg style="width:16px;height:16px;"><use href="/icons.svg#icon-plus"></use></svg>
+          <span>Add Task</span>
         </button>
       </div>
-      <form id="task-modal-form">
+    </div>
+
+    <!-- SECTION 8.1 — ACADEMIC OVERVIEW RIBBON -->
+    <section class="overview-ribbon" aria-label="Academic Workload Summary">
+      <div class="overview-cell">
+        <span class="overview-cell-label">Pending tasks</span>
+        <div class="overview-cell-numeral tabular" id="stat-pending">0</div>
+        <span class="overview-cell-footnote">Active deliverables</span>
+      </div>
+
+      <div class="overview-cell">
+        <span class="overview-cell-label">Due today</span>
+        <div class="overview-cell-numeral tabular" id="stat-due-today">0</div>
+        <span class="overview-cell-footnote">Submissions closing</span>
+      </div>
+
+      <div class="overview-cell">
+        <span class="overview-cell-label">Completed</span>
+        <div class="overview-cell-numeral tabular" id="stat-completed">0</div>
+        <span class="overview-cell-footnote">Finished tasks</span>
+      </div>
+
+      <div class="overview-cell" id="cell-overdue">
+        <span class="overview-cell-label">Overdue</span>
+        <div class="overview-cell-numeral tabular" id="stat-overdue">0</div>
+        <span class="overview-cell-footnote">Require attention</span>
+      </div>
+
+      <div class="overview-cell">
+        <span class="overview-cell-label">Weekly rate</span>
+        <div class="overview-cell-numeral tabular" id="stat-rate">0<span class="overview-unit">%</span></div>
+        <span class="overview-cell-footnote">Semester completion</span>
+      </div>
+    </section>
+
+    <!-- SECTION 8.2 — SIGNATURE WEEKLY WORKLOAD MAP -->
+    <section class="editorial-card" aria-label="Weekly Workload Map">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-20); flex-wrap:wrap; gap:var(--space-12);">
+        <div>
+          <span class="section-eyebrow">Signature Instrument</span>
+          <h2 style="font-family:var(--font-editorial); font-size:22px; font-weight:500;">Weekly Workload Map</h2>
+        </div>
+        <div style="display:flex; gap:var(--space-16); font-size:12px; flex-wrap:wrap;">
+          <span class="status-pill balanced"><span class="status-dot"></span>Balanced &le; 80%</span>
+          <span class="status-pill near_capacity"><span class="status-dot"></span>Near Capacity 81–100%</span>
+          <span class="status-pill overloaded"><span class="status-dot"></span>Overloaded &gt; 100%</span>
+        </div>
+      </div>
+
+      <!-- Seven-day horizontal grid with vertical capacity gauges -->
+      <div id="workload-map-grid" class="workload-map-grid">
+        <!-- Rendered dynamically by dashboard.js -->
+      </div>
+
+      <!-- Selected Day Task Details Shelf -->
+      <div id="selected-day-shelf" class="selected-day-detail-panel">
+        <div class="shelf-header">
+          <div class="shelf-title-group">
+            <span class="section-eyebrow" style="margin:0;">Day Schedule</span>
+            <h3 id="shelf-date-title" style="font-size:16px; font-weight:600; margin:0;">Today</h3>
+            <span id="shelf-status-pill" class="status-pill balanced">Balanced</span>
+          </div>
+          <button id="btn-shelf-add-task" class="btn btn-secondary btn-sm" type="button">
+            <svg style="width:14px;height:14px;margin-right:4px;"><use href="/icons.svg#icon-plus"></use></svg>
+            Add Task for This Day
+          </button>
+        </div>
+        <div id="workload-detail-sentence" class="workload-sentence-banner balanced">
+          <!-- Rendered dynamically -->
+        </div>
+        <div id="shelf-tasks-list" class="shelf-tasks-container">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TWO-COLUMN EDITORIAL DECK: FOCUS & DEADLINES vs SUBJECTS & INSIGHTS -->
+    <div class="dashboard-two-column-deck" style="display:grid; grid-template-columns:1.5fr 1fr; gap:var(--space-32);">
+      
+      <!-- LEFT COLUMN -->
+      <div style="display:flex; flex-direction:column; gap:var(--space-32);">
+        <!-- SECTION 8.3 — TODAY'S FOCUS -->
+        <section class="editorial-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-16);">
+            <div>
+              <span class="section-eyebrow">Algorithmic Priority Ranking</span>
+              <h2 style="font-family:var(--font-editorial); font-size:22px; font-weight:500;">Today's Focus</h2>
+            </div>
+            <a href="/tasks.html" class="btn btn-ghost btn-sm">All Tasks &rarr;</a>
+          </div>
+          <div id="focus-tasks-list" style="display:flex; flex-direction:column; gap:var(--space-12);">
+            <!-- Rendered by dashboard.js -->
+          </div>
+        </section>
+
+        <!-- SECTION 8.4 — UPCOMING DEADLINES -->
+        <section class="editorial-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-16);">
+            <div>
+              <span class="section-eyebrow">Submission Horizon</span>
+              <h2 style="font-family:var(--font-editorial); font-size:22px; font-weight:500;">Upcoming Deadlines</h2>
+            </div>
+            <a href="/calendar.html" class="btn btn-ghost btn-sm">Full Calendar &rarr;</a>
+          </div>
+          <div id="upcoming-deadlines-container" style="display:flex; flex-direction:column; gap:var(--space-12);">
+            <!-- Rendered by dashboard.js -->
+          </div>
+        </section>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div style="display:flex; flex-direction:column; gap:var(--space-32);">
+        <!-- SECTION 8.5 — SUBJECT WORKLOAD -->
+        <section class="editorial-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-16);">
+            <div>
+              <span class="section-eyebrow">Academic Distribution</span>
+              <h2 style="font-family:var(--font-editorial); font-size:22px; font-weight:500;">Subject Workload</h2>
+            </div>
+            <a href="/subjects.html" class="btn btn-ghost btn-sm">Manage &rarr;</a>
+          </div>
+          <div id="subject-workload-bars" style="display:flex; flex-direction:column; gap:var(--space-16);">
+            <!-- Rendered by dashboard.js -->
+          </div>
+        </section>
+
+        <!-- SECTION 8.6 — QUICK INSIGHTS RAIL -->
+        <section class="editorial-card" style="background-color:var(--bg-secondary);">
+          <span class="section-eyebrow">Weekly Intelligence</span>
+          <h2 style="font-family:var(--font-editorial); font-size:20px; font-weight:500; margin-bottom:var(--space-16);">Workload Health</h2>
+          <div id="insights-rail-widgets" style="display:flex; flex-direction:column; gap:var(--space-12);">
+            <!-- Rendered by dashboard.js -->
+          </div>
+        </section>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- QUICK ADD TASK MODAL (SECTION 10) -->
+  <div id="modal-quick-task" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Create Academic Task</h3>
+        <button class="btn btn-ghost btn-sm" data-dismiss="modal">&times;</button>
+      </div>
+      <form id="form-quick-task">
         <div class="modal-body">
           <div class="form-group">
-            <label class="form-label" for="task-title">Task title</label>
-            <input type="text" id="task-title" class="input-text" required placeholder="e.g. CPU Scheduling Simulation in C">
+            <label class="form-label" for="task-title">Task Title</label>
+            <input type="text" id="task-title" class="form-input" placeholder="e.g. Relational Normalization BCNF" required>
           </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-12);">
+          <div class="form-group">
+            <label class="form-label" for="task-subject">Subject</label>
+            <select id="task-subject" class="form-select" required></select>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-12);">
             <div class="form-group">
-              <label class="form-label" for="task-subject">Subject</label>
-              <select id="task-subject" class="input-select" required>
-                <!-- Populated dynamically -->
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="task-type">Task type</label>
-              <select id="task-type" class="input-select" required>
+              <label class="form-label" for="task-type">Task Type</label>
+              <select id="task-type" class="form-select">
                 <option value="Assignment">Assignment</option>
                 <option value="Practical">Practical</option>
                 <option value="Project">Project</option>
@@ -332,64 +258,45 @@
                 <option value="Other">Other</option>
               </select>
             </div>
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-12);">
-            <div class="form-group">
-              <label class="form-label" for="task-planned-date">
-                <span>Planned study date</span>
-                <span class="form-hint">Used for workload</span>
-              </label>
-              <input type="date" id="task-planned-date" class="input-text tabular" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="task-due-date">
-                <span>Submission due date</span>
-                <span class="form-hint">Final deadline</span>
-              </label>
-              <input type="date" id="task-due-date" class="input-text tabular" required>
-            </div>
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-12);">
-            <div class="form-group">
-              <label class="form-label" for="task-hours">
-                <span>Estimated study hours</span>
-                <span class="form-hint">0.25 increment</span>
-              </label>
-              <input type="number" id="task-hours" class="input-text tabular" step="0.25" min="0.25" max="24" value="1.00" required>
-            </div>
             <div class="form-group">
               <label class="form-label" for="task-priority">Priority</label>
-              <select id="task-priority" class="input-select">
+              <select id="task-priority" class="form-select">
                 <option value="High">High</option>
                 <option value="Medium" selected>Medium</option>
                 <option value="Low">Low</option>
               </select>
             </div>
           </div>
-
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-12);">
+            <div class="form-group">
+              <label class="form-label" for="task-due-date">Submission Due Date</label>
+              <input type="date" id="task-due-date" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="task-planned-date">Planned Study Date</label>
+              <input type="date" id="task-planned-date" class="form-input" required>
+            </div>
+          </div>
           <div class="form-group">
-            <label class="form-label" for="task-description">
-              <span>Description / Notes</span>
-              <span class="form-hint">Optional</span>
-            </label>
-            <textarea id="task-description" class="input-textarea" rows="2" placeholder="Submission criteria, questions to cover..."></textarea>
+            <label class="form-label" for="task-hours">Estimated Study Duration (Hours)</label>
+            <input type="number" id="task-hours" class="form-input" step="0.25" min="0.25" max="24" value="2.0" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="task-desc">Description / Notes (Optional)</label>
+            <textarea id="task-desc" class="form-textarea" placeholder="Key deliverables or rubric points..."></textarea>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="submit" id="btn-save-task" class="btn btn-primary">Save task</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Save Task</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Shared Scripts -->
   <script src="/js/api.js"></script>
-  <script src="/js/auth.js"></script>
   <script src="/js/ui.js"></script>
-  <script src="/js/workload.js"></script>
+  <script src="/js/auth.js"></script>
   <script src="/js/dashboard.js"></script>
 </body>
 </html>

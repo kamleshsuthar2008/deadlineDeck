@@ -85,7 +85,66 @@ router.get('/', async (req, res, next) => {
       estimated_hours: Number(r.estimated_hours)
     }));
 
-    res.json({ tasks });
+    res.json({
+      success: true,
+      message: 'Tasks retrieved successfully.',
+      tasks,
+      data: { tasks }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * GET /api/tasks/:id
+ * Retrieve a single task by ID
+ */
+router.get('/:id', async (req, res, next) => {
+  try {
+    const taskId = Number(req.params.id);
+    const rows = await query(
+      `SELECT 
+        t.task_id,
+        t.user_id,
+        t.subject_id,
+        s.subject_name,
+        s.subject_code,
+        t.title,
+        t.description,
+        t.task_type,
+        t.due_date,
+        t.planned_date,
+        t.estimated_hours,
+        t.priority,
+        t.status,
+        t.created_at,
+        t.updated_at
+      FROM tasks t
+      JOIN subjects s ON t.subject_id = s.subject_id
+      WHERE t.task_id = ? AND t.user_id = ?`,
+      [taskId, req.userId]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        errorCode: 'NOT_FOUND',
+        message: 'Task not found.'
+      });
+    }
+
+    const task = {
+      ...rows[0],
+      estimated_hours: Number(rows[0].estimated_hours)
+    };
+
+    res.json({
+      success: true,
+      message: 'Task retrieved successfully.',
+      task,
+      data: { task }
+    });
   } catch (err) {
     next(err);
   }
@@ -110,16 +169,32 @@ router.post('/', async (req, res, next) => {
     } = req.body;
 
     if (!title || !title.trim()) {
-      return res.status(400).json({ error: 'Validation error', message: 'Task title is required.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Task title is required.'
+      });
     }
     if (!subject_id) {
-      return res.status(400).json({ error: 'Validation error', message: 'Subject selection is required.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Subject selection is required.'
+      });
     }
     if (!due_date) {
-      return res.status(400).json({ error: 'Validation error', message: 'Submission due date is required.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Submission due date is required.'
+      });
     }
     if (!planned_date) {
-      return res.status(400).json({ error: 'Validation error', message: 'Planned study date is required.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Planned study date is required.'
+      });
     }
 
     const cleanType = VALID_TYPES.includes(task_type) ? task_type : 'Assignment';
@@ -130,7 +205,11 @@ router.post('/', async (req, res, next) => {
     // Verify subject ownership
     const subRows = await query('SELECT subject_id, subject_name, subject_code FROM subjects WHERE subject_id = ? AND user_id = ?', [subject_id, req.userId]);
     if (subRows.length === 0) {
-      return res.status(400).json({ error: 'Validation error', message: 'Selected subject does not exist or does not belong to your account.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Selected subject does not exist or does not belong to your account.'
+      });
     }
 
     const result = await query(
@@ -153,24 +232,27 @@ router.post('/', async (req, res, next) => {
     );
 
     const insertedId = result.insertId;
+    const newTask = {
+      task_id: insertedId,
+      user_id: req.userId,
+      subject_id: Number(subject_id),
+      subject_name: subRows[0].subject_name,
+      subject_code: subRows[0].subject_code,
+      title: title.trim(),
+      description: description ? description.trim() : null,
+      task_type: cleanType,
+      due_date: due_date.substring(0, 10),
+      planned_date: planned_date.substring(0, 10),
+      estimated_hours: hours,
+      priority: cleanPriority,
+      status: cleanStatus
+    };
+
     res.status(201).json({
       success: true,
       message: 'Task created successfully.',
-      task: {
-        task_id: insertedId,
-        user_id: req.userId,
-        subject_id: Number(subject_id),
-        subject_name: subRows[0].subject_name,
-        subject_code: subRows[0].subject_code,
-        title: title.trim(),
-        description: description ? description.trim() : null,
-        task_type: cleanType,
-        due_date: due_date.substring(0, 10),
-        planned_date: planned_date.substring(0, 10),
-        estimated_hours: hours,
-        priority: cleanPriority,
-        status: cleanStatus
-      }
+      task: newTask,
+      data: { task: newTask }
     });
   } catch (err) {
     next(err);
@@ -199,11 +281,19 @@ router.put('/:id', async (req, res, next) => {
     // Ownership check
     const existing = await query('SELECT task_id FROM tasks WHERE task_id = ? AND user_id = ?', [taskId, req.userId]);
     if (existing.length === 0) {
-      return res.status(404).json({ error: 'Task not found.' });
+      return res.status(404).json({
+        success: false,
+        errorCode: 'NOT_FOUND',
+        message: 'Task not found.'
+      });
     }
 
     if (!title || !title.trim()) {
-      return res.status(400).json({ error: 'Task title is required.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Task title is required.'
+      });
     }
 
     const hours = Number(estimated_hours) > 0 ? Number(estimated_hours) : 1.00;
@@ -238,7 +328,25 @@ router.put('/:id', async (req, res, next) => {
       ]
     );
 
-    res.json({ success: true, message: 'Task updated successfully.' });
+    const updatedTask = {
+      task_id: taskId,
+      title: title.trim(),
+      description: description ? description.trim() : null,
+      subject_id: Number(subject_id),
+      task_type: cleanType,
+      due_date: due_date.substring(0, 10),
+      planned_date: planned_date.substring(0, 10),
+      estimated_hours: hours,
+      priority: cleanPriority,
+      status: cleanStatus
+    };
+
+    res.json({
+      success: true,
+      message: 'Task updated successfully.',
+      task: updatedTask,
+      data: { task: updatedTask }
+    });
   } catch (err) {
     next(err);
   }
@@ -254,16 +362,28 @@ router.patch('/:id/status', async (req, res, next) => {
     const { status } = req.body;
 
     if (!VALID_STATUSES.includes(status)) {
-      return res.status(400).json({ error: 'Invalid status value.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Invalid status value.'
+      });
     }
 
     const rows = await query('SELECT task_id FROM tasks WHERE task_id = ? AND user_id = ?', [taskId, req.userId]);
     if (rows.length === 0) {
-      return res.status(404).json({ error: 'Task not found.' });
+      return res.status(404).json({
+        success: false,
+        errorCode: 'NOT_FOUND',
+        message: 'Task not found.'
+      });
     }
 
     await query('UPDATE tasks SET status = ? WHERE task_id = ? AND user_id = ?', [status, taskId, req.userId]);
-    res.json({ success: true, message: `Status updated to ${status}.` });
+    res.json({
+      success: true,
+      message: `Status updated to ${status}.`,
+      data: { task_id: taskId, status }
+    });
   } catch (err) {
     next(err);
   }
@@ -278,11 +398,19 @@ router.delete('/:id', async (req, res, next) => {
     const taskId = Number(req.params.id);
     const rows = await query('SELECT task_id FROM tasks WHERE task_id = ? AND user_id = ?', [taskId, req.userId]);
     if (rows.length === 0) {
-      return res.status(404).json({ error: 'Task not found.' });
+      return res.status(404).json({
+        success: false,
+        errorCode: 'NOT_FOUND',
+        message: 'Task not found.'
+      });
     }
 
     await query('DELETE FROM tasks WHERE task_id = ? AND user_id = ?', [taskId, req.userId]);
-    res.json({ success: true, message: 'Task deleted successfully.' });
+    res.json({
+      success: true,
+      message: 'Task deleted successfully.',
+      data: { task_id: taskId }
+    });
   } catch (err) {
     next(err);
   }

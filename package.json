@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node app.js",
     "dev": "node --watch app.js",
+    "db:check": "node scripts/check-db.js",
+    "db:verify": "node scripts/verify-schema.js",
+    "db:setup": "node database/setup.js",
     "setup-db": "node database/setup.js",
     "test": "node --test tests/**/*.test.js"
   },

@@ -15,13 +15,25 @@ router.post('/register', async (req, res, next) => {
     const { name, email, password, default_study_hours } = req.body;
 
     if (!name || !name.trim()) {
-      return res.status(400).json({ error: 'Validation error', message: 'Student name is required.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Student name is required.'
+      });
     }
     if (!email || !email.includes('@')) {
-      return res.status(400).json({ error: 'Validation error', message: 'A valid email address is required.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'A valid email address is required.'
+      });
     }
     if (!password || password.length < 6) {
-      return res.status(400).json({ error: 'Validation error', message: 'Password must be at least 6 characters long.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Password must be at least 6 characters long.'
+      });
     }
 
     const normalizedEmail = email.trim().toLowerCase();
@@ -29,9 +41,10 @@ router.post('/register', async (req, res, next) => {
     // Check for duplicate email
     const existing = await query('SELECT user_id FROM users WHERE email = ?', [normalizedEmail]);
     if (existing.length > 0) {
-      return res.status(409).json({ 
-        error: 'Duplicate email', 
-        message: 'An account with this email address already exists. Please sign in instead.' 
+      return res.status(409).json({
+        success: false,
+        errorCode: 'DUPLICATE_EMAIL',
+        message: 'An account with this email address already exists. Please sign in instead.'
       });
     }
 
@@ -60,6 +73,13 @@ router.post('/register', async (req, res, next) => {
       );
     }
 
+    const userData = {
+      user_id: newUserId,
+      name: name.trim(),
+      email: normalizedEmail,
+      default_study_hours: studyHours
+    };
+
     // Regenerate session to prevent fixation
     req.session.regenerate((err) => {
       if (err) return next(err);
@@ -67,12 +87,8 @@ router.post('/register', async (req, res, next) => {
       res.status(201).json({
         success: true,
         message: 'Registration successful.',
-        user: {
-          user_id: newUserId,
-          name: name.trim(),
-          email: normalizedEmail,
-          default_study_hours: studyHours
-        }
+        user: userData,
+        data: { user: userData }
       });
     });
   } catch (err) {
@@ -89,7 +105,11 @@ router.post('/login', async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ error: 'Validation error', message: 'Email and password are required.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Email and password are required.'
+      });
     }
 
     const normalizedEmail = email.trim().toLowerCase();
@@ -99,15 +119,30 @@ router.post('/login', async (req, res, next) => {
     );
 
     if (rows.length === 0) {
-      return res.status(401).json({ error: 'Invalid credentials', message: 'Incorrect email or password.' });
+      return res.status(401).json({
+        success: false,
+        errorCode: 'INVALID_CREDENTIALS',
+        message: 'Incorrect email or password.'
+      });
     }
 
     const user = rows[0];
     const isMatch = await bcrypt.compare(password, user.password_hash);
 
     if (!isMatch) {
-      return res.status(401).json({ error: 'Invalid credentials', message: 'Incorrect email or password.' });
+      return res.status(401).json({
+        success: false,
+        errorCode: 'INVALID_CREDENTIALS',
+        message: 'Incorrect email or password.'
+      });
     }
+
+    const userData = {
+      user_id: user.user_id,
+      name: user.name,
+      email: user.email,
+      default_study_hours: Number(user.default_study_hours)
+    };
 
     // Regenerate session on login
     req.session.regenerate((err) => {
@@ -116,12 +151,8 @@ router.post('/login', async (req, res, next) => {
       res.json({
         success: true,
         message: 'Sign-in successful.',
-        user: {
-          user_id: user.user_id,
-          name: user.name,
-          email: user.email,
-          default_study_hours: Number(user.default_study_hours)
-        }
+        user: userData,
+        data: { user: userData }
       });
     });
   } catch (err) {
@@ -137,13 +168,26 @@ router.post('/logout', (req, res) => {
   if (req.session) {
     req.session.destroy((err) => {
       if (err) {
-        return res.status(500).json({ error: 'Failed to log out cleanly.' });
+        return res.status(500).json({
+          success: false,
+          errorCode: 'LOGOUT_ERROR',
+          message: 'Failed to log out cleanly.'
+        });
       }
+      res.clearCookie('deadlinedeck.sid');
       res.clearCookie('connect.sid');
-      res.json({ success: true, message: 'Logged out successfully.' });
+      res.json({
+        success: true,
+        message: 'Logged out successfully.',
+        data: {}
+      });
     });
   } else {
-    res.json({ success: true, message: 'No active session.' });
+    res.json({
+      success: true,
+      message: 'No active session.',
+      data: {}
+    });
   }
 });
 
@@ -158,15 +202,26 @@ router.get('/me', requireAuth, async (req, res, next) => {
       [req.userId]
     );
     if (rows.length === 0) {
-      return res.status(404).json({ error: 'User not found.' });
+      return res.status(404).json({
+        success: false,
+        errorCode: 'NOT_FOUND',
+        message: 'User profile not found.'
+      });
     }
     const user = rows[0];
-    res.json({
+    const userData = {
       user_id: user.user_id,
       name: user.name,
       email: user.email,
       default_study_hours: Number(user.default_study_hours),
       created_at: user.created_at
+    };
+    res.json({
+      success: true,
+      message: 'Profile retrieved successfully.',
+      ...userData,
+      user: userData,
+      data: { user: userData }
     });
   } catch (err) {
     next(err);
@@ -182,12 +237,20 @@ router.put('/profile', requireAuth, async (req, res, next) => {
     const { name, default_study_hours } = req.body;
 
     if (!name || !name.trim()) {
-      return res.status(400).json({ error: 'Validation error', message: 'Name cannot be blank.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Name cannot be blank.'
+      });
     }
 
     const hours = Number(default_study_hours);
     if (isNaN(hours) || hours <= 0 || hours > 24) {
-      return res.status(400).json({ error: 'Validation error', message: 'Default study hours must be between 0.25 and 24.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Default study hours must be between 0.25 and 24.'
+      });
     }
 
     await query(
@@ -195,13 +258,16 @@ router.put('/profile', requireAuth, async (req, res, next) => {
       [name.trim(), hours, req.userId]
     );
 
+    const updated = {
+      name: name.trim(),
+      default_study_hours: hours
+    };
+
     res.json({
       success: true,
       message: 'Profile updated successfully.',
-      user: {
-        name: name.trim(),
-        default_study_hours: hours
-      }
+      user: updated,
+      data: { user: updated }
     });
   } catch (err) {
     next(err);
@@ -217,24 +283,46 @@ router.put('/password', requireAuth, async (req, res, next) => {
     const { current_password, new_password } = req.body;
 
     if (!current_password || !new_password) {
-      return res.status(400).json({ error: 'Both current and new passwords are required.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Both current and new passwords are required.'
+      });
     }
     if (new_password.length < 6) {
-      return res.status(400).json({ error: 'New password must be at least 6 characters long.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'VALIDATION_ERROR',
+        message: 'New password must be at least 6 characters long.'
+      });
     }
 
     const rows = await query('SELECT password_hash FROM users WHERE user_id = ?', [req.userId]);
-    if (rows.length === 0) return res.status(404).json({ error: 'User not found.' });
+    if (rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        errorCode: 'NOT_FOUND',
+        message: 'User profile not found.'
+      });
+    }
 
     const isMatch = await bcrypt.compare(current_password, rows[0].password_hash);
     if (!isMatch) {
-      return res.status(400).json({ error: 'Current password is incorrect.' });
+      return res.status(400).json({
+        success: false,
+        errorCode: 'INVALID_CREDENTIALS',
+        message: 'Current password is incorrect.'
+      });
     }
 
     const newHash = await bcrypt.hash(new_password, SALT_ROUNDS);
     await query('UPDATE users SET password_hash = ? WHERE user_id = ?', [newHash, req.userId]);
 
-    res.json({ success: true, message: 'Password updated successfully.' });
+    res.json({
+      success: true,
+      message: 'Password updated successfully.',
+      data: {}
+    });
   } catch (err) {
     next(err);
   }
